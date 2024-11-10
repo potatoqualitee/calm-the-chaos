@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Content Filter</title>
+  <style>
+    body {
+      width: 250px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #1c1c1c;
+      color: #ffffff;
+    }
+
+    .container {
+      padding: 15px;
+    }
+
+    .domain-info {
+      text-align: center;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    .stats {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .stat-item {
+      margin: 10px 0;
+      font-size: 14px;
+    }
+
+    .stat-number {
+      font-size: 16px;
+      font-weight: bold;
+      color: #4285f4;
+    }
+
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      margin: 15px 0;
+    }
+
+    .toggle-label {
+      margin-left: 10px;
+      font-size: 14px;
+    }
+
+    #domainToggle {
+      width: 18px;
+      height: 18px;
+    }
+
+    #currentDomain {
+      word-break: break-all;
+      color: #8f8f8f;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .divider {
+      border-top: 1px solid #333;
+      margin: 15px 0;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 10px 0;
+      border-top: 1px solid #333;
+    }
+
+    .settings-link {
+      color: #4285f4;
+      text-decoration: none;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .settings-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="domain-info">
+      <div id="currentDomain"></div>
+    </div>
+
+    <div class="stats">
+      <div class="stat-item">
+        Blocked on this page
+        <div class="stat-number">0 (0%)</div>
+      </div>
+
+      <div class="stat-item">
+        Blocked since install
+        <div class="stat-number">0 (0%)</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="toggle-container">
+      <input type="checkbox" id="domainToggle">
+      <label class="toggle-label" for="domainToggle">Disable on this domain</label>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="footer">
+      <a class="settings-link" id="openSettings">Manage Keywords & Domains</a>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+
+</html>
