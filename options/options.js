@@ -150,6 +150,15 @@ function createKeywordItem(keyword, checked, isCustom = false) {
   return item;
 }
 
+// Notify content script to update
+function notifyContentScript() {
+  chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+    if (tabs[0]) {
+      chrome.tabs.sendMessage(tabs[0].id, { type: 'updateKeywords' });
+    }
+  });
+}
+
 // Domain management functions
 async function addDomain(domain) {
   domain = domain.trim().toLowerCase();
@@ -163,6 +172,7 @@ async function addDomain(domain) {
     ignoredDomains.push(domain);
     await chrome.storage.local.set({ ignoredDomains });
     updateDomainList(ignoredDomains, disabledDomains);
+    notifyContentScript();
   }
 }
 
@@ -174,6 +184,7 @@ async function removeDomain(domain) {
   ignoredDomains = ignoredDomains.filter(d => d !== domain);
   await chrome.storage.local.set({ ignoredDomains });
   updateDomainList(ignoredDomains, disabledDomains);
+  notifyContentScript();
 }
 
 async function toggleDomain(domain) {
@@ -191,6 +202,7 @@ async function toggleDomain(domain) {
 
   await chrome.storage.local.set({ disabledDomains });
   initializeSettings(); // Refresh display
+  notifyContentScript();
 }
 
 // Keyword management functions
@@ -218,6 +230,7 @@ async function toggleGroup(groupName) {
 
   await chrome.storage.local.set({ disabledGroups, disabledKeywords });
   initializeSettings(); // Refresh display
+  notifyContentScript();
 }
 
 async function toggleKeyword(keyword) {
@@ -234,6 +247,7 @@ async function toggleKeyword(keyword) {
   disabledKeywords.sort();
 
   await chrome.storage.local.set({ disabledKeywords });
+  notifyContentScript();
 }
 
 async function addCustomKeyword(keyword) {
@@ -249,11 +263,7 @@ async function addCustomKeyword(keyword) {
     customKeywords.sort();
     await chrome.storage.local.set({ customKeywords });
     initializeSettings(); // Refresh display
-
-    // Notify content script to update regex
-    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, { type: 'updateKeywords' });
-    });
+    notifyContentScript();
   }
 }
 
@@ -266,11 +276,7 @@ async function removeCustomKeyword(keyword) {
   customKeywords.sort();
   await chrome.storage.local.set({ customKeywords });
   initializeSettings(); // Refresh display
-
-  // Notify content script to update regex
-  chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, { type: 'updateKeywords' });
-  });
+  notifyContentScript();
 }
 
 // Fetch and import settings from URL
@@ -298,6 +304,7 @@ async function importFromUrl() {
 
     // Notify user of success
     showStatus('Import successful!', 'success');
+    notifyContentScript();
   } catch (error) {
     console.error('Failed to import from URL:', error);
     showStatus('Failed to import from URL. Check console for details.', 'error');
@@ -382,6 +389,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('matchingOptions').addEventListener('change', async (e) => {
     const matchingOption = e.target.value;
     await chrome.storage.local.set({ matchingOption });
+    notifyContentScript();
   });
 
   // Add event listeners for export and import buttons
@@ -408,6 +416,7 @@ document.addEventListener('DOMContentLoaded', () => {
           progressIndicator.style.fontSize = '24px';
           progressIndicator.style.fontWeight = 'bold';
           progressIndicator.style.marginTop = '20px'; // Add margin for spacing
+          notifyContentScript();
         }).catch((error) => {
           console.error('Import failed:', error);
           progressIndicator.textContent = 'Import failed! Check console for details.';

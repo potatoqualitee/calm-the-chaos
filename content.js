@@ -11,6 +11,20 @@ initializeRegex(() => {
   }
 });
 
+// Listen for settings updates
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === 'updateKeywords') {
+    // Reinitialize regex and refilter content
+    initializeRegex(() => {
+      try {
+        filterContent();
+      } catch (error) {
+        console.debug('Error in update filtering:', error);
+      }
+    });
+  }
+});
+
 // Memory management - clear history periodically
 setInterval(() => {
   try {

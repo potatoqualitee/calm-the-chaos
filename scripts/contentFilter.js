@@ -10,7 +10,7 @@ import { handleLinkedIn } from './platformHandlers/handleLinkedIn.js';
 import { handleYouTube } from './platformHandlers/handleYouTube.js';
 import { handleCNN } from './platformHandlers/handleCNN.js';
 import { handleStackOverflow } from './platformHandlers/handleStackOverflow.js';
-import { handleBluesky } from './platformHandlers/handleBluesky.js'; // Import the Bluesky handler
+import { handleBluesky } from './platformHandlers/handleBluesky.js';
 
 const history = new Set();
 let currentPageBlockedCount = 0;  // Track current page's blocked items only
@@ -30,6 +30,7 @@ window.addEventListener('beforeunload', () => {
 function containsBlockedContent(text) {
   try {
     const BLOCKED_REGEX = getBlockedRegex();
+    // Return empty array if no regex pattern (all keywords disabled) or no text
     if (!text || !BLOCKED_REGEX) return [];
 
     const matches = [];
@@ -87,6 +88,9 @@ function findMinimalContentContainer(node) {
 
 function handleGenericSites(nodesToHide) {
   try {
+    // If no regex pattern (all keywords disabled), skip filtering
+    if (!getBlockedRegex()) return;
+
     const walker = document.createTreeWalker(
       document.body,
       NodeFilter.SHOW_TEXT,
@@ -127,16 +131,36 @@ function handleGenericSites(nodesToHide) {
 }
 
 function handleGenericMedia(nodesToHide) {
-  chromeStorageGet(['keywordGroups', 'customKeywords'], function (result) {
+  // If no regex pattern (all keywords disabled), skip filtering
+  if (!getBlockedRegex()) return;
+
+  chromeStorageGet(['keywordGroups', 'customKeywords', 'disabledKeywords', 'disabledGroups'], function (result) {
     try {
       const keywordGroups = result.keywordGroups || {};
       const customKeywords = result.customKeywords || [];
+      const disabledKeywords = result.disabledKeywords || [];
+      const disabledGroups = result.disabledGroups || [];
       const allKeywords = new Set();
 
-      Object.values(keywordGroups).forEach(group => {
-        group.forEach(keyword => allKeywords.add(keyword.toLowerCase()));
+      // Only include enabled keywords
+      Object.entries(keywordGroups).forEach(([groupName, keywords]) => {
+        if (!disabledGroups.includes(groupName)) {
+          keywords.forEach(keyword => {
+            if (!disabledKeywords.includes(keyword)) {
+              allKeywords.add(keyword.toLowerCase());
+            }
+          });
+        }
       });
-      customKeywords.forEach(keyword => allKeywords.add(keyword.toLowerCase()));
+
+      customKeywords.forEach(keyword => {
+        if (!disabledKeywords.includes(keyword)) {
+          allKeywords.add(keyword.toLowerCase());
+        }
+      });
+
+      // If no enabled keywords, skip filtering
+      if (allKeywords.size === 0) return;
 
       const imgSelector = Array.from(allKeywords)
         .map(keyword => `
@@ -170,6 +194,9 @@ function handleGenericMedia(nodesToHide) {
 
 function elementContainsBlockedContent(element) {
   try {
+    // If no regex pattern (all keywords disabled), return false
+    if (!getBlockedRegex()) return false;
+
     const textsToCheck = [
       element.textContent || '',
       element.getAttribute('alt') || '',
@@ -274,6 +301,12 @@ function filterContent() {
         return;
       }
 
+      // If no regex pattern (all keywords disabled), skip filtering
+      if (!getBlockedRegex()) {
+        console.log('Content filtering is disabled - all keywords are disabled');
+        return;
+      }
+
       try {
         handleGenericSites(nodesToHide);
 
@@ -301,7 +334,7 @@ function filterContent() {
         if (hostname.includes('stackoverflow.com')) {
           handleStackOverflow(nodesToHide);
         }
-        if (hostname.includes('bsky.app')) { // Add condition for Bluesky
+        if (hostname.includes('bsky.app')) {
           handleBluesky(nodesToHide);
         }
 
