@@ -54,6 +54,11 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
 
 // Function to update badge with page-specific count
 function updateBadge(pageCount, url) {
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    chrome.action.setBadgeText({ text: '' });
+    return;
+  }
+
   chrome.storage.local.get('disabledUrls', function (result) {
     const disabledUrls = result.disabledUrls || [];
     let text = '';
@@ -75,6 +80,17 @@ function updateBadge(pageCount, url) {
 
 // Function to update the icon based on the URL's status
 function updateIcon(url) {
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    chrome.action.setIcon({
+      path: {
+        "16": "images/icon16_gray.png",
+        "48": "images/icon48_gray.png",
+        "128": "images/icon128_gray.png"
+      }
+    });
+    return;
+  }
+
   chrome.storage.local.get('disabledUrls', function (result) {
     const disabledUrls = result.disabledUrls || [];
     const isIgnoredUrl = disabledUrls.some(urlPattern => {
