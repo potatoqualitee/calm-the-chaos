@@ -30,7 +30,7 @@ While this extension is tailored for a US-centric audience, its flexible design 
 
 - **🔍 Customizable Filtering**: Tailor your browsing experience by defining custom keywords and keyword groups.
 - **🌐 Platform Support**: Seamlessly integrates with Reddit, Facebook, Twitter, Instagram, LinkedIn, YouTube, CNN, StackOverflow, and Bluesky.
-- **🔄 Flexible Matching**: Choose between exact, flexible, and fuzzy matching to refine content identification.
+- **🔄 Flexible Matching**: Choose between exact and flexible matching to refine content identification.
 - **🔒 Domain Control**: Enable or disable filtering for specific domains to match your browsing habits.
 
 ## 🚀 Installation

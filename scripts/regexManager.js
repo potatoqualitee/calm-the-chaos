@@ -20,7 +20,7 @@ function initializeRegex(callback) {
         if (!disabledGroups.includes(groupName)) {
           keywords.forEach(keyword => {
             if (!disabledKeywords.includes(keyword)) {
-              allKeywords.add(keyword.toLowerCase());
+              allKeywords.add(keyword.toLowerCase().trim());
             }
           });
         }
@@ -29,7 +29,7 @@ function initializeRegex(callback) {
       // Add enabled custom keywords
       customKeywords.forEach(keyword => {
         if (!disabledKeywords.includes(keyword)) {
-          allKeywords.add(keyword.toLowerCase());
+          allKeywords.add(keyword.toLowerCase().trim());
         }
       });
 

@@ -41,7 +41,7 @@ function containsBlockedContent(text) {
       const fuzzyMatches = fuzzySet.get(text.toLowerCase());
       if (fuzzyMatches) {
         fuzzyMatches.forEach(match => {
-          if (match[0] > 0.5) { // Adjust threshold as needed
+          if (match[0] > 0.1) { // Further adjusted threshold to 0.1
             matches.add(match[1]);
           }
         });
@@ -104,8 +104,14 @@ function findMinimalContentContainer(node) {
 
 function handleGenericSites(nodesToHide) {
   try {
-    // If no regex pattern (all keywords disabled), skip filtering
-    if (!getBlockedRegex()) return;
+    const fuzzySet = getFuzzySet();
+    const BLOCKED_REGEX = getBlockedRegex();
+
+    // If no pattern (all keywords disabled), skip filtering
+    if (!fuzzySet && !BLOCKED_REGEX) {
+      console.log('Content filtering is disabled - all keywords are disabled');
+      return;
+    }
 
     const walker = document.createTreeWalker(
       document.body,
@@ -147,8 +153,11 @@ function handleGenericSites(nodesToHide) {
 }
 
 function handleGenericMedia(nodesToHide) {
-  // If no regex pattern (all keywords disabled), skip filtering
-  if (!getBlockedRegex()) return;
+  const fuzzySet = getFuzzySet();
+  const BLOCKED_REGEX = getBlockedRegex();
+
+  // If no pattern (all keywords disabled), skip filtering
+  if (!fuzzySet && !BLOCKED_REGEX) return;
 
   chromeStorageGet(['keywordGroups', 'customKeywords', 'disabledKeywords', 'disabledGroups'], function (result) {
     try {
@@ -210,8 +219,11 @@ function handleGenericMedia(nodesToHide) {
 
 function elementContainsBlockedContent(element) {
   try {
-    // If no regex pattern (all keywords disabled), return false
-    if (!getBlockedRegex()) return false;
+    const fuzzySet = getFuzzySet();
+    const BLOCKED_REGEX = getBlockedRegex();
+
+    // If no pattern (all keywords disabled), return false
+    if (!fuzzySet && !BLOCKED_REGEX) return false;
 
     const textsToCheck = [
       element.textContent || '',
@@ -317,8 +329,11 @@ function filterContent() {
         return;
       }
 
-      // If no regex pattern (all keywords disabled), skip filtering
-      if (!getBlockedRegex()) {
+      const fuzzySet = getFuzzySet();
+      const BLOCKED_REGEX = getBlockedRegex();
+
+      // If no pattern (all keywords disabled), skip filtering
+      if (!fuzzySet && !BLOCKED_REGEX) {
         console.log('Content filtering is disabled - all keywords are disabled');
         return;
       }
