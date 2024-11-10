@@ -2,7 +2,7 @@
 
 // Function to export settings to a JSON file
 function exportSettings() {
-  chrome.storage.local.get(['customKeywords', 'keywordGroups', 'disabledGroups', 'disabledKeywords', 'ignoredDomains', 'disabledDomains', 'matchingOption'], (settings) => {
+  chrome.storage.local.get(['customKeywords', 'keywordGroups', 'disabledGroups', 'disabledKeywords', 'ignoredDomains', 'disabledDomains', 'matchingOptionsList'], (settings) => {
     const exportData = {
       customKeywords: settings.customKeywords || [],
       keywordGroups: settings.keywordGroups || {},
@@ -10,7 +10,7 @@ function exportSettings() {
       disabledKeywords: settings.disabledKeywords || [],
       ignoredDomains: settings.ignoredDomains || [],
       disabledDomains: settings.disabledDomains || [],
-      matchingOption: settings.matchingOption || 'flexible'
+      matchingOptionsList: settings.matchingOptionsList || ['flexible']
     };
 
     // Include the checked state of default keywords
@@ -41,7 +41,7 @@ function importSettings(file) {
   reader.onload = (event) => {
     const importedSettings = JSON.parse(event.target.result);
 
-    chrome.storage.local.get(['customKeywords', 'keywordGroups', 'disabledGroups', 'disabledKeywords', 'ignoredDomains', 'disabledDomains', 'matchingOption'], (currentSettings) => {
+    chrome.storage.local.get(['customKeywords', 'keywordGroups', 'disabledGroups', 'disabledKeywords', 'ignoredDomains', 'disabledDomains', 'matchingOptionsList'], (currentSettings) => {
       const newKeywords = new Set(currentSettings.customKeywords);
       importedSettings.customKeywords.forEach(keyword => newKeywords.add(keyword));
 
@@ -78,6 +78,9 @@ function importSettings(file) {
       const newIgnoredDomains = new Set(currentSettings.ignoredDomains);
       importedSettings.ignoredDomains.forEach(domain => newIgnoredDomains.add(domain));
 
+      // Update matchingOptionsList to include fuzzy, flexible, and exact
+      const matchingOptionsList = ['fuzzy', 'flexible', 'exact'];
+
       chrome.storage.local.set({
         customKeywords: Array.from(newKeywords),
         keywordGroups: updatedKeywordGroups,
@@ -85,7 +88,7 @@ function importSettings(file) {
         disabledKeywords: Array.from(disabledKeywords),
         ignoredDomains: Array.from(newIgnoredDomains),
         disabledDomains: Array.from(newDisabledDomains),
-        matchingOption: importedSettings.matchingOption || 'flexible'
+        matchingOptionsList: matchingOptionsList
       }, () => {
         // Update progress indicator to show "Import Complete" in green with margin
         progressIndicator.textContent = 'Import Complete!';

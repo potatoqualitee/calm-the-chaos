@@ -10,7 +10,7 @@ function initializeRegex(callback) {
     try {
       const keywordGroups = result.keywordGroups || {};
       const customKeywords = result.customKeywords || [];
-      const matchingOption = result.matchingOption || 'flexible'; // Default to flexible if not set
+      const matchingOption = result.hasOwnProperty('matchingOption') ? result.matchingOption : 'flexible'; // Only set to flexible if not explicitly saved
       const disabledKeywords = result.disabledKeywords || [];
       const disabledGroups = result.disabledGroups || [];
       const allKeywords = new Set();

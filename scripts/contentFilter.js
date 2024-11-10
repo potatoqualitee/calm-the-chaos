@@ -1,7 +1,7 @@
 // Refactored contentFilter.js with elementContainsBlockedContent exported
 
 import { chromeStorageGet, chromeRuntimeSendMessage } from './utils.js';
-import { getBlockedRegex } from './regexManager.js';
+import { getBlockedRegex, getFuzzySet } from './regexManager.js';
 import { handleReddit } from './platformHandlers/handleReddit.js';
 import { handleFacebook } from './platformHandlers/handleFacebook.js';
 import { handleTwitter } from './platformHandlers/handleTwitter.js';
@@ -30,18 +30,34 @@ window.addEventListener('beforeunload', () => {
 function containsBlockedContent(text) {
   try {
     const BLOCKED_REGEX = getBlockedRegex();
-    // Return empty array if no regex pattern (all keywords disabled) or no text
-    if (!text || !BLOCKED_REGEX) return [];
+    const fuzzySet = getFuzzySet();
+    const matches = new Set();
 
-    const matches = [];
-    let match;
-    const regex = new RegExp(BLOCKED_REGEX, 'gi');
+    // Return empty array if no text
+    if (!text) return [];
 
-    while ((match = regex.exec(text.toLowerCase())) !== null) {
-      matches.push(match[0]);
+    // Use fuzzy matching if fuzzySet is available
+    if (fuzzySet) {
+      const fuzzyMatches = fuzzySet.get(text.toLowerCase());
+      if (fuzzyMatches) {
+        fuzzyMatches.forEach(match => {
+          if (match[0] > 0.5) { // Adjust threshold as needed
+            matches.add(match[1]);
+          }
+        });
+      }
     }
 
-    return matches.length > 0 ? Array.from(new Set(matches)) : [];
+    // Use regex matching if BLOCKED_REGEX is available
+    if (BLOCKED_REGEX) {
+      let match;
+      const regex = new RegExp(BLOCKED_REGEX, 'gi');
+      while ((match = regex.exec(text.toLowerCase())) !== null) {
+        matches.add(match[0]);
+      }
+    }
+
+    return Array.from(matches);
   } catch (error) {
     console.debug('Error in containsBlockedContent:', error);
     return [];

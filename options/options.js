@@ -24,8 +24,10 @@ async function initializeSettings() {
   let disabledGroups = result.disabledGroups || [];
   let disabledKeywords = result.disabledKeywords || [];
   let disabledDomains = result.disabledDomains || [];
-  let matchingOption = result.matchingOption || 'flexible'; // Default to flexible matching
+  let matchingOption = result.matchingOption !== undefined ? result.matchingOption : 'flexible'; // Only set to flexible if undefined
   let importUrl = result.importUrl || ''; // Retrieve saved URL
+
+  console.log('Retrieved matchingOption:', matchingOption); // Debug log
 
   // Sort custom keywords alphabetically
   customKeywords.sort();
@@ -40,7 +42,7 @@ async function initializeSettings() {
 
   updateDomainList(ignoredDomains, disabledDomains);
   updateKeywordGroups(keywordGroups, customKeywords, disabledGroups, disabledKeywords);
-  document.getElementById('matchingOptions').value = matchingOption; // Set the dropdown to the stored value
+  document.querySelector(`input[name="matchingOptions"][value="${matchingOption}"]`).checked = true; // Correctly set the radio button
   document.getElementById('urlInput').value = importUrl; // Set the URL input to the stored value
 }
 
@@ -150,13 +152,11 @@ function createKeywordItem(keyword, checked, isCustom = false) {
   return item;
 }
 
-// Notify content script to update
-function notifyContentScript() {
-  chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-    if (tabs[0]) {
-      chrome.tabs.sendMessage(tabs[0].id, { type: 'updateKeywords' });
-    }
-  });
+// Directly update storage without sending a message
+async function updateMatchingOption(matchingOption) {
+  console.log('Setting matchingOption:', matchingOption); // Debug log
+  await chrome.storage.local.set({ matchingOption });
+  // Removed unnecessary removal of other options
 }
 
 // Domain management functions
@@ -172,7 +172,6 @@ async function addDomain(domain) {
     ignoredDomains.push(domain);
     await chrome.storage.local.set({ ignoredDomains });
     updateDomainList(ignoredDomains, disabledDomains);
-    notifyContentScript();
   }
 }
 
@@ -184,7 +183,6 @@ async function removeDomain(domain) {
   ignoredDomains = ignoredDomains.filter(d => d !== domain);
   await chrome.storage.local.set({ ignoredDomains });
   updateDomainList(ignoredDomains, disabledDomains);
-  notifyContentScript();
 }
 
 async function toggleDomain(domain) {
@@ -202,7 +200,6 @@ async function toggleDomain(domain) {
 
   await chrome.storage.local.set({ disabledDomains });
   initializeSettings(); // Refresh display
-  notifyContentScript();
 }
 
 // Keyword management functions
@@ -230,7 +227,6 @@ async function toggleGroup(groupName) {
 
   await chrome.storage.local.set({ disabledGroups, disabledKeywords });
   initializeSettings(); // Refresh display
-  notifyContentScript();
 }
 
 async function toggleKeyword(keyword) {
@@ -247,7 +243,6 @@ async function toggleKeyword(keyword) {
   disabledKeywords.sort();
 
   await chrome.storage.local.set({ disabledKeywords });
-  notifyContentScript();
 }
 
 async function addCustomKeyword(keyword) {
@@ -263,7 +258,6 @@ async function addCustomKeyword(keyword) {
     customKeywords.sort();
     await chrome.storage.local.set({ customKeywords });
     initializeSettings(); // Refresh display
-    notifyContentScript();
   }
 }
 
@@ -276,7 +270,6 @@ async function removeCustomKeyword(keyword) {
   customKeywords.sort();
   await chrome.storage.local.set({ customKeywords });
   initializeSettings(); // Refresh display
-  notifyContentScript();
 }
 
 // Fetch and import settings from URL
@@ -304,7 +297,6 @@ async function importFromUrl() {
 
     // Notify user of success
     showStatus('Import successful!', 'success');
-    notifyContentScript();
   } catch (error) {
     console.error('Failed to import from URL:', error);
     showStatus('Failed to import from URL. Check console for details.', 'error');
@@ -388,8 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Add event listener for matching options
   document.getElementById('matchingOptions').addEventListener('change', async (e) => {
     const matchingOption = e.target.value;
-    await chrome.storage.local.set({ matchingOption });
-    notifyContentScript();
+    updateMatchingOption(matchingOption);
   });
 
   // Add event listeners for export and import buttons
@@ -404,7 +395,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let progressIndicator = document.getElementById('progressIndicator');
         if (!progressIndicator) {
           progressIndicator = document.createElement('div');
-          progressIndicator.id = 'progressIndicator';
           document.body.appendChild(progressIndicator);
         }
         progressIndicator.style.display = 'block'; // Ensure it's visible
@@ -416,7 +406,6 @@ document.addEventListener('DOMContentLoaded', () => {
           progressIndicator.style.fontSize = '24px';
           progressIndicator.style.fontWeight = 'bold';
           progressIndicator.style.marginTop = '20px'; // Add margin for spacing
-          notifyContentScript();
         }).catch((error) => {
           console.error('Import failed:', error);
           progressIndicator.textContent = 'Import failed! Check console for details.';
