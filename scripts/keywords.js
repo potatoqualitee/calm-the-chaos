@@ -450,6 +450,7 @@ export const DEFAULT_KEYWORD_GROUPS = {
     'mainstream media',
     'mandate',
     'midterm',
+    'middle class',
     'MSM',
     'nationalist',
     'NATO',
@@ -514,6 +515,7 @@ export const DEFAULT_KEYWORD_GROUPS = {
     'voting machine',
     'Washington elite',
     'White House',
+    'working class',
     'WWG1WGA'
   ],
   'Social Issues': [
