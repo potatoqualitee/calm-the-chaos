@@ -7,6 +7,13 @@ document.addEventListener('DOMContentLoaded', async function () {
       }).join(' ');
     }
 
+    function updateVisibility(isDisabled) {
+      const statsAndKeywords = document.getElementById('statsAndKeywords');
+      if (statsAndKeywords) {
+        statsAndKeywords.style.display = isDisabled ? 'none' : 'block';
+      }
+    }
+
     // Set up toggle
     const toggle = document.getElementById('domainToggle');
     if (!toggle) {
@@ -20,6 +27,12 @@ document.addEventListener('DOMContentLoaded', async function () {
     const currentUrl = new URL(currentTab.url).href;
     console.log('Current URL:', currentUrl);
 
+    // Update domain display
+    const currentDomainElement = document.getElementById('currentDomain');
+    if (currentDomainElement) {
+      currentDomainElement.textContent = `Current Domain: ${new URL(currentUrl).hostname}`;
+    }
+
     // Load current state
     const result = await chrome.storage.local.get([
       'disabledUrls',
@@ -28,10 +41,11 @@ document.addEventListener('DOMContentLoaded', async function () {
       `blockedKeywords_${currentTab.id}`,
       'originalKeywords'
     ]);
+
     const disabledUrls = result.disabledUrls || [];
     const stats = result.stats || { totalBlocked: 0, totalScanned: 0 };
-    const pageStats = result[`pageStats_${currentTab.id}`] || { pageBlocked: 0, pageTotal: 0 };
-    const blockedKeywords = result[`blockedKeywords_${currentTab.id}`] || [];
+    let pageStats = result[`pageStats_${currentTab.id}`] || { pageBlocked: 0, pageTotal: 0 };
+    let blockedKeywords = result[`blockedKeywords_${currentTab.id}`] || [];
     const originalKeywords = result.originalKeywords || {};
 
     // Update toggle state using pattern matching and protocol check
@@ -39,7 +53,9 @@ document.addEventListener('DOMContentLoaded', async function () {
       const pattern = urlPattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
       return new RegExp(`^${pattern}$`).test(currentUrl);
     }) || !/^https?:\/\//.test(currentUrl);
+
     toggle.checked = isIgnoredUrl;
+    updateVisibility(isIgnoredUrl);  // Set initial visibility
 
     // Update stats display
     const pageBlockedPercent = pageStats.pageTotal
@@ -79,9 +95,14 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Sort keywords alphabetically using their original format
         const sortedKeywords = Object.entries(keywordCounts).sort(([a], [b]) => a.localeCompare(b));
 
-        // Generate the display HTML with grouped and counted keywords in title case
+        // Generate the display HTML with pills design
         blockedKeywordsElement.innerHTML = sortedKeywords
-          .map(([keyword, count]) => `<div class="keyword-item">${toTitleCase(keyword)}: ${count}</div>`)
+          .map(([keyword, count]) => `
+            <span class="keyword-pill">
+              ${toTitleCase(keyword)}
+              <span class="keyword-count">${count}</span>
+            </span>
+          `)
           .join('');
 
         console.log('Blocked keywords (grouped and original format):', sortedKeywords);
@@ -103,11 +124,15 @@ document.addEventListener('DOMContentLoaded', async function () {
     toggle.addEventListener('change', async function () {
       const result = await chrome.storage.local.get('disabledUrls');
       let disabledUrls = result.disabledUrls || [];
+
       if (this.checked) {
         if (!disabledUrls.includes(currentUrl)) disabledUrls.push(currentUrl);
+        updateVisibility(true);  // Hide stats when disabled
       } else {
         disabledUrls = disabledUrls.filter(url => url !== currentUrl);
+        updateVisibility(false);  // Show stats when enabled
       }
+
       await chrome.storage.local.set({ disabledUrls });
       chrome.tabs.reload(currentTab.id);
     });
