@@ -1,4 +1,6 @@
+
 # ![Extension Icon](images/icon128.png) Calm the Chaos
+### v0.1.0-alpha
 
 ## 🌟 Overview
 
@@ -6,25 +8,41 @@ A browser extension that filters unwanted content across every website.
 
 (Total alpha version, I mostly tested my most visited websites.)
 
-### Unwanted Content Categories
+### Filtered Categories
 
 The extension filters content based on the following categories:
 
-- **Environmental**: Topics related to climate change, natural disasters, and environmental issues.
-- **Financial/Economic**: Terms associated with market trends, economic conditions, and financial jargon.
-- **International Political Figures**: Names of prominent political figures from around the world.
-- **International Relations**: Topics related to global conflicts, diplomacy, and international policies.
-- **Media and Business Figures**: Names of influential media personalities and business leaders.
-- **Political and Government**: Keywords related to political ideologies, government policies, and political events.
-- **Social Issues**: Terms associated with social justice, cultural debates, and societal challenges.
-- **Technology**: Keywords related to tech platforms, digital trends, and online behaviors.
-- **US Political Figures**: Names of notable political figures in the United States.
-- **Violence and Extremism**: Terms related to violent acts, extremism, and security threats.
-- **Other**: Miscellaneous keywords covering conspiracy theories, government control, and other controversial topics.
+| Category | Description |
+|----------|-------------|
+| Environmental | Topics related to climate change, natural disasters, and environmental issues |
+| Financial/Economic | Terms associated with market trends, economic conditions, and financial jargon |
+| International Political Figures | Names of prominent political figures from around the world |
+| International Relations | Topics related to global conflicts, diplomacy, and international policies |
+| Media and Business Figures | Names of influential media personalities and business leaders |
+| Political and Government | Keywords related to political ideologies, government policies, and political events |
+| Social Issues | Terms associated with social justice, cultural debates, and societal challenges |
+| Technology | Keywords related to tech platforms, digital trends, and online behaviors |
+| US Political Figures | Names of notable political figures in the United States |
+| Violence and Extremism | Terms related to violent acts, extremism, and security threats |
+| Other | Miscellaneous keywords covering conspiracy theories, government control, and other controversial topics |
 
-### 🌍 US-Centric Focus
+### 🌍 Regional Customization
 
-While this extension is tailored for a US-centric audience, its flexible design allows you to expand its capabilities to suit other regions or personal preferences.
+While the default keywords are US-centric, you can easily maintain your own regional keyword list:
+
+1. Create a plain text file with your keywords (one per line), for example:
+   ```
+   keyword1
+   keyword2
+   keyword3
+   ```
+
+2. Host this file anywhere on the web (e.g., GitHub Gist, Pastebin)
+3. In the extension settings:
+   - Go to the "Import/Export" tab
+   - Paste your URL in the "Enter URL to import settings" field
+   - Click "Import from URL"
+4. Enable "Check for new keywords on startup" to automatically update your keywords when you start your browser
 
 ## ✨ Features
 
@@ -56,13 +74,9 @@ This extension is built for flexibility and extensibility, allowing developers t
 - **regexManager.js**: Manages regex patterns and supports flexible and exact matching.
 - **utils.js**: Utility functions for regex handling and Chrome API interactions.
 
-### Extending the Extension
-
-Developers can enhance functionality by adding new platform handlers or modifying existing logic to meet diverse requirements.
-
 ## 🤝 Contributing
 
-We welcome contributions from the community! To contribute:
+Contributions are welcomed, especially if you have extra websites to filter.
 
 1. **Fork the Repository**: Create your own copy.
 2. **Create a Branch**: For your feature or bugfix.
