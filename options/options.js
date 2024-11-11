@@ -1,4 +1,4 @@
-//options.js
+// Import necessary modules
 import { DEFAULT_IGNORED_URLS, DEFAULT_KEYWORD_GROUPS } from '../scripts/keywords.js';
 import { exportSettings, importSettings } from '../scripts/settingsManager.js';
 
@@ -63,6 +63,50 @@ async function initializeSettings() {
   document.getElementById('checkForUpdates').checked = checkForUpdates;
 }
 
+function setupFilter() {
+  // Get filter inputs
+  const keywordFilter = document.getElementById('filterInput');
+  const domainFilter = document.getElementById('domainFilterInput');
+
+  // Keyword filtering
+  keywordFilter?.addEventListener('input', (e) => {
+    const searchTerm = e.target.value.toLowerCase();
+
+    // Filter keyword items
+    document.querySelectorAll('#keywordGroups .keyword-item, #customKeywords .keyword-item').forEach(item => {
+      const text = item.querySelector('label').textContent.toLowerCase();
+      item.style.display = text.includes(searchTerm) ? '' : 'none';
+    });
+
+    // Hide empty groups
+    document.querySelectorAll('#keywordGroups .keyword-group').forEach(group => {
+      const hasVisibleItems = Array.from(group.querySelectorAll('.keyword-item'))
+        .some(item => item.style.display !== 'none');
+      const groupTitle = group.querySelector('.group-title').textContent.toLowerCase();
+      group.style.display = (hasVisibleItems || groupTitle.includes(searchTerm)) ? '' : 'none';
+    });
+  });
+
+  // Domain filtering
+  domainFilter?.addEventListener('input', (e) => {
+    const searchTerm = e.target.value.toLowerCase();
+
+    // Filter domain items
+    document.querySelectorAll('#domainList .keyword-item').forEach(item => {
+      const text = item.querySelector('label').textContent.toLowerCase();
+      item.style.display = text.includes(searchTerm) ? '' : 'none';
+    });
+
+    // Hide empty groups
+    document.querySelectorAll('#domainList .keyword-group').forEach(group => {
+      const hasVisibleItems = Array.from(group.querySelectorAll('.keyword-item'))
+        .some(item => item.style.display !== 'none');
+      const groupTitle = group.querySelector('.group-title').textContent.toLowerCase();
+      group.style.display = (hasVisibleItems || groupTitle.includes(searchTerm)) ? '' : 'none';
+    });
+  });
+}
+
 // Update the domain groups display
 function updateDomainGroups(domainGroups, disabledDomains, disabledDomainGroups) {
   const domainList = document.getElementById('domainList');
@@ -74,7 +118,7 @@ function updateDomainGroups(domainGroups, disabledDomains, disabledDomainGroups)
   sortedGroupNames.forEach(groupName => {
     const domains = domainGroups[groupName];
     const group = document.createElement('div');
-    group.className = 'keyword-group'; // Reuse keyword group styling
+    group.className = 'keyword-group';
 
     const header = document.createElement('div');
     header.className = 'group-header';
@@ -93,12 +137,11 @@ function updateDomainGroups(domainGroups, disabledDomains, disabledDomainGroups)
     group.appendChild(header);
 
     const domainsList = document.createElement('div');
-    domainsList.className = 'keyword-list'; // Reuse keyword list styling
+    domainsList.className = 'keyword-list';
 
-    // Sort domains alphabetically within each group
     [...domains].sort().forEach(domain => {
       const item = document.createElement('div');
-      item.className = 'keyword-item'; // Reuse keyword item styling
+      item.className = 'keyword-item';
 
       const domainCheckbox = document.createElement('input');
       domainCheckbox.type = 'checkbox';
@@ -126,7 +169,6 @@ async function addDomain(domain) {
   const result = await chrome.storage.local.get(['ignoredDomains']);
   const ignoredDomains = result.ignoredDomains || {};
 
-  // Add to 'Other' category if it exists, or create it
   if (!ignoredDomains['Other']) {
     ignoredDomains['Other'] = [];
   }
@@ -177,7 +219,6 @@ async function toggleDomain(domain) {
   initializeSettings();
 }
 
-// Update keyword groups display
 function updateKeywordGroups(groups, customKeywords, disabledGroups, disabledKeywords) {
   const container = document.getElementById('keywordGroups');
   container.innerHTML = '';
@@ -185,7 +226,6 @@ function updateKeywordGroups(groups, customKeywords, disabledGroups, disabledKey
   // Sort group names alphabetically
   const sortedGroupNames = Object.keys(groups).sort();
 
-  // Standard keyword groups
   sortedGroupNames.forEach(groupName => {
     const keywords = groups[groupName];
     const group = document.createElement('div');
@@ -210,7 +250,6 @@ function updateKeywordGroups(groups, customKeywords, disabledGroups, disabledKey
     const keywordList = document.createElement('div');
     keywordList.className = 'keyword-list';
 
-    // Sort keywords alphabetically within each group
     [...keywords].sort().forEach(keyword => {
       const item = createKeywordItem(keyword, !disabledKeywords.includes(keyword));
       keywordList.appendChild(item);
@@ -224,7 +263,6 @@ function updateKeywordGroups(groups, customKeywords, disabledGroups, disabledKey
   const customList = document.getElementById('customKeywords');
   customList.innerHTML = '';
 
-  // Sort custom keywords alphabetically
   [...customKeywords].sort().forEach(keyword => {
     const item = createKeywordItem(keyword, !disabledKeywords.includes(keyword), true);
     customList.appendChild(item);
@@ -257,13 +295,11 @@ function createKeywordItem(keyword, checked, isCustom = false) {
   return item;
 }
 
-// Update matching option
 async function updateMatchingOption(matchingOption) {
   console.log('Setting matchingOption:', matchingOption);
   await chrome.storage.local.set({ matchingOption });
 }
 
-// Keyword management functions
 async function toggleGroup(groupName) {
   const result = await chrome.storage.local.get(['disabledGroups', 'keywordGroups', 'disabledKeywords']);
   let disabledGroups = result.disabledGroups || [];
@@ -327,7 +363,6 @@ async function removeCustomKeyword(keyword) {
   initializeSettings();
 }
 
-// Show status message
 function showStatus(message, type = 'success') {
   const statusIndicator = document.getElementById('statusIndicator');
   statusIndicator.textContent = message;
@@ -336,7 +371,6 @@ function showStatus(message, type = 'success') {
   setTimeout(() => statusIndicator.style.display = 'none', 3000);
 }
 
-// Fetch and import settings from URL
 async function importFromUrl() {
   const url = document.getElementById('urlInput').value.trim();
   if (!url) return;
@@ -356,18 +390,15 @@ async function importFromUrl() {
       }
     }
 
-    // Save the URL
     await chrome.storage.local.set({ importUrl: url });
-
     showStatus('Import successful!');
-    initializeSettings(); // Refresh the display
+    initializeSettings();
   } catch (error) {
     console.error('Failed to import from URL:', error);
     showStatus('Failed to import from URL', 'error');
   }
 }
 
-// Tab management
 function setupTabs() {
   const tabButtons = document.querySelectorAll('.tab-button');
   const tabContents = document.querySelectorAll('.tab-content');
@@ -385,10 +416,10 @@ function setupTabs() {
   });
 }
 
-// Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
   initializeSettings();
   setupTabs();
+  setupFilter();
 
   document.getElementById('addDomain').addEventListener('click', () => {
     const domain = document.getElementById('newDomain').value;

@@ -20,6 +20,33 @@
       padding: 20px;
     }
 
+    .content-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .search-container {
+      position: relative;
+      width: 300px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .search-input:focus {
+      border-color: #4285f4;
+      box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.1);
+      outline: none;
+    }
+
     .section {
       margin-bottom: 30px;
     }
@@ -183,8 +210,9 @@
     .settings-actions {
       margin-top: 20px;
       display: flex;
-      gap: 10px;
+      flex-direction: column;
       align-items: center;
+      gap: 10px;
     }
 
     #exportSettings,
@@ -210,17 +238,27 @@
     }
 
     #urlInput {
-      flex-grow: 1;
+      width: 100%;
+      max-width: 400px;
       padding: 8px;
       border: 1px solid #ddd;
       border-radius: 4px;
-      margin-right: 10px;
+      margin-top: 10px;
     }
 
+    .settings-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
 
-    .settings-row label {
-      margin: 0;
-      font-weight: 500;
+    #settingsButtons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 20px;
     }
 
     .switch {
@@ -268,72 +306,8 @@
     input:checked+.slider:before {
       transform: translateX(22px);
     }
-
-    #importFromUrlButton {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 150px;
-    }
-
-    #settingsButtons {
-      display: flex;
-      justify-content: center;
-      gap: 20px; /* Adds space between the buttons */
-      margin-bottom: 20px; /* Adds space below the buttons */
-    }
-
-    .settings-actions {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
-
-    button {
-      margin: 0 auto;
-    }
-
-    #newDomain {
-      flex-grow: 1;
-      padding: 8px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-    }
-
-    #addDomain {
-      background: #4285f4;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    #addDomain:hover {
-      background: #357ae8;
-    }
-
-    .settings-row {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px; /* Space between the label and the switch */
-      margin-top: 20px;
-    }
-
-    #urlInput {
-      width: 100%; /* Makes the input box fill the entire width of its container */
-      max-width: 400px; /* Sets a maximum width to prevent it from becoming too wide */
-      padding: 8px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      margin-top: 10px;
-    }
   </style>
 </head>
-
 <body>
   <div class="container">
     <div class="tab-container">
@@ -345,7 +319,14 @@
     </div>
 
     <div id="keywords" class="tab-content active">
-      <h2>Keyword Groups</h2>
+      <div class="content-header">
+        <h2>Keyword Groups</h2>
+        <!-- Replace the search container in both tabs with this version -->
+        <div class="search-container">
+          <input type="text" id="filterInput" placeholder="Search keywords..." class="search-input">
+        </div>
+      </div>
+
       <div class="info">
         Enable or disable entire groups or individual keywords. Changes are saved automatically.
       </div>
@@ -375,11 +356,18 @@
     </div>
 
     <div id="domains" class="tab-content">
-      <h2>Ignored Domains</h2>
+      <div class="content-header">
+        <h2>Ignored Domains</h2>
+        <!-- Replace the search container in both tabs with this version -->
+        <div class="search-container">
+          <input type="text" id="domainFilterInput" placeholder="Search domains..." class="search-input">
+        </div>
+      </div>
+
       <div class="info">
         Add domains to ignore from content filtering. Use * for wildcards.
         <p>Examples: mail.*, outlook.com*, *.google.com<br>
-        Use checkboxes to enable/disable domains without removing them.</p>
+          Use checkboxes to enable/disable domains without removing them.</p>
       </div>
       <div id="domainList" class="domain-list">
       </div>
@@ -414,6 +402,7 @@
       </div>
     </div>
   </div>
+
   <script src="../scripts/keywords.js" type="module"></script>
   <script src="options.js" type="module"></script>
 </body>
