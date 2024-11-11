@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
 
     // Update toggle state using pattern matching and protocol check
-    const isEnabledUrl = enabledDomains.some(urlPattern => {
+    const isEnabledUrl = !disabledDomains.some(urlPattern => {
       const pattern = urlPattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
       return new RegExp(`^${pattern}$`).test(currentUrl);
     }) && /^https?:\/\//.test(currentUrl);
@@ -74,17 +74,10 @@ document.addEventListener('DOMContentLoaded', async function () {
     updateVisibility(isEnabledUrl);  // Set initial visibility
 
     // Update stats display
-    const pageBlockedPercent = pageStats.pageTotal
-      ? Math.round((pageStats.pageBlocked / pageStats.pageTotal) * 100)
-      : 0;
-    const totalBlockedPercent = stats.totalScanned
-      ? Math.round((stats.totalBlocked / stats.totalScanned) * 100)
-      : 0;
-
     const statsElements = document.querySelectorAll('.stat-number');
     if (statsElements.length >= 2) {
-      statsElements[0].textContent = `${pageStats.pageBlocked} (${pageBlockedPercent}%)`;
-      statsElements[1].textContent = `${(stats.totalBlocked / 1000000).toFixed(2)}M (${totalBlockedPercent}%)`;
+      statsElements[0].textContent = `${pageStats.pageBlocked}`;
+      statsElements[1].textContent = `${(stats.totalBlocked / 1000000).toFixed(2)}M`;
     }
 
     // Function to normalize keywords by removing leading/trailing punctuation and trimming spaces
@@ -92,14 +85,15 @@ document.addEventListener('DOMContentLoaded', async function () {
       return keyword.toLowerCase().replace(/^[\s.,:;!?]+|[\s.,:;!?]+$/g, '').trim();
     }
 
-    // Function to fetch and display blocked keywords with proper grouping and original format
+    // Update the fetchBlockedKeywords function
     async function fetchBlockedKeywords(tabId) {
       const result = await chrome.storage.local.get([`blockedKeywords_${tabId}`, 'originalKeywords']);
       const blockedKeywords = result[`blockedKeywords_${tabId}`] || [];
       const originalKeywords = result.originalKeywords || {};
       const blockedKeywordsElement = document.getElementById('blockedKeywords');
+      const keywordsTitleElement = document.querySelector('.keywords-title'); // Add this line
 
-      if (blockedKeywordsElement) {
+      if (blockedKeywordsElement && keywordsTitleElement) { // Update condition
         // Group keywords using normalized versions and display original format
         const keywordCounts = blockedKeywords.reduce((acc, keyword) => {
           const normalizedKeyword = normalizeKeyword(keyword);
@@ -111,14 +105,17 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Sort keywords alphabetically using their original format
         const sortedKeywords = Object.entries(keywordCounts).sort(([a], [b]) => a.localeCompare(b));
 
+        // Show/hide title based on whether there are any keywords
+        keywordsTitleElement.style.display = sortedKeywords.length > 0 ? 'block' : 'none';
+
         // Generate the display HTML with pills design
         blockedKeywordsElement.innerHTML = sortedKeywords
           .map(([keyword, count]) => `
-            <span class="keyword-pill">
-              ${toTitleCase(keyword)}
-              <span class="keyword-count">${count}</span>
-            </span>
-          `)
+        <span class="keyword-pill">
+          ${toTitleCase(keyword)}
+          <span class="keyword-count">${count}</span>
+        </span>
+      `)
           .join('');
 
         console.log('Blocked keywords (grouped and original format):', sortedKeywords);
@@ -163,6 +160,8 @@ document.addEventListener('DOMContentLoaded', async function () {
       }
 
       await chrome.storage.local.set({ ignoredDomains, disabledDomains });
+      // Add this line to update the icon
+      chrome.tabs.get(currentTab.id, tab => updateIcon(tab.url));
       chrome.tabs.reload(currentTab.id);
     });
 

@@ -161,50 +161,46 @@ const updateBadge = debounce((pageCount, url) => {
 // Function to update the icon based on the URL's status
 function updateIcon(url) {
   if (!url.startsWith('http://') && !url.startsWith('https://')) {
-    chrome.action.setIcon({
-      path: {
-        "16": "images/icon16_gray.png",
-        "48": "images/icon48_gray.png",
-        "128": "images/icon128_gray.png"
-      }
-    });
+    setGrayIcon();
     return;
   }
 
-  chrome.storage.local.get(['ignoredDomains', 'disabledDomains', 'disabledDomainGroups'], (result) => {
-    const ignoredDomains = result.ignoredDomains || {};
+  chrome.storage.local.get(['disabledDomains'], (result) => {
+    const currentDomain = new URL(url).hostname;
     const disabledDomains = result.disabledDomains || [];
-    const disabledDomainGroups = result.disabledDomainGroups || [];
 
-    // Get all enabled domains
-    const enabledDomains = [];
-    Object.entries(ignoredDomains).forEach(([groupName, domains]) => {
-      if (!disabledDomainGroups.includes(groupName)) {
-        domains.forEach(domain => {
-          if (!disabledDomains.includes(domain)) {
-            enabledDomains.push(domain);
-          }
-        });
-      }
+    // Check if the current domain is in disabled domains
+    const isDisabled = disabledDomains.some(pattern => {
+      const regexPattern = new RegExp(pattern.replace(/\*/g, '.*'));
+      return regexPattern.test(currentDomain);
     });
 
-    const isIgnoredUrl = enabledDomains.some(urlPattern => {
-      const pattern = urlPattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
-      const regexPattern = new RegExp(pattern);
-      return regexPattern.test(url);
-    });
+    if (isDisabled) {
+      setGrayIcon();
+    } else {
+      setColorIcon();
+    }
+  });
+}
 
-    const iconPath = isIgnoredUrl ? {
+// Add these helper functions right after updateIcon
+function setGrayIcon() {
+  chrome.action.setIcon({
+    path: {
       "16": "images/icon16_gray.png",
       "48": "images/icon48_gray.png",
       "128": "images/icon128_gray.png"
-    } : {
+    }
+  });
+}
+
+function setColorIcon() {
+  chrome.action.setIcon({
+    path: {
       "16": "images/icon16.png",
       "48": "images/icon48.png",
       "128": "images/icon128.png"
-    };
-
-    chrome.action.setIcon({ path: iconPath });
+    }
   });
 }
 
