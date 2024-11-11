@@ -312,12 +312,18 @@ function hideNodes(nodesToHide) {
 function filterContent() {
   const nodesToHide = new Set();
   const hostname = window.location.hostname;
+  const currentUrl = window.location.href;
 
-  chromeStorageGet(['disabledDomains'], function (result) {
+  chromeStorageGet(['disabledUrls'], function (result) {
     try {
-      const disabledDomains = result.disabledDomains || [];
-      if (disabledDomains.includes(hostname)) {
-        console.log('Content filtering is disabled for this domain:', hostname);
+      const disabledUrls = result.disabledUrls || [];
+      const isIgnoredUrl = disabledUrls.some(urlPattern => {
+        const pattern = urlPattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
+        return new RegExp(`^${pattern}$`).test(currentUrl);
+      }) || !/^https?:\/\//.test(currentUrl);
+
+      if (isIgnoredUrl) {
+        console.log('Content filtering is disabled for this URL:', currentUrl);
         return;
       }
 
