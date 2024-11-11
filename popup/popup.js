@@ -14,29 +14,32 @@ document.addEventListener('DOMContentLoaded', async function () {
       return;
     }
 
-    // Get current tab's domain
+    // Get current tab's URL
     const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
     const currentTab = tabs[0];
-    let hostname = new URL(currentTab.url).hostname;
-    hostname = hostname.replace(/^www\./, ''); // Remove 'www.' if present
-    console.log('Current hostname:', hostname);
+    const currentUrl = new URL(currentTab.url).href;
+    console.log('Current URL:', currentUrl);
 
     // Load current state
     const result = await chrome.storage.local.get([
-      'disabledDomains',
+      'disabledUrls',
       'stats',
       `pageStats_${currentTab.id}`,
       `blockedKeywords_${currentTab.id}`,
       'originalKeywords'
     ]);
-    const disabledDomains = result.disabledDomains || [];
+    const disabledUrls = result.disabledUrls || [];
     const stats = result.stats || { totalBlocked: 0, totalScanned: 0 };
     const pageStats = result[`pageStats_${currentTab.id}`] || { pageBlocked: 0, pageTotal: 0 };
     const blockedKeywords = result[`blockedKeywords_${currentTab.id}`] || [];
     const originalKeywords = result.originalKeywords || {};
 
-    // Update toggle state
-    toggle.checked = disabledDomains.includes(hostname);
+    // Update toggle state using pattern matching and protocol check
+    const isIgnoredUrl = disabledUrls.some(urlPattern => {
+      const pattern = urlPattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
+      return new RegExp(`^${pattern}$`).test(currentUrl);
+    }) || !/^https?:\/\//.test(currentUrl);
+    toggle.checked = isIgnoredUrl;
 
     // Update stats display
     const pageBlockedPercent = pageStats.pageTotal
@@ -98,14 +101,14 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Handle toggle changes
     toggle.addEventListener('change', async function () {
-      const result = await chrome.storage.local.get('disabledDomains');
-      let disabledDomains = result.disabledDomains || [];
+      const result = await chrome.storage.local.get('disabledUrls');
+      let disabledUrls = result.disabledUrls || [];
       if (this.checked) {
-        if (!disabledDomains.includes(hostname)) disabledDomains.push(hostname);
+        if (!disabledUrls.includes(currentUrl)) disabledUrls.push(currentUrl);
       } else {
-        disabledDomains = disabledDomains.filter(domain => domain !== hostname);
+        disabledUrls = disabledUrls.filter(url => url !== currentUrl);
       }
-      await chrome.storage.local.set({ disabledDomains });
+      await chrome.storage.local.set({ disabledUrls });
       chrome.tabs.reload(currentTab.id);
     });
 
