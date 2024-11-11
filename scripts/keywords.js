@@ -697,6 +697,7 @@ export const DEFAULT_KEYWORD_GROUPS = {
     'Joe Lieberman',
     'Joe Manchin',
     'John Bolton',
+    'John Oliver',
     'Josh Hawley',
     'Kamala Harris',
     'VP Harris',
