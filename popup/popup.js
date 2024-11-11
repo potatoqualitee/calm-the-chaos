@@ -7,10 +7,10 @@ document.addEventListener('DOMContentLoaded', async function () {
       }).join(' ');
     }
 
-    function updateVisibility(isDisabled) {
+    function updateVisibility(isEnabled) {
       const statsAndKeywords = document.getElementById('statsAndKeywords');
       if (statsAndKeywords) {
-        statsAndKeywords.style.display = isDisabled ? 'none' : 'block';
+        statsAndKeywords.style.display = isEnabled ? 'block' : 'none';
       }
     }
 
@@ -65,13 +65,13 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
 
     // Update toggle state using pattern matching and protocol check
-    const isIgnoredUrl = enabledDomains.some(urlPattern => {
+    const isEnabledUrl = enabledDomains.some(urlPattern => {
       const pattern = urlPattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
       return new RegExp(`^${pattern}$`).test(currentUrl);
-    }) || !/^https?:\/\//.test(currentUrl);
+    }) && /^https?:\/\//.test(currentUrl);
 
-    toggle.checked = isIgnoredUrl;
-    updateVisibility(isIgnoredUrl);  // Set initial visibility
+    toggle.checked = isEnabledUrl;
+    updateVisibility(isEnabledUrl);  // Set initial visibility
 
     // Update stats display
     const pageBlockedPercent = pageStats.pageTotal
@@ -143,6 +143,14 @@ document.addEventListener('DOMContentLoaded', async function () {
       let disabledDomains = result.disabledDomains || [];
 
       if (this.checked) {
+        // Remove from disabled domains if present
+        disabledDomains = disabledDomains.filter(url => url !== currentUrl);
+        // Remove from 'Other' category if present
+        if (ignoredDomains['Other']) {
+          ignoredDomains['Other'] = ignoredDomains['Other'].filter(url => url !== currentUrl);
+        }
+        updateVisibility(true);  // Show stats when enabled
+      } else {
         // Add to 'Other' category if it doesn't exist
         if (!ignoredDomains['Other']) {
           ignoredDomains['Other'] = [];
@@ -151,15 +159,7 @@ document.addEventListener('DOMContentLoaded', async function () {
           ignoredDomains['Other'].push(currentUrl);
           ignoredDomains['Other'].sort();
         }
-        updateVisibility(true);  // Hide stats when disabled
-      } else {
-        // Remove from disabled domains if present
-        disabledDomains = disabledDomains.filter(url => url !== currentUrl);
-        // Remove from 'Other' category if present
-        if (ignoredDomains['Other']) {
-          ignoredDomains['Other'] = ignoredDomains['Other'].filter(url => url !== currentUrl);
-        }
-        updateVisibility(false);  // Show stats when enabled
+        updateVisibility(false);  // Hide stats when disabled
       }
 
       await chrome.storage.local.set({ ignoredDomains, disabledDomains });
