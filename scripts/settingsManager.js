@@ -78,8 +78,8 @@ function importSettings(file) {
       const newIgnoredDomains = new Set(currentSettings.ignoredDomains);
       importedSettings.ignoredDomains.forEach(domain => newIgnoredDomains.add(domain));
 
-      // Update matchingOptionsList to include fuzzy, flexible, and exact
-      const matchingOptionsList = ['fuzzy', 'flexible', 'exact'];
+      // Update matchingOptionsList to include flexible and exact
+      const matchingOptionsList = ['flexible', 'exact'];
 
       chrome.storage.local.set({
         customKeywords: Array.from(newKeywords),

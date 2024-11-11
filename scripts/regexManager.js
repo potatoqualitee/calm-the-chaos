@@ -1,8 +1,6 @@
 import { generateBlockedRegex, chromeStorageGet } from './utils.js';
-import FuzzySet from 'fuzzyset.js';
 
 let BLOCKED_REGEX;
-let fuzzySet;
 
 // Initialize the regex from storage
 function initializeRegex(callback) {
@@ -33,13 +31,8 @@ function initializeRegex(callback) {
         }
       });
 
-      if (matchingOption === 'fuzzy') {
-        // Initialize FuzzySet for fuzzy matching
-        fuzzySet = FuzzySet(Array.from(allKeywords));
-      } else {
-        // Use regex for exact or flexible matching
-        BLOCKED_REGEX = allKeywords.size > 0 ? generateBlockedRegex(allKeywords, matchingOption) : null;
-      }
+      // Use regex for exact or flexible matching
+      BLOCKED_REGEX = allKeywords.size > 0 ? generateBlockedRegex(allKeywords, matchingOption) : null;
 
       if (callback) callback();
     } catch (error) {
@@ -52,8 +45,4 @@ function getBlockedRegex() {
   return BLOCKED_REGEX;
 }
 
-function getFuzzySet() {
-  return fuzzySet;
-}
-
-export { initializeRegex, getBlockedRegex, getFuzzySet };
+export { initializeRegex, getBlockedRegex };

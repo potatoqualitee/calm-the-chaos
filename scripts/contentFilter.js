@@ -1,7 +1,7 @@
 // Refactored contentFilter.js with elementContainsBlockedContent exported
 
 import { chromeStorageGet, chromeRuntimeSendMessage } from './utils.js';
-import { getBlockedRegex, getFuzzySet } from './regexManager.js';
+import { getBlockedRegex } from './regexManager.js';
 import { handleReddit } from './platformHandlers/handleReddit.js';
 import { handleFacebook } from './platformHandlers/handleFacebook.js';
 import { handleTwitter } from './platformHandlers/handleTwitter.js';
@@ -30,23 +30,10 @@ window.addEventListener('beforeunload', () => {
 function containsBlockedContent(text) {
   try {
     const BLOCKED_REGEX = getBlockedRegex();
-    const fuzzySet = getFuzzySet();
     const matches = new Set();
 
     // Return empty array if no text
     if (!text) return [];
-
-    // Use fuzzy matching if fuzzySet is available
-    if (fuzzySet) {
-      const fuzzyMatches = fuzzySet.get(text.toLowerCase());
-      if (fuzzyMatches) {
-        fuzzyMatches.forEach(match => {
-          if (match[0] > 0.1) { // Further adjusted threshold to 0.1
-            matches.add(match[1]);
-          }
-        });
-      }
-    }
 
     // Use regex matching if BLOCKED_REGEX is available
     if (BLOCKED_REGEX) {
@@ -104,11 +91,10 @@ function findMinimalContentContainer(node) {
 
 function handleGenericSites(nodesToHide) {
   try {
-    const fuzzySet = getFuzzySet();
     const BLOCKED_REGEX = getBlockedRegex();
 
     // If no pattern (all keywords disabled), skip filtering
-    if (!fuzzySet && !BLOCKED_REGEX) {
+    if (!BLOCKED_REGEX) {
       console.log('Content filtering is disabled - all keywords are disabled');
       return;
     }
@@ -153,11 +139,10 @@ function handleGenericSites(nodesToHide) {
 }
 
 function handleGenericMedia(nodesToHide) {
-  const fuzzySet = getFuzzySet();
   const BLOCKED_REGEX = getBlockedRegex();
 
   // If no pattern (all keywords disabled), skip filtering
-  if (!fuzzySet && !BLOCKED_REGEX) return;
+  if (!BLOCKED_REGEX) return;
 
   chromeStorageGet(['keywordGroups', 'customKeywords', 'disabledKeywords', 'disabledGroups'], function (result) {
     try {
@@ -219,11 +204,10 @@ function handleGenericMedia(nodesToHide) {
 
 function elementContainsBlockedContent(element) {
   try {
-    const fuzzySet = getFuzzySet();
     const BLOCKED_REGEX = getBlockedRegex();
 
     // If no pattern (all keywords disabled), return false
-    if (!fuzzySet && !BLOCKED_REGEX) return false;
+    if (!BLOCKED_REGEX) return false;
 
     const textsToCheck = [
       element.textContent || '',
@@ -337,11 +321,10 @@ function filterContent() {
         return;
       }
 
-      const fuzzySet = getFuzzySet();
       const BLOCKED_REGEX = getBlockedRegex();
 
       // If no pattern (all keywords disabled), skip filtering
-      if (!fuzzySet && !BLOCKED_REGEX) {
+      if (!BLOCKED_REGEX) {
         console.log('Content filtering is disabled - all keywords are disabled');
         return;
       }

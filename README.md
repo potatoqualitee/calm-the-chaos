@@ -53,7 +53,7 @@ This extension is built for flexibility and extensibility, allowing developers t
 ### Key Components
 
 - **contentFilter.js**: Core logic for content identification and blocking.
-- **regexManager.js**: Manages regex patterns and supports flexible and fuzzy matching.
+- **regexManager.js**: Manages regex patterns and supports flexible and exact matching.
 - **utils.js**: Utility functions for regex handling and Chrome API interactions.
 
 ### Extending the Extension
