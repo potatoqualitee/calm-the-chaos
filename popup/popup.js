@@ -35,21 +35,37 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Load current state
     const result = await chrome.storage.local.get([
-      'disabledUrls',
+      'ignoredDomains',
+      'disabledDomains',
+      'disabledDomainGroups',
       'stats',
       `pageStats_${currentTab.id}`,
       `blockedKeywords_${currentTab.id}`,
       'originalKeywords'
     ]);
 
-    const disabledUrls = result.disabledUrls || [];
+    const ignoredDomains = result.ignoredDomains || {};
+    const disabledDomains = result.disabledDomains || [];
+    const disabledDomainGroups = result.disabledDomainGroups || [];
     const stats = result.stats || { totalBlocked: 0, totalScanned: 0 };
     let pageStats = result[`pageStats_${currentTab.id}`] || { pageBlocked: 0, pageTotal: 0 };
     let blockedKeywords = result[`blockedKeywords_${currentTab.id}`] || [];
     const originalKeywords = result.originalKeywords || {};
 
+    // Get all enabled domains
+    const enabledDomains = [];
+    Object.entries(ignoredDomains).forEach(([groupName, domains]) => {
+      if (!disabledDomainGroups.includes(groupName)) {
+        domains.forEach(domain => {
+          if (!disabledDomains.includes(domain)) {
+            enabledDomains.push(domain);
+          }
+        });
+      }
+    });
+
     // Update toggle state using pattern matching and protocol check
-    const isIgnoredUrl = disabledUrls.some(urlPattern => {
+    const isIgnoredUrl = enabledDomains.some(urlPattern => {
       const pattern = urlPattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
       return new RegExp(`^${pattern}$`).test(currentUrl);
     }) || !/^https?:\/\//.test(currentUrl);
@@ -122,18 +138,31 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Handle toggle changes
     toggle.addEventListener('change', async function () {
-      const result = await chrome.storage.local.get('disabledUrls');
-      let disabledUrls = result.disabledUrls || [];
+      const result = await chrome.storage.local.get(['ignoredDomains', 'disabledDomains']);
+      let ignoredDomains = result.ignoredDomains || {};
+      let disabledDomains = result.disabledDomains || [];
 
       if (this.checked) {
-        if (!disabledUrls.includes(currentUrl)) disabledUrls.push(currentUrl);
+        // Add to 'Other' category if it doesn't exist
+        if (!ignoredDomains['Other']) {
+          ignoredDomains['Other'] = [];
+        }
+        if (!ignoredDomains['Other'].includes(currentUrl)) {
+          ignoredDomains['Other'].push(currentUrl);
+          ignoredDomains['Other'].sort();
+        }
         updateVisibility(true);  // Hide stats when disabled
       } else {
-        disabledUrls = disabledUrls.filter(url => url !== currentUrl);
+        // Remove from disabled domains if present
+        disabledDomains = disabledDomains.filter(url => url !== currentUrl);
+        // Remove from 'Other' category if present
+        if (ignoredDomains['Other']) {
+          ignoredDomains['Other'] = ignoredDomains['Other'].filter(url => url !== currentUrl);
+        }
         updateVisibility(false);  // Show stats when enabled
       }
 
-      await chrome.storage.local.set({ disabledUrls });
+      await chrome.storage.local.set({ ignoredDomains, disabledDomains });
       chrome.tabs.reload(currentTab.id);
     });
 

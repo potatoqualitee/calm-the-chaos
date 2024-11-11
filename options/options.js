@@ -11,6 +11,7 @@ async function initializeSettings() {
     'disabledGroups',
     'disabledKeywords',
     'disabledDomains',
+    'disabledDomainGroups',
     'matchingOption',
     'importUrl',
     'checkForUpdates'
@@ -19,7 +20,7 @@ async function initializeSettings() {
   // Initialize domains
   let ignoredDomains = result.ignoredDomains;
   if (!ignoredDomains) {
-    ignoredDomains = [...DEFAULT_IGNORED_URLS];
+    ignoredDomains = DEFAULT_IGNORED_URLS;
     await chrome.storage.local.set({ ignoredDomains });
   }
 
@@ -35,6 +36,7 @@ async function initializeSettings() {
   let disabledGroups = result.disabledGroups || [];
   let disabledKeywords = result.disabledKeywords || [];
   let disabledDomains = result.disabledDomains || [];
+  let disabledDomainGroups = result.disabledDomainGroups || [];
   let matchingOption = result.matchingOption !== undefined ? result.matchingOption : 'flexible';
   let importUrl = result.importUrl || '';
   let checkForUpdates = result.checkForUpdates !== undefined ? result.checkForUpdates : true;
@@ -47,43 +49,132 @@ async function initializeSettings() {
     disabledGroups,
     disabledKeywords,
     disabledDomains,
+    disabledDomainGroups,
     matchingOption,
     importUrl,
     checkForUpdates
   });
 
   // Update UI elements
-  updateDomainList(ignoredDomains, disabledDomains);
+  updateDomainGroups(ignoredDomains, disabledDomains, disabledDomainGroups);
   updateKeywordGroups(keywordGroups, customKeywords, disabledGroups, disabledKeywords);
   document.querySelector(`input[name="matchingOptions"][value="${matchingOption}"]`).checked = true;
   document.getElementById('urlInput').value = importUrl;
   document.getElementById('checkForUpdates').checked = checkForUpdates;
 }
 
-// Update the domain list display
-function updateDomainList(domains, disabledDomains) {
+// Update the domain groups display
+function updateDomainGroups(domainGroups, disabledDomains, disabledDomainGroups) {
   const domainList = document.getElementById('domainList');
   domainList.innerHTML = '';
 
-  // Sort domains alphabetically
-  domains.sort();
+  // Sort group names alphabetically
+  const sortedGroupNames = Object.keys(domainGroups).sort();
 
-  domains.forEach(domain => {
-    const item = document.createElement('div');
-    item.className = 'domain-item';
+  sortedGroupNames.forEach(groupName => {
+    const domains = domainGroups[groupName];
+    const group = document.createElement('div');
+    group.className = 'keyword-group'; // Reuse keyword group styling
+
+    const header = document.createElement('div');
+    header.className = 'group-header';
 
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
-    checkbox.checked = !disabledDomains.includes(domain);
-    checkbox.onchange = () => toggleDomain(domain);
+    checkbox.checked = !disabledDomainGroups.includes(groupName);
+    checkbox.onchange = () => toggleDomainGroup(groupName);
 
-    const text = document.createElement('span');
-    text.textContent = domain;
+    const title = document.createElement('div');
+    title.className = 'group-title';
+    title.textContent = groupName;
 
-    item.appendChild(checkbox);
-    item.appendChild(text);
-    domainList.appendChild(item);
+    header.appendChild(checkbox);
+    header.appendChild(title);
+    group.appendChild(header);
+
+    const domainsList = document.createElement('div');
+    domainsList.className = 'keyword-list'; // Reuse keyword list styling
+
+    // Sort domains alphabetically within each group
+    [...domains].sort().forEach(domain => {
+      const item = document.createElement('div');
+      item.className = 'keyword-item'; // Reuse keyword item styling
+
+      const domainCheckbox = document.createElement('input');
+      domainCheckbox.type = 'checkbox';
+      domainCheckbox.checked = !disabledDomains.includes(domain);
+      domainCheckbox.onchange = () => toggleDomain(domain);
+
+      const label = document.createElement('label');
+      label.textContent = domain;
+
+      item.appendChild(domainCheckbox);
+      item.appendChild(label);
+      domainsList.appendChild(item);
+    });
+
+    group.appendChild(domainsList);
+    domainList.appendChild(group);
   });
+}
+
+// Domain management functions
+async function addDomain(domain) {
+  domain = domain.trim().toLowerCase();
+  if (!domain) return;
+
+  const result = await chrome.storage.local.get(['ignoredDomains']);
+  const ignoredDomains = result.ignoredDomains || {};
+
+  // Add to 'Other' category if it exists, or create it
+  if (!ignoredDomains['Other']) {
+    ignoredDomains['Other'] = [];
+  }
+
+  if (!ignoredDomains['Other'].includes(domain)) {
+    ignoredDomains['Other'].push(domain);
+    ignoredDomains['Other'].sort();
+    await chrome.storage.local.set({ ignoredDomains });
+    initializeSettings();
+  }
+}
+
+async function toggleDomainGroup(groupName) {
+  const result = await chrome.storage.local.get(['disabledDomainGroups', 'ignoredDomains', 'disabledDomains']);
+  let disabledDomainGroups = result.disabledDomainGroups || [];
+  let disabledDomains = result.disabledDomains || [];
+  const ignoredDomains = result.ignoredDomains || {};
+
+  if (disabledDomainGroups.includes(groupName)) {
+    disabledDomainGroups = disabledDomainGroups.filter(g => g !== groupName);
+    const domains = ignoredDomains[groupName] || [];
+    disabledDomains = disabledDomains.filter(d => !domains.includes(d));
+  } else {
+    disabledDomainGroups.push(groupName);
+    const domains = ignoredDomains[groupName] || [];
+    disabledDomains = [...new Set([...disabledDomains, ...domains])];
+  }
+
+  disabledDomainGroups.sort();
+  disabledDomains.sort();
+
+  await chrome.storage.local.set({ disabledDomainGroups, disabledDomains });
+  initializeSettings();
+}
+
+async function toggleDomain(domain) {
+  const result = await chrome.storage.local.get('disabledDomains');
+  let disabledDomains = result.disabledDomains || [];
+
+  if (disabledDomains.includes(domain)) {
+    disabledDomains = disabledDomains.filter(d => d !== domain);
+  } else {
+    disabledDomains.push(domain);
+  }
+
+  disabledDomains.sort();
+  await chrome.storage.local.set({ disabledDomains });
+  initializeSettings();
 }
 
 // Update keyword groups display
@@ -172,47 +263,6 @@ async function updateMatchingOption(matchingOption) {
   await chrome.storage.local.set({ matchingOption });
 }
 
-// Domain management functions
-async function addDomain(domain) {
-  domain = domain.trim().toLowerCase();
-  if (!domain) return;
-
-  const result = await chrome.storage.local.get(['ignoredDomains', 'disabledDomains']);
-  const ignoredDomains = result.ignoredDomains || [];
-  const disabledDomains = result.disabledDomains || [];
-
-  if (!ignoredDomains.includes(domain)) {
-    ignoredDomains.push(domain);
-    await chrome.storage.local.set({ ignoredDomains });
-    updateDomainList(ignoredDomains, disabledDomains);
-  }
-}
-
-async function removeDomain(domain) {
-  const result = await chrome.storage.local.get(['ignoredDomains', 'disabledDomains']);
-  let ignoredDomains = result.ignoredDomains || [];
-  const disabledDomains = result.disabledDomains || [];
-
-  ignoredDomains = ignoredDomains.filter(d => d !== domain);
-  await chrome.storage.local.set({ ignoredDomains });
-  updateDomainList(ignoredDomains, disabledDomains);
-}
-
-async function toggleDomain(domain) {
-  const result = await chrome.storage.local.get('disabledDomains');
-  let disabledDomains = result.disabledDomains || [];
-
-  if (disabledDomains.includes(domain)) {
-    disabledDomains = disabledDomains.filter(d => d !== domain);
-  } else {
-    disabledDomains.push(domain);
-  }
-
-  disabledDomains.sort();
-  await chrome.storage.local.set({ disabledDomains });
-  initializeSettings();
-}
-
 // Keyword management functions
 async function toggleGroup(groupName) {
   const result = await chrome.storage.local.get(['disabledGroups', 'keywordGroups', 'disabledKeywords']);
@@ -249,6 +299,7 @@ async function toggleKeyword(keyword) {
 
   disabledKeywords.sort();
   await chrome.storage.local.set({ disabledKeywords });
+  initializeSettings();
 }
 
 async function addCustomKeyword(keyword) {

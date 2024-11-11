@@ -314,10 +314,25 @@ function filterContent() {
   const hostname = window.location.hostname;
   const currentUrl = window.location.href;
 
-  chromeStorageGet(['disabledUrls'], function (result) {
+  chromeStorageGet(['ignoredDomains', 'disabledDomains', 'disabledDomainGroups'], function (result) {
     try {
-      const disabledUrls = result.disabledUrls || [];
-      const isIgnoredUrl = disabledUrls.some(urlPattern => {
+      const ignoredDomains = result.ignoredDomains || {};
+      const disabledDomains = result.disabledDomains || [];
+      const disabledDomainGroups = result.disabledDomainGroups || [];
+
+      // Get all enabled domains
+      const enabledDomains = [];
+      Object.entries(ignoredDomains).forEach(([groupName, domains]) => {
+        if (!disabledDomainGroups.includes(groupName)) {
+          domains.forEach(domain => {
+            if (!disabledDomains.includes(domain)) {
+              enabledDomains.push(domain);
+            }
+          });
+        }
+      });
+
+      const isIgnoredUrl = enabledDomains.some(urlPattern => {
         const pattern = urlPattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
         return new RegExp(`^${pattern}$`).test(currentUrl);
       }) || !/^https?:\/\//.test(currentUrl);

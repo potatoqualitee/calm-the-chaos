@@ -4,14 +4,13 @@ import { DEFAULT_IGNORED_URLS, DEFAULT_KEYWORD_GROUPS } from './scripts/keywords
 
 // Initialize default settings on installation
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.local.get(['disabledUrls', 'checkForUpdates', 'importUrl'], (result) => {
-    const disabledUrls = result.disabledUrls || [];
-    const newDisabledUrls = [...new Set([...disabledUrls, ...DEFAULT_IGNORED_URLS])];
+  chrome.storage.local.get(['ignoredDomains', 'checkForUpdates', 'importUrl'], (result) => {
+    const ignoredDomains = result.ignoredDomains || DEFAULT_IGNORED_URLS;
     const checkForUpdates = result.checkForUpdates !== undefined ? result.checkForUpdates : true;
     const importUrl = result.importUrl || '';
 
     chrome.storage.local.set({
-      disabledUrls: newDisabledUrls,
+      ignoredDomains,
       checkForUpdates,
       importUrl,
     });
@@ -126,11 +125,25 @@ const updateBadge = debounce((pageCount, url) => {
     return;
   }
 
-  chrome.storage.local.get('disabledUrls', (result) => {
-    const disabledUrls = result.disabledUrls || [];
+  chrome.storage.local.get(['ignoredDomains', 'disabledDomains', 'disabledDomainGroups'], (result) => {
+    const ignoredDomains = result.ignoredDomains || {};
+    const disabledDomains = result.disabledDomains || [];
+    const disabledDomainGroups = result.disabledDomainGroups || [];
     let text = '';
 
-    const isIgnoredUrl = disabledUrls.some(urlPattern => {
+    // Get all enabled domains
+    const enabledDomains = [];
+    Object.entries(ignoredDomains).forEach(([groupName, domains]) => {
+      if (!disabledDomainGroups.includes(groupName)) {
+        domains.forEach(domain => {
+          if (!disabledDomains.includes(domain)) {
+            enabledDomains.push(domain);
+          }
+        });
+      }
+    });
+
+    const isIgnoredUrl = enabledDomains.some(urlPattern => {
       const pattern = urlPattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
       const regexPattern = new RegExp(pattern);
       return regexPattern.test(url);
@@ -158,9 +171,24 @@ function updateIcon(url) {
     return;
   }
 
-  chrome.storage.local.get('disabledUrls', (result) => {
-    const disabledUrls = result.disabledUrls || [];
-    const isIgnoredUrl = disabledUrls.some(urlPattern => {
+  chrome.storage.local.get(['ignoredDomains', 'disabledDomains', 'disabledDomainGroups'], (result) => {
+    const ignoredDomains = result.ignoredDomains || {};
+    const disabledDomains = result.disabledDomains || [];
+    const disabledDomainGroups = result.disabledDomainGroups || [];
+
+    // Get all enabled domains
+    const enabledDomains = [];
+    Object.entries(ignoredDomains).forEach(([groupName, domains]) => {
+      if (!disabledDomainGroups.includes(groupName)) {
+        domains.forEach(domain => {
+          if (!disabledDomains.includes(domain)) {
+            enabledDomains.push(domain);
+          }
+        });
+      }
+    });
+
+    const isIgnoredUrl = enabledDomains.some(urlPattern => {
       const pattern = urlPattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
       const regexPattern = new RegExp(pattern);
       return regexPattern.test(url);
