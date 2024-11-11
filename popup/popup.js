@@ -2,9 +2,14 @@ document.addEventListener('DOMContentLoaded', async function () {
   try {
     // Helper function to capitalize each word in a string
     function toTitleCase(str) {
-      return str.split(' ').map(word => {
-        return word.length === 3 ? word.toUpperCase() : word.charAt(0).toUpperCase() + word.substr(1).toLowerCase();
-      }).join(' ');
+      // If total length (excluding spaces) is 3, make it all caps
+      if (str.replace(/\s/g, '').length === 3) {
+        return str.toUpperCase();
+      }
+      // Otherwise capitalize first letter of each word
+      return str.split(' ').map(word =>
+        word.charAt(0).toUpperCase() + word.substr(1).toLowerCase()
+      ).join(' ');
     }
 
     function updateVisibility(isEnabled) {
@@ -77,7 +82,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const statsElements = document.querySelectorAll('.stat-number');
     if (statsElements.length >= 2) {
       statsElements[0].textContent = `${pageStats.pageBlocked}`;
-      statsElements[1].textContent = `${(stats.totalBlocked / 1000000).toFixed(2)}M`;
+      statsElements[1].textContent = `${stats.totalBlocked.toLocaleString()}`; // Display exact number with commas
     }
 
     // Function to normalize keywords by removing leading/trailing punctuation and trimming spaces
