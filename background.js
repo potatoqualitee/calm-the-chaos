@@ -2,32 +2,26 @@
 
 import { DEFAULT_IGNORED_URLS, DEFAULT_KEYWORD_GROUPS } from './scripts/keywords.js';
 
-// background.js
-chrome.runtime.onInstalled.addListener(function () {
-  // Initialize disabled URLs with defaults
-  chrome.storage.local.get('disabledUrls', function (result) {
+// Initialize default settings on installation
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.storage.local.get('disabledUrls', (result) => {
     const disabledUrls = result.disabledUrls || [];
     const newDisabledUrls = [...new Set([...disabledUrls, ...DEFAULT_IGNORED_URLS])];
     chrome.storage.local.set({ disabledUrls: newDisabledUrls });
   });
 
-  // Initialize keyword groups with defaults
-  chrome.storage.local.get('keywordGroups', function (result) {
+  chrome.storage.local.get('keywordGroups', (result) => {
     const keywordGroups = result.keywordGroups || {};
     const newKeywordGroups = { ...keywordGroups, ...DEFAULT_KEYWORD_GROUPS };
     chrome.storage.local.set({ keywordGroups: newKeywordGroups });
   });
 
-  // Initialize cumulative stats
   chrome.storage.local.set({
-    stats: {
-      totalBlocked: 0,
-      totalScanned: 0
-    }
+    stats: { totalBlocked: 0, totalScanned: 0 }
   });
 });
 
-// Listen for tab updates to reset page counts
+// Listen for tab updates to reset page counts and update badge
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status === 'loading') {
     chrome.storage.local.set({ [`pageStats_${tabId}`]: { pageBlocked: 0, pageTotal: 0 } });
@@ -39,7 +33,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   }
 });
 
-// Listen for tab activation to update badge with the correct count
+// Listen for tab activation to update badge and icon
 chrome.tabs.onActivated.addListener((activeInfo) => {
   chrome.tabs.get(activeInfo.tabId, (tab) => {
     if (tab.url) {
@@ -52,14 +46,24 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
   });
 });
 
+// Debounce function to limit the rate of function execution
+function debounce(func, wait) {
+  let timeout;
+  return function (...args) {
+    const context = this;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(context, args), wait);
+  };
+}
+
 // Function to update badge with page-specific count
-function updateBadge(pageCount, url) {
+const updateBadge = debounce((pageCount, url) => {
   if (!url.startsWith('http://') && !url.startsWith('https://')) {
     chrome.action.setBadgeText({ text: '' });
     return;
   }
 
-  chrome.storage.local.get('disabledUrls', function (result) {
+  chrome.storage.local.get('disabledUrls', (result) => {
     const disabledUrls = result.disabledUrls || [];
     let text = '';
 
@@ -76,7 +80,7 @@ function updateBadge(pageCount, url) {
     chrome.action.setBadgeText({ text });
     chrome.action.setBadgeBackgroundColor({ color: '#6B7280' });
   });
-}
+}, 200); // Debounce badge updates with a 200ms delay
 
 // Function to update the icon based on the URL's status
 function updateIcon(url) {
@@ -91,7 +95,7 @@ function updateIcon(url) {
     return;
   }
 
-  chrome.storage.local.get('disabledUrls', function (result) {
+  chrome.storage.local.get('disabledUrls', (result) => {
     const disabledUrls = result.disabledUrls || [];
     const isIgnoredUrl = disabledUrls.some(urlPattern => {
       const pattern = urlPattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
@@ -114,25 +118,25 @@ function updateIcon(url) {
 }
 
 // Listen for messages from content script
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, sender) => {
+  const tabId = sender.tab.id;
   if (message.type === 'updateBlockCount') {
-    const tabId = sender.tab.id;
     chrome.storage.local.get(['stats', `pageStats_${tabId}`], (result) => {
       const stats = result.stats || { totalBlocked: 0, totalScanned: 0 };
       const pageStats = result[`pageStats_${tabId}`] || { pageBlocked: 0, pageTotal: 0 };
 
       pageStats.pageBlocked = message.count;
       pageStats.pageTotal = message.total;
-
-      stats.totalBlocked = Math.max(stats.totalBlocked, message.count);
+      stats.totalBlocked += message.count;
       stats.totalScanned += message.total;
 
       chrome.storage.local.set({ stats, [`pageStats_${tabId}`]: pageStats });
       updateBadge(pageStats.pageBlocked, sender.tab.url);
     });
-  } else if (message.type === 'updateKeywords') {
-    console.log('Keywords updated');
   } else if (message.type === 'blockedItems') {
-    console.log('Blocked Items:', message.items);
+    const storageKey = `blockedKeywords_${tabId}`;
+    chrome.storage.local.set({ [storageKey]: message.items.map(item => item.blockedKeywords).flat() }, () => {
+      console.log('Blocked keywords synced for tab:', tabId);
+    });
   }
 });

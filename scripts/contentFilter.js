@@ -311,6 +311,14 @@ function hideNodes(nodesToHide) {
         type: 'blockedItems',
         items: blockedItems
       });
+
+      // Store blocked keywords in chrome.storage.local
+      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        const currentTab = tabs[0];
+        const storageKey = `blockedKeywords_${currentTab.id}`;
+        console.log('Storing blocked keywords:', blockedItems.map(item => item.blockedKeywords).flat());
+        chrome.storage.local.set({ [storageKey]: blockedItems.map(item => item.blockedKeywords).flat() });
+      });
     }
   } catch (error) {
     console.debug('Error in hideNodes:', error);
