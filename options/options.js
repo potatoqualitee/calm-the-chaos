@@ -1,9 +1,20 @@
+//options.js
 import { DEFAULT_IGNORED_URLS, DEFAULT_KEYWORD_GROUPS } from '../scripts/keywords.js';
 import { exportSettings, importSettings } from '../scripts/settingsManager.js';
 
 // Initialize the settings
 async function initializeSettings() {
-  const result = await chrome.storage.local.get(['ignoredDomains', 'keywordGroups', 'customKeywords', 'disabledGroups', 'disabledKeywords', 'disabledDomains', 'matchingOption', 'importUrl']);
+  const result = await chrome.storage.local.get([
+    'ignoredDomains',
+    'keywordGroups',
+    'customKeywords',
+    'disabledGroups',
+    'disabledKeywords',
+    'disabledDomains',
+    'matchingOption',
+    'importUrl',
+    'checkForUpdates'
+  ]);
 
   // Initialize domains
   let ignoredDomains = result.ignoredDomains;
@@ -19,15 +30,14 @@ async function initializeSettings() {
     await chrome.storage.local.set({ keywordGroups });
   }
 
-  // Initialize custom keywords
+  // Initialize other settings
   let customKeywords = result.customKeywords || [];
   let disabledGroups = result.disabledGroups || [];
   let disabledKeywords = result.disabledKeywords || [];
   let disabledDomains = result.disabledDomains || [];
-  let matchingOption = result.matchingOption !== undefined ? result.matchingOption : 'flexible'; // Only set to flexible if undefined
-  let importUrl = result.importUrl || ''; // Retrieve saved URL
-
-  console.log('Retrieved matchingOption:', matchingOption); // Debug log
+  let matchingOption = result.matchingOption !== undefined ? result.matchingOption : 'flexible';
+  let importUrl = result.importUrl || '';
+  let checkForUpdates = result.checkForUpdates !== undefined ? result.checkForUpdates : true;
 
   // Sort custom keywords alphabetically
   customKeywords.sort();
@@ -37,13 +47,17 @@ async function initializeSettings() {
     disabledGroups,
     disabledKeywords,
     disabledDomains,
-    matchingOption
+    matchingOption,
+    importUrl,
+    checkForUpdates
   });
 
+  // Update UI elements
   updateDomainList(ignoredDomains, disabledDomains);
   updateKeywordGroups(keywordGroups, customKeywords, disabledGroups, disabledKeywords);
-  document.querySelector(`input[name="matchingOptions"][value="${matchingOption}"]`).checked = true; // Correctly set the radio button
-  document.getElementById('urlInput').value = importUrl; // Set the URL input to the stored value
+  document.querySelector(`input[name="matchingOptions"][value="${matchingOption}"]`).checked = true;
+  document.getElementById('urlInput').value = importUrl;
+  document.getElementById('checkForUpdates').checked = checkForUpdates;
 }
 
 // Update the domain list display
@@ -152,11 +166,10 @@ function createKeywordItem(keyword, checked, isCustom = false) {
   return item;
 }
 
-// Directly update storage without sending a message
+// Update matching option
 async function updateMatchingOption(matchingOption) {
-  console.log('Setting matchingOption:', matchingOption); // Debug log
+  console.log('Setting matchingOption:', matchingOption);
   await chrome.storage.local.set({ matchingOption });
-  // Removed unnecessary removal of other options
 }
 
 // Domain management functions
@@ -195,11 +208,9 @@ async function toggleDomain(domain) {
     disabledDomains.push(domain);
   }
 
-  // Sort disabled domains alphabetically
   disabledDomains.sort();
-
   await chrome.storage.local.set({ disabledDomains });
-  initializeSettings(); // Refresh display
+  initializeSettings();
 }
 
 // Keyword management functions
@@ -211,22 +222,19 @@ async function toggleGroup(groupName) {
 
   if (disabledGroups.includes(groupName)) {
     disabledGroups = disabledGroups.filter(g => g !== groupName);
-    // Enable all keywords in this group
     const keywords = keywordGroups[groupName] || [];
     disabledKeywords = disabledKeywords.filter(k => !keywords.includes(k));
   } else {
     disabledGroups.push(groupName);
-    // Disable all keywords in this group
     const keywords = keywordGroups[groupName] || [];
     disabledKeywords = [...new Set([...disabledKeywords, ...keywords])];
   }
 
-  // Sort disabled groups and keywords alphabetically
   disabledGroups.sort();
   disabledKeywords.sort();
 
   await chrome.storage.local.set({ disabledGroups, disabledKeywords });
-  initializeSettings(); // Refresh display
+  initializeSettings();
 }
 
 async function toggleKeyword(keyword) {
@@ -239,9 +247,7 @@ async function toggleKeyword(keyword) {
     disabledKeywords.push(keyword);
   }
 
-  // Sort disabled keywords alphabetically
   disabledKeywords.sort();
-
   await chrome.storage.local.set({ disabledKeywords });
 }
 
@@ -254,10 +260,9 @@ async function addCustomKeyword(keyword) {
 
   if (!customKeywords.includes(keyword)) {
     customKeywords.push(keyword);
-    // Sort custom keywords alphabetically
     customKeywords.sort();
     await chrome.storage.local.set({ customKeywords });
-    initializeSettings(); // Refresh display
+    initializeSettings();
   }
 }
 
@@ -266,10 +271,18 @@ async function removeCustomKeyword(keyword) {
   let customKeywords = result.customKeywords || [];
 
   customKeywords = customKeywords.filter(k => k !== keyword);
-  // Sort custom keywords alphabetically
   customKeywords.sort();
   await chrome.storage.local.set({ customKeywords });
-  initializeSettings(); // Refresh display
+  initializeSettings();
+}
+
+// Show status message
+function showStatus(message, type = 'success') {
+  const statusIndicator = document.getElementById('statusIndicator');
+  statusIndicator.textContent = message;
+  statusIndicator.style.display = 'block';
+  statusIndicator.style.color = type === 'success' ? '#28a745' : '#dc3545';
+  setTimeout(() => statusIndicator.style.display = 'none', 3000);
 }
 
 // Fetch and import settings from URL
@@ -292,32 +305,15 @@ async function importFromUrl() {
       }
     }
 
-    // Save the URL for future use
+    // Save the URL
     await chrome.storage.local.set({ importUrl: url });
 
-    // Notify user of success
-    showStatus('Import successful!', 'success');
+    showStatus('Import successful!');
+    initializeSettings(); // Refresh the display
   } catch (error) {
     console.error('Failed to import from URL:', error);
-    showStatus('Failed to import from URL. Check console for details.', 'error');
+    showStatus('Failed to import from URL', 'error');
   }
-}
-
-// Show status message
-function showStatus(message, type) {
-  let statusIndicator = document.getElementById('statusIndicator');
-  if (!statusIndicator) {
-    statusIndicator = document.createElement('div');
-    statusIndicator.id = 'statusIndicator';
-    document.body.appendChild(statusIndicator);
-  }
-  statusIndicator.textContent = message;
-  statusIndicator.style.display = 'block';
-  statusIndicator.style.color = type === 'success' ? 'green' : 'red';
-  statusIndicator.style.fontSize = '16px';
-  statusIndicator.style.fontWeight = 'bold';
-  statusIndicator.style.marginTop = '10px';
-  setTimeout(() => statusIndicator.style.display = 'none', 3000);
 }
 
 // Tab management
@@ -334,12 +330,6 @@ function setupTabs() {
 
       button.classList.add('active');
       document.getElementById(tabId).classList.add('active');
-
-      // Hide progress indicator if not on the import/export tab
-      const progressIndicator = document.getElementById('progressIndicator');
-      if (tabId !== 'importExportTab' && progressIndicator) {
-        progressIndicator.style.display = 'none';
-      }
     });
   });
 }
@@ -380,41 +370,36 @@ document.addEventListener('DOMContentLoaded', () => {
   // Add event listener for matching options
   document.getElementById('matchingOptions').addEventListener('change', async (e) => {
     const matchingOption = e.target.value;
-    updateMatchingOption(matchingOption);
+    await updateMatchingOption(matchingOption);
   });
 
   // Add event listeners for export and import buttons
   document.getElementById('exportSettings').addEventListener('click', exportSettings);
+
   document.getElementById('importSettingsButton').addEventListener('click', () => {
     const fileInput = document.getElementById('importSettings');
-    fileInput.click(); // Trigger file input
+    fileInput.click();
+  });
 
-    fileInput.addEventListener('change', (event) => {
-      const file = event.target.files[0];
-      if (file) {
-        let progressIndicator = document.getElementById('progressIndicator');
-        if (!progressIndicator) {
-          progressIndicator = document.createElement('div');
-          document.body.appendChild(progressIndicator);
-        }
-        progressIndicator.style.display = 'block'; // Ensure it's visible
-        progressIndicator.textContent = 'Importing settings...';
-
-        importSettings(file).then(() => {
-          progressIndicator.textContent = 'Import Complete!';
-          progressIndicator.style.color = 'green';
-          progressIndicator.style.fontSize = '24px';
-          progressIndicator.style.fontWeight = 'bold';
-          progressIndicator.style.marginTop = '20px'; // Add margin for spacing
-        }).catch((error) => {
-          console.error('Import failed:', error);
-          progressIndicator.textContent = 'Import failed! Check console for details.';
-          setTimeout(() => progressIndicator.remove(), 3000);
-        });
+  document.getElementById('importSettings').addEventListener('change', async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      try {
+        await importSettings(file);
+        showStatus('Import successful!');
+        initializeSettings();
+      } catch (error) {
+        console.error('Import failed:', error);
+        showStatus('Import failed!', 'error');
       }
-    });
+    }
   });
 
   // Add event listener for import from URL button
   document.getElementById('importFromUrlButton').addEventListener('click', importFromUrl);
+
+  // Add event listener for check for updates toggle
+  document.getElementById('checkForUpdates').addEventListener('change', async (e) => {
+    await chrome.storage.local.set({ checkForUpdates: e.target.checked });
+  });
 });

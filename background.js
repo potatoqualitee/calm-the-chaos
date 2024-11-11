@@ -4,10 +4,22 @@ import { DEFAULT_IGNORED_URLS, DEFAULT_KEYWORD_GROUPS } from './scripts/keywords
 
 // Initialize default settings on installation
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.local.get('disabledUrls', (result) => {
+  chrome.storage.local.get(['disabledUrls', 'checkForUpdates', 'importUrl'], (result) => {
     const disabledUrls = result.disabledUrls || [];
     const newDisabledUrls = [...new Set([...disabledUrls, ...DEFAULT_IGNORED_URLS])];
-    chrome.storage.local.set({ disabledUrls: newDisabledUrls });
+    const checkForUpdates = result.checkForUpdates !== undefined ? result.checkForUpdates : true;
+    const importUrl = result.importUrl || '';
+
+    chrome.storage.local.set({
+      disabledUrls: newDisabledUrls,
+      checkForUpdates,
+      importUrl,
+    });
+
+    // If enabled, check for updates on install
+    if (checkForUpdates && importUrl) {
+      checkForNewKeywords(importUrl);
+    }
   });
 
   chrome.storage.local.get('keywordGroups', (result) => {
@@ -18,6 +30,57 @@ chrome.runtime.onInstalled.addListener(() => {
 
   chrome.storage.local.set({
     stats: { totalBlocked: 0, totalScanned: 0 }
+  });
+});
+
+// Check for new keywords from URL
+async function checkForNewKeywords(url) {
+  try {
+    const response = await fetch(url);
+    const contentType = response.headers.get('content-type');
+
+    if (contentType.includes('application/json')) {
+      const settings = await response.json();
+      if (settings.customKeywords) {
+        chrome.storage.local.get('customKeywords', (result) => {
+          const existingKeywords = result.customKeywords || [];
+          const newKeywords = settings.customKeywords.filter(
+            keyword => !existingKeywords.includes(keyword)
+          );
+          if (newKeywords.length > 0) {
+            const updatedKeywords = [...existingKeywords, ...newKeywords].sort();
+            chrome.storage.local.set({ customKeywords: updatedKeywords });
+          }
+        });
+      }
+    } else if (contentType.includes('text/plain')) {
+      const text = await response.text();
+      const newKeywords = text.split('\n')
+        .map(line => line.trim())
+        .filter(line => line);
+
+      chrome.storage.local.get('customKeywords', (result) => {
+        const existingKeywords = result.customKeywords || [];
+        const uniqueNewKeywords = newKeywords.filter(
+          keyword => !existingKeywords.includes(keyword)
+        );
+        if (uniqueNewKeywords.length > 0) {
+          const updatedKeywords = [...existingKeywords, ...uniqueNewKeywords].sort();
+          chrome.storage.local.set({ customKeywords: updatedKeywords });
+        }
+      });
+    }
+  } catch (error) {
+    console.error('Failed to check for new keywords:', error);
+  }
+}
+
+// Check for updates on browser startup if enabled
+chrome.runtime.onStartup.addListener(() => {
+  chrome.storage.local.get(['checkForUpdates', 'importUrl'], (result) => {
+    if (result.checkForUpdates && result.importUrl) {
+      checkForNewKeywords(result.importUrl);
+    }
   });
 });
 
@@ -80,7 +143,7 @@ const updateBadge = debounce((pageCount, url) => {
     chrome.action.setBadgeText({ text });
     chrome.action.setBadgeBackgroundColor({ color: '#6B7280' });
   });
-}, 200); // Debounce badge updates with a 200ms delay
+}, 200);
 
 // Function to update the icon based on the URL's status
 function updateIcon(url) {
