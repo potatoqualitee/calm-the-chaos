@@ -1,6 +1,10 @@
 // Background.js
 
-import { DEFAULT_IGNORED_URLS, DEFAULT_KEYWORD_GROUPS } from './scripts/keywords.js';
+// Import necessary modules
+import { DEFAULT_KEYWORD_GROUPS } from '../scripts/keywords.js';
+import { DEFAULT_IGNORED_URLS } from '../scripts/ignoredUrls.js';
+import { DEFAULT_ELEMENT_GROUPS } from '../scripts/elements.js';
+
 
 // Initialize default settings on installation
 chrome.runtime.onInstalled.addListener(() => {
