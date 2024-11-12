@@ -64,8 +64,8 @@ document.addEventListener('DOMContentLoaded', async function () {
       return new RegExp(`^${pattern}$`).test(currentUrl);
     }) && /^https?:\/\//.test(currentUrl);
 
-    toggle.checked = isEnabledUrl;
-    updateVisibility(isEnabledUrl);
+    // Do not set the toggle state automatically on popup open
+    // updateVisibility(isEnabledUrl); // This line is removed to prevent automatic toggle setting
 
     const statsElements = document.querySelectorAll('.stat-number');
     if (statsElements.length >= 2) {
