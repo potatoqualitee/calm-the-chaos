@@ -1,9 +1,42 @@
-// Background.js
+// background.js
 
 // Import necessary modules
 import { DEFAULT_KEYWORD_GROUPS } from '../scripts/keywords.js';
 import { DEFAULT_IGNORED_URLS } from '../scripts/ignoredUrls.js';
 import { DEFAULT_ELEMENT_GROUPS } from '../scripts/elements.js';
+
+// Helper function to check if a domain matches any patterns
+function domainMatchesPatterns(domain, patterns) {
+  return patterns.some(pattern => {
+    const regexPattern = pattern
+      .replace(/\./g, '\\.')
+      .replace(/\*/g, '.*');
+    const regex = new RegExp(`^${regexPattern}$`, 'i');
+    return regex.test(domain);
+  });
+}
+
+// Function to get all ignored domain patterns
+function getIgnoredDomainsPatterns(ignoredDomains, disabledDomainGroups) {
+  const patterns = [];
+  Object.entries(ignoredDomains).forEach(([groupName, domains]) => {
+    if (!disabledDomainGroups.includes(groupName)) {
+      patterns.push(...domains);
+    }
+  });
+  return patterns;
+}
+
+// Function to determine if the extension is enabled on the URL
+function isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomains, disabledDomainGroups) {
+  const domain = new URL(url).hostname;
+  const ignoredDomainsPatterns = getIgnoredDomainsPatterns(ignoredDomains, disabledDomainGroups);
+
+  const isIgnoredDomain = domainMatchesPatterns(domain, ignoredDomainsPatterns);
+  const isDisabledDomain = domainMatchesPatterns(domain, disabledDomains);
+
+  return !isIgnoredDomain && !isDisabledDomain;
+}
 
 // Function to inject content scripts into existing tabs
 async function injectContentScripts() {
@@ -112,7 +145,7 @@ chrome.runtime.onStartup.addListener(() => {
   });
 });
 
-// Listen for tab updates to reset page counts and update badge
+// Listen for tab updates to reset page counts and update badge and icon
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status === 'loading') {
     chrome.storage.local.set({ [`pageStats_${tabId}`]: { pageBlocked: 0, pageTotal: 0 } });
@@ -158,27 +191,11 @@ const updateBadge = debounce((pageCount, url) => {
     const ignoredDomains = result.ignoredDomains || {};
     const disabledDomains = result.disabledDomains || [];
     const disabledDomainGroups = result.disabledDomainGroups || [];
+
+    const isEnabled = isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomains, disabledDomainGroups);
+
     let text = '';
-
-    // Get all enabled domains
-    const enabledDomains = [];
-    Object.entries(ignoredDomains).forEach(([groupName, domains]) => {
-      if (!disabledDomainGroups.includes(groupName)) {
-        domains.forEach(domain => {
-          if (!disabledDomains.includes(domain)) {
-            enabledDomains.push(domain);
-          }
-        });
-      }
-    });
-
-    const isIgnoredUrl = enabledDomains.some(urlPattern => {
-      const pattern = urlPattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
-      const regexPattern = new RegExp(pattern);
-      return regexPattern.test(url);
-    });
-
-    if (!isIgnoredUrl) {
+    if (isEnabled) {
       text = (typeof pageCount === 'number' ? pageCount.toString() : '0');
     }
 
@@ -194,20 +211,17 @@ function updateIcon(url) {
     return;
   }
 
-  chrome.storage.local.get(['disabledDomains'], (result) => {
-    const currentDomain = new URL(url).hostname;
+  chrome.storage.local.get(['ignoredDomains', 'disabledDomains', 'disabledDomainGroups'], (result) => {
+    const ignoredDomains = result.ignoredDomains || {};
     const disabledDomains = result.disabledDomains || [];
+    const disabledDomainGroups = result.disabledDomainGroups || [];
 
-    // Check if the current domain is in disabled domains
-    const isDisabled = disabledDomains.some(pattern => {
-      const regexPattern = new RegExp(pattern.replace(/\*/g, '.*'));
-      return regexPattern.test(currentDomain);
-    });
+    const isEnabled = isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomains, disabledDomainGroups);
 
-    if (isDisabled) {
-      setGrayIcon();
-    } else {
+    if (isEnabled) {
       setColorIcon();
+    } else {
+      setGrayIcon();
     }
   });
 }
@@ -258,5 +272,9 @@ chrome.runtime.onMessage.addListener((message, sender) => {
     chrome.storage.local.set({ [storageKey]: message.items.map(item => item.blockedKeywords).flat() }, () => {
       console.debug('Blocked keywords synced for tab:', tabId);
     });
+  } else if (message.type === 'setGrayIcon') {
+    setGrayIcon();
+  } else if (message.type === 'setColorIcon') {
+    setColorIcon();
   }
 });

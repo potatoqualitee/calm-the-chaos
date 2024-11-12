@@ -1,3 +1,5 @@
+// popup.js
+
 document.addEventListener('DOMContentLoaded', async function () {
   try {
     function toTitleCase(str) {
@@ -16,19 +18,37 @@ document.addEventListener('DOMContentLoaded', async function () {
       }
     }
 
-    const toggle = document.getElementById('domainToggle');
-    if (!toggle) {
-      console.error('Toggle element not found');
-      return;
+    // Function to check if domain matches patterns
+    function domainMatchesPatterns(domain, patterns) {
+      return patterns.some(pattern => {
+        const regexPattern = pattern
+          .replace(/\./g, '\\.')
+          .replace(/\*/g, '.*');
+        const regex = new RegExp(`^${regexPattern}$`, 'i');
+        return regex.test(domain);
+      });
+    }
+
+    // Function to get all ignored domain patterns
+    function getIgnoredDomainsPatterns(ignoredDomains, disabledDomainGroups) {
+      const patterns = [];
+      Object.entries(ignoredDomains).forEach(([groupName, domains]) => {
+        if (!disabledDomainGroups.includes(groupName)) {
+          patterns.push(...domains);
+        }
+      });
+      return patterns;
     }
 
     const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
     const currentTab = tabs[0];
     const currentUrl = new URL(currentTab.url).href;
+    const currentDomain = new URL(currentTab.url).hostname;
 
+    // Display the current domain
     const currentDomainElement = document.getElementById('currentDomain');
     if (currentDomainElement) {
-      currentDomainElement.textContent = `Current Domain: ${new URL(currentUrl).hostname}`;
+      currentDomainElement.textContent = `Current Domain: ${currentDomain}`;
     }
 
     const result = await chrome.storage.local.get([
@@ -48,24 +68,24 @@ document.addEventListener('DOMContentLoaded', async function () {
     let pageStats = result[`pageStats_${currentTab.id}`] || { pageBlocked: 0, pageTotal: 0 };
     const originalKeywords = result.originalKeywords || {};
 
-    const enabledDomains = [];
-    Object.entries(ignoredDomains).forEach(([groupName, domains]) => {
-      if (!disabledDomainGroups.includes(groupName)) {
-        domains.forEach(domain => {
-          if (!disabledDomains.includes(domain)) {
-            enabledDomains.push(domain);
-          }
-        });
-      }
-    });
+    const ignoredDomainsPatterns = getIgnoredDomainsPatterns(ignoredDomains, disabledDomainGroups);
 
-    const isEnabledUrl = !disabledDomains.some(urlPattern => {
-      const pattern = urlPattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
-      return new RegExp(`^${pattern}$`).test(currentUrl);
-    }) && /^https?:\/\//.test(currentUrl);
+    // Determine if the extension is enabled on this domain
+    const isIgnoredDomain = domainMatchesPatterns(currentDomain, ignoredDomainsPatterns);
+    const isDisabledDomain = domainMatchesPatterns(currentDomain, disabledDomains);
 
-    // Do not set the toggle state automatically on popup open
-    // updateVisibility(isEnabledUrl); // This line is removed to prevent automatic toggle setting
+    const isExtensionEnabled = !isIgnoredDomain && !isDisabledDomain;
+
+    // Set the toggle state based on whether the extension is enabled
+    const toggle = document.getElementById('domainToggle');
+    if (toggle) {
+      toggle.checked = isExtensionEnabled;
+    } else {
+      console.error('Toggle element not found');
+      return;
+    }
+
+    updateVisibility(isExtensionEnabled);
 
     const statsElements = document.querySelectorAll('.stat-number');
     if (statsElements.length >= 2) {
@@ -140,28 +160,25 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
 
     toggle.addEventListener('change', async function () {
-      const result = await chrome.storage.local.get(['ignoredDomains', 'disabledDomains']);
-      let ignoredDomains = result.ignoredDomains || {};
+      const result = await chrome.storage.local.get(['disabledDomains']);
       let disabledDomains = result.disabledDomains || [];
 
       if (this.checked) {
-        disabledDomains = disabledDomains.filter(url => url !== currentUrl);
-        if (ignoredDomains['Other']) {
-          ignoredDomains['Other'] = ignoredDomains['Other'].filter(url => url !== currentUrl);
-        }
+        // Remove the domain from disabledDomains when enabling
+        disabledDomains = disabledDomains.filter(domain => domain !== currentDomain);
         updateVisibility(true);
+        chrome.runtime.sendMessage({ type: 'setColorIcon' });
       } else {
-        if (!ignoredDomains['Other']) {
-          ignoredDomains['Other'] = [];
-        }
-        if (!ignoredDomains['Other'].includes(currentUrl)) {
-          ignoredDomains['Other'].push(currentUrl);
-          ignoredDomains['Other'].sort();
+        // Add the domain to disabledDomains when disabling
+        if (!disabledDomains.includes(currentDomain)) {
+          disabledDomains.push(currentDomain);
+          disabledDomains.sort();
         }
         updateVisibility(false);
+        chrome.runtime.sendMessage({ type: 'setGrayIcon' });
       }
 
-      await chrome.storage.local.set({ ignoredDomains, disabledDomains });
+      await chrome.storage.local.set({ disabledDomains });
       chrome.tabs.reload(currentTab.id);
     });
 
