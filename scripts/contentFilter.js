@@ -12,6 +12,7 @@ import { handleYouTube } from './platformHandlers/handleYouTube.js';
 import { handleCNN } from './platformHandlers/handleCNN.js';
 import { handleMSN } from './platformHandlers/handleMSN.js';
 import { handleBBC } from './platformHandlers/handleBBC.js';
+import { handleGoogleNews } from './platformHandlers/handleGoogleNews.js'
 import { handleStackOverflow } from './platformHandlers/handleStackOverflow.js';
 import { handleBluesky } from './platformHandlers/handleBluesky.js';
 import { handleYahoo } from './platformHandlers/handleYahoo.js'; // Import Yahoo handler
@@ -359,6 +360,9 @@ function filterContent() {
 
         if (hostname.includes('reddit.com')) {
           handleReddit(nodesToHide);
+        }
+        if (hostname.includes('news.google.com')) {
+          handleGoogleNews(nodesToHide);
         }
         if (hostname.includes('cnn.com')) {
           handleCNN(nodesToHide);
