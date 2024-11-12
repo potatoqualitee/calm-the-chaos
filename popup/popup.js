@@ -40,8 +40,29 @@ document.addEventListener('DOMContentLoaded', async function () {
       return patterns;
     }
 
+    // Function to determine if the extension is enabled on the URL
+    function isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomains, disabledDomainGroups) {
+      if (!url || (!url.startsWith('http://') && !url.startsWith('https://'))) {
+        return false;
+      }
+      const domain = new URL(url).hostname;
+      const ignoredDomainsPatterns = getIgnoredDomainsPatterns(ignoredDomains, disabledDomainGroups);
+
+      const isIgnoredDomain = domainMatchesPatterns(domain, ignoredDomainsPatterns);
+      const isDisabledDomain = domainMatchesPatterns(domain, disabledDomains);
+
+      return !isIgnoredDomain && !isDisabledDomain;
+    }
+
     const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
     const currentTab = tabs[0];
+
+    // Handle cases where the URL might be undefined
+    if (!currentTab || !currentTab.url) {
+      console.error('Cannot access current tab URL.');
+      return;
+    }
+
     const currentUrl = new URL(currentTab.url).href;
     const currentDomain = new URL(currentTab.url).hostname;
 
@@ -68,13 +89,13 @@ document.addEventListener('DOMContentLoaded', async function () {
     let pageStats = result[`pageStats_${currentTab.id}`] || { pageBlocked: 0, pageTotal: 0 };
     const originalKeywords = result.originalKeywords || {};
 
-    const ignoredDomainsPatterns = getIgnoredDomainsPatterns(ignoredDomains, disabledDomainGroups);
-
-    // Determine if the extension is enabled on this domain
-    const isIgnoredDomain = domainMatchesPatterns(currentDomain, ignoredDomainsPatterns);
-    const isDisabledDomain = domainMatchesPatterns(currentDomain, disabledDomains);
-
-    const isExtensionEnabled = !isIgnoredDomain && !isDisabledDomain;
+    // Determine if the extension is enabled on this URL
+    const isExtensionEnabled = isExtensionEnabledOnUrl(
+      currentUrl,
+      ignoredDomains,
+      disabledDomains,
+      disabledDomainGroups
+    );
 
     // Set the toggle state based on whether the extension is enabled
     const toggle = document.getElementById('domainToggle');

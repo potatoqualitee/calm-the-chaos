@@ -29,6 +29,9 @@ function getIgnoredDomainsPatterns(ignoredDomains, disabledDomainGroups) {
 
 // Function to determine if the extension is enabled on the URL
 function isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomains, disabledDomainGroups) {
+  if (!url || (!url.startsWith('http://') && !url.startsWith('https://'))) {
+    return false;
+  }
   const domain = new URL(url).hostname;
   const ignoredDomainsPatterns = getIgnoredDomainsPatterns(ignoredDomains, disabledDomainGroups);
 
@@ -145,31 +148,6 @@ chrome.runtime.onStartup.addListener(() => {
   });
 });
 
-// Listen for tab updates to reset page counts and update badge and icon
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (changeInfo.status === 'loading') {
-    chrome.storage.local.set({ [`pageStats_${tabId}`]: { pageBlocked: 0, pageTotal: 0 } });
-    chrome.action.setBadgeText({ text: '0' });
-    if (tab.url) {
-      updateBadge(0, tab.url);
-      updateIcon(tab.url);
-    }
-  }
-});
-
-// Listen for tab activation to update badge and icon
-chrome.tabs.onActivated.addListener((activeInfo) => {
-  chrome.tabs.get(activeInfo.tabId, (tab) => {
-    if (tab.url) {
-      chrome.storage.local.get([`pageStats_${activeInfo.tabId}`], (result) => {
-        const pageStats = result[`pageStats_${activeInfo.tabId}`] || { pageBlocked: 0, pageTotal: 0 };
-        updateBadge(pageStats.pageBlocked, tab.url);
-        updateIcon(tab.url);
-      });
-    }
-  });
-});
-
 // Debounce function to limit the rate of function execution
 function debounce(func, wait) {
   let timeout;
@@ -182,7 +160,7 @@ function debounce(func, wait) {
 
 // Function to update badge with page-specific count
 const updateBadge = debounce((pageCount, url) => {
-  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+  if (!url || (!url.startsWith('http://') && !url.startsWith('https://'))) {
     chrome.action.setBadgeText({ text: '' });
     return;
   }
@@ -206,7 +184,7 @@ const updateBadge = debounce((pageCount, url) => {
 
 // Function to update the icon based on the URL's status
 function updateIcon(url) {
-  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+  if (!url || (!url.startsWith('http://') && !url.startsWith('https://'))) {
     setGrayIcon();
     return;
   }
@@ -245,6 +223,29 @@ function setColorIcon() {
     }
   });
 }
+
+// Listen for tab updates to reset page counts and update badge and icon
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (changeInfo.status === 'loading') {
+    chrome.storage.local.set({ [`pageStats_${tabId}`]: { pageBlocked: 0, pageTotal: 0 } });
+    chrome.action.setBadgeText({ text: '0' });
+    const url = tab.url || '';
+    updateBadge(0, url);
+    updateIcon(url);
+  }
+});
+
+// Listen for tab activation to update badge and icon
+chrome.tabs.onActivated.addListener((activeInfo) => {
+  chrome.tabs.get(activeInfo.tabId, (tab) => {
+    const url = tab.url || '';
+    chrome.storage.local.get([`pageStats_${activeInfo.tabId}`], (result) => {
+      const pageStats = result[`pageStats_${activeInfo.tabId}`] || { pageBlocked: 0, pageTotal: 0 };
+      updateBadge(pageStats.pageBlocked, url);
+      updateIcon(url);
+    });
+  });
+});
 
 // Listen for messages from content script
 chrome.runtime.onMessage.addListener((message, sender) => {
