@@ -2,6 +2,7 @@
 
 import { chromeStorageGet, chromeRuntimeSendMessage } from './utils.js';
 import { getBlockedRegex } from './regexManager.js';
+import { DEFAULT_ELEMENT_GROUPS } from './elements.js';
 import { handleReddit } from './platformHandlers/handleReddit.js';
 import { handleFacebook } from './platformHandlers/handleFacebook.js';
 import { handleTwitter } from './platformHandlers/handleTwitter.js';
@@ -391,29 +392,40 @@ function filterContent() {
   });
 }
 
-function getContainerSelectors() {
-  return [
-    '[role="article"]', '[data-ad-comet-preview="message"]',
-    'div[data-testid="tweet"]', '[data-testid="tweetText"]', '[data-testid="reply"]',
-    'article[role="presentation"]', '[data-testid="post-container"]', 'li:has(span[dir="auto"])',
-    '[data-testid="comment"]', '[data-testid="post-container"]', '[data-ks-item]',
-    '.feed-shared-update-v2', '.update-components-actor__meta',
-    'ytd-rich-grid-media', 'ytd-video-renderer', 'a#video-title',
-    'yt-formatted-string.style-scope.ytd-video-renderer',
-    'yt-formatted-string.metadata-snippet-text',
-    'yt-formatted-string#description-text',
-    'yt-formatted-string.video-description',
-    'yt-formatted-string.content',
-    'h3.title-and-badge.style-scope.ytd-video-renderer',
-    'yt-formatted-string.title',
-    'yt-formatted-string.caption',
-    '.text-wrapper.style-scope.ytd-video-renderer',
-    '.metadata-snippet-container-one-line.style-scope.ytd-video-renderer',
-    '.article', '.post', '.card', '.content', '.media', '.image-container',
-    '.story', '.news-item', '.entry', '[class*="grid-item"]', '[class*="list-item"]',
-    '[class*="card"]', '[class*="article"]', '[class*="post"]', '.feed-item',
-    '.item', '.wrapper'
-  ];
+async function getContainerSelectors() {
+  try {
+    const result = await new Promise((resolve, reject) => {
+      chromeStorageGet(['elementGroups', 'disabledElementGroups', 'disabledElements'], function (result) {
+        if (chrome.runtime.lastError) {
+          reject(chrome.runtime.lastError);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+
+    const elementGroups = result.elementGroups || DEFAULT_ELEMENT_GROUPS;
+    const disabledElementGroups = result.disabledElementGroups || [];
+    const disabledElements = result.disabledElements || [];
+
+    const enabledSelectors = [];
+
+    // Only include selectors from enabled groups and that aren't individually disabled
+    Object.entries(elementGroups).forEach(([groupName, selectors]) => {
+      if (!disabledElementGroups.includes(groupName)) {
+        selectors.forEach(selector => {
+          if (!disabledElements.includes(selector)) {
+            enabledSelectors.push(selector);
+          }
+        });
+      }
+    });
+
+    return enabledSelectors;
+  } catch (error) {
+    console.debug('Error in getContainerSelectors:', error);
+    return Object.values(DEFAULT_ELEMENT_GROUPS).flat(); // Fallback to all selectors if storage get fails
+  }
 }
 
 export { filterContent, containsBlockedContent, elementContainsBlockedContent };

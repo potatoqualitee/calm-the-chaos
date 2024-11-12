@@ -1,6 +1,20 @@
 import { initializeRegex } from './scripts/regexManager.js';
 import { filterContent } from './scripts/contentFilter.js';
 
+// Add message listener for extension reload
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === 'extensionReloaded') {
+    console.debug('Extension reloaded, reinitializing...');
+    initializeRegex(() => {
+      try {
+        filterContent();
+      } catch (error) {
+        console.debug('Error in reload filtering:', error);
+      }
+    });
+  }
+});
+
 // Initialize the regex pattern
 initializeRegex(() => {
   // Initial filtering
@@ -51,8 +65,8 @@ const observer = new MutationObserver((mutations) => {
     mutations.forEach(mutation => {
       try {
         if (mutation.addedNodes.length > 0 ||
-            (mutation.type === 'characterData' &&
-             containsBlockedContent(mutation.target.textContent))) {
+          (mutation.type === 'characterData' &&
+            containsBlockedContent(mutation.target.textContent))) {
           pendingMutations.add(mutation);
         }
       } catch (error) {
