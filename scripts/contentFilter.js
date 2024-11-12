@@ -10,8 +10,10 @@ import { handleInstagram } from './platformHandlers/handleInstagram.js';
 import { handleLinkedIn } from './platformHandlers/handleLinkedIn.js';
 import { handleYouTube } from './platformHandlers/handleYouTube.js';
 import { handleCNN } from './platformHandlers/handleCNN.js';
+import { handleMSN } from './platformHandlers/handleMSN.js';
 import { handleStackOverflow } from './platformHandlers/handleStackOverflow.js';
 import { handleBluesky } from './platformHandlers/handleBluesky.js';
+import { handleYahoo } from './platformHandlers/handleYahoo.js'; // Import Yahoo handler
 
 const history = new Set();
 let currentPageBlockedCount = 0;  // Track current page's blocked items only
@@ -360,6 +362,9 @@ function filterContent() {
         if (hostname.includes('cnn.com')) {
           handleCNN(nodesToHide);
         }
+        if (hostname.includes('msn.com')) {
+          handleMSN(nodesToHide); // Corrected to call handleMSN
+        }
         if (hostname.includes('facebook.com')) {
           handleFacebook(nodesToHide);
         }
@@ -380,6 +385,9 @@ function filterContent() {
         }
         if (hostname.includes('bsky.app')) {
           handleBluesky(nodesToHide);
+        }
+        if (hostname.includes('yahoo.com')) {
+          handleYahoo(nodesToHide); // Add Yahoo handler
         }
 
         hideNodes(nodesToHide);
