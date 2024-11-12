@@ -373,6 +373,8 @@ export const DEFAULT_KEYWORD_GROUPS = {
     'totalitarian',
     'transparency',
     'UN resolution',
+    'US Postal',
+    'USPS',
     'unconstitutional',
     'voter',
     'voter fraud',
