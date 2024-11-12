@@ -11,6 +11,7 @@ import { handleLinkedIn } from './platformHandlers/handleLinkedIn.js';
 import { handleYouTube } from './platformHandlers/handleYouTube.js';
 import { handleCNN } from './platformHandlers/handleCNN.js';
 import { handleMSN } from './platformHandlers/handleMSN.js';
+import { handleBBC } from './platformHandlers/handleBBC.js';
 import { handleStackOverflow } from './platformHandlers/handleStackOverflow.js';
 import { handleBluesky } from './platformHandlers/handleBluesky.js';
 import { handleYahoo } from './platformHandlers/handleYahoo.js'; // Import Yahoo handler
@@ -363,7 +364,10 @@ function filterContent() {
           handleCNN(nodesToHide);
         }
         if (hostname.includes('msn.com')) {
-          handleMSN(nodesToHide); // Corrected to call handleMSN
+          handleMSN(nodesToHide);
+        }
+        if (hostname.includes('bbc.')) {
+          handleBBC(nodesToHide);
         }
         if (hostname.includes('facebook.com')) {
           handleFacebook(nodesToHide);

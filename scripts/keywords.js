@@ -383,6 +383,7 @@ export const DEFAULT_KEYWORD_GROUPS = {
     'voting machine',
     'Washington elite',
     'White House',
+    'Mar-a-Lago',
     'working class',
     'WWG1WGA'
   ],
