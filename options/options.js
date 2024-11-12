@@ -3,6 +3,7 @@ import { DEFAULT_IGNORED_URLS } from '../scripts/ignoredUrls.js';
 import { DEFAULT_KEYWORD_GROUPS } from '../scripts/keywords.js';
 import { DEFAULT_ELEMENT_GROUPS } from '../scripts/elements.js';
 import { exportSettings, importSettings } from '../scripts/settingsManager.js';
+import { initializeRegex } from '../scripts/regexManager.js'; // Import initializeRegex
 
 // Initialize the settings
 async function initializeSettings() {
@@ -78,6 +79,9 @@ async function initializeSettings() {
   document.querySelector(`input[name="matchingOptions"][value="${matchingOption}"]`).checked = true;
   document.getElementById('urlInput').value = importUrl;
   document.getElementById('checkForUpdates').checked = checkForUpdates;
+
+  // Recompile regex after settings are initialized
+  initializeRegex();
 }
 
 function setupFilter() {
