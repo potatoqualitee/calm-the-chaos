@@ -618,6 +618,7 @@ export const DEFAULT_KEYWORD_GROUPS = {
     'Sinema',
     'Stacey Abrams',
     'Steve Bannon',
+    'Susie Wiles',
     'Taylor Greene',
     'Ted Cruz',
     'Tim Scott',
