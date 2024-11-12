@@ -392,8 +392,18 @@ function filterContent() {
   });
 }
 
-function getContainerSelectors() {
-  return chromeStorageGet(['elementGroups', 'disabledElementGroups', 'disabledElements'], function (result) {
+async function getContainerSelectors() {
+  try {
+    const result = await new Promise((resolve, reject) => {
+      chromeStorageGet(['elementGroups', 'disabledElementGroups', 'disabledElements'], function (result) {
+        if (chrome.runtime.lastError) {
+          reject(chrome.runtime.lastError);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+
     const elementGroups = result.elementGroups || DEFAULT_ELEMENT_GROUPS;
     const disabledElementGroups = result.disabledElementGroups || [];
     const disabledElements = result.disabledElements || [];
@@ -412,7 +422,10 @@ function getContainerSelectors() {
     });
 
     return enabledSelectors;
-  }) || Object.values(DEFAULT_ELEMENT_GROUPS).flat(); // Fallback to all selectors if storage get fails
+  } catch (error) {
+    console.debug('Error in getContainerSelectors:', error);
+    return Object.values(DEFAULT_ELEMENT_GROUPS).flat(); // Fallback to all selectors if storage get fails
+  }
 }
 
 export { filterContent, containsBlockedContent, elementContainsBlockedContent };

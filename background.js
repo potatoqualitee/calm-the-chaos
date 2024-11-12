@@ -5,14 +5,26 @@ import { DEFAULT_KEYWORD_GROUPS } from '../scripts/keywords.js';
 import { DEFAULT_IGNORED_URLS } from '../scripts/ignoredUrls.js';
 import { DEFAULT_ELEMENT_GROUPS } from '../scripts/elements.js';
 
-// Initialize default settings on installation
-chrome.runtime.onInstalled.addListener((details) => {
-  // Send message to all tabs when extension is reloaded
-  chrome.tabs.query({ url: ['http://*/*', 'https://*/*'] }, (tabs) => {
-    tabs.forEach(tab => {
-      chrome.tabs.sendMessage(tab.id, { type: 'extensionReloaded' });
-    });
-  });
+// Function to inject content scripts into existing tabs
+async function injectContentScripts() {
+  const tabs = await chrome.tabs.query({ url: ['http://*/*', 'https://*/*'] });
+  for (const tab of tabs) {
+    try {
+      await chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        files: ['content.js']
+      });
+      console.debug(`Injected content script into tab ${tab.id}`);
+    } catch (error) {
+      console.debug(`Failed to inject script into tab ${tab.id}:`, error);
+    }
+  }
+}
+
+chrome.runtime.onInstalled.addListener(async (details) => {
+  if (details.reason === 'update') {
+    await injectContentScripts();
+  }
 
   // Initialize default settings on installation
   chrome.storage.local.get(['ignoredDomains', 'checkForUpdates', 'importUrl'], (result) => {
@@ -200,7 +212,6 @@ function updateIcon(url) {
   });
 }
 
-// Add these helper functions right after updateIcon
 function setGrayIcon() {
   chrome.action.setIcon({
     path: {
@@ -223,6 +234,11 @@ function setColorIcon() {
 
 // Listen for messages from content script
 chrome.runtime.onMessage.addListener((message, sender) => {
+  if (message.type === 'ping') {
+    return true; // Acknowledge ping
+  }
+
+  console.log('Received message:', message, 'from tab:', sender.tab ? sender.tab.id : 'unknown');
   const tabId = sender.tab.id;
   if (message.type === 'updateBlockCount') {
     chrome.storage.local.get(['stats', `pageStats_${tabId}`], (result) => {
@@ -240,7 +256,7 @@ chrome.runtime.onMessage.addListener((message, sender) => {
   } else if (message.type === 'blockedItems') {
     const storageKey = `blockedKeywords_${tabId}`;
     chrome.storage.local.set({ [storageKey]: message.items.map(item => item.blockedKeywords).flat() }, () => {
-      console.log('Blocked keywords synced for tab:', tabId);
+      console.debug('Blocked keywords synced for tab:', tabId);
     });
   }
 });
