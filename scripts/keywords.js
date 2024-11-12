@@ -261,6 +261,7 @@ export const DEFAULT_KEYWORD_GROUPS = {
     'Federal Election Commission',
     'Federal Reserve',
     'Federalist Society',
+    'federal judge',
     'filibuster',
     'FISA',
     'founding fathers',
