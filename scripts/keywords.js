@@ -550,6 +550,7 @@ export const DEFAULT_KEYWORD_GROUPS = {
     'Dick Cheney',
     'DJT',
     'Elizabeth Warren',
+    'Elise Stefanik',
     'Eric Swalwell',
     'Fetterman',
     'Francis Suarez',
