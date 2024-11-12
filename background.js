@@ -5,9 +5,16 @@ import { DEFAULT_KEYWORD_GROUPS } from '../scripts/keywords.js';
 import { DEFAULT_IGNORED_URLS } from '../scripts/ignoredUrls.js';
 import { DEFAULT_ELEMENT_GROUPS } from '../scripts/elements.js';
 
-
 // Initialize default settings on installation
-chrome.runtime.onInstalled.addListener(() => {
+chrome.runtime.onInstalled.addListener((details) => {
+  // Send message to all tabs when extension is reloaded
+  chrome.tabs.query({ url: ['http://*/*', 'https://*/*'] }, (tabs) => {
+    tabs.forEach(tab => {
+      chrome.tabs.sendMessage(tab.id, { type: 'extensionReloaded' });
+    });
+  });
+
+  // Initialize default settings on installation
   chrome.storage.local.get(['ignoredDomains', 'checkForUpdates', 'importUrl'], (result) => {
     const ignoredDomains = result.ignoredDomains || DEFAULT_IGNORED_URLS;
     const checkForUpdates = result.checkForUpdates !== undefined ? result.checkForUpdates : true;
@@ -29,6 +36,12 @@ chrome.runtime.onInstalled.addListener(() => {
     const keywordGroups = result.keywordGroups || {};
     const newKeywordGroups = { ...keywordGroups, ...DEFAULT_KEYWORD_GROUPS };
     chrome.storage.local.set({ keywordGroups: newKeywordGroups });
+  });
+
+  chrome.storage.local.get('elementGroups', (result) => {
+    const elementGroups = result.elementGroups || {};
+    const newElementGroups = { ...elementGroups, ...DEFAULT_ELEMENT_GROUPS };
+    chrome.storage.local.set({ elementGroups: newElementGroups });
   });
 
   chrome.storage.local.set({
