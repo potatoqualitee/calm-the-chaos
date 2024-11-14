@@ -41,13 +41,14 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     // Function to determine if the extension is enabled on the URL
-    function isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomainGroups) {
+    function isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomainGroups, filteringEnabled) {
       if (!url || (!url.startsWith('http://') && !url.startsWith('https://'))) {
         return false;
       }
       const domain = new URL(url).hostname;
       const ignoredDomainsPatterns = getIgnoredDomainsPatterns(ignoredDomains, disabledDomainGroups);
-      return !domainMatchesPatterns(domain, ignoredDomainsPatterns);
+      const matches = domainMatchesPatterns(domain, ignoredDomainsPatterns);
+      return filteringEnabled ? !matches : matches;
     }
 
     const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -74,7 +75,8 @@ document.addEventListener('DOMContentLoaded', async function () {
       'stats',
       `pageStats_${currentTab.id}`,
       `blockedKeywords_${currentTab.id}`,
-      'originalKeywords'
+      'originalKeywords',
+      'filteringEnabled'
     ]);
 
     const ignoredDomains = result.ignoredDomains || {};
@@ -82,12 +84,14 @@ document.addEventListener('DOMContentLoaded', async function () {
     const stats = result.stats || { totalBlocked: 0, totalScanned: 0 };
     let pageStats = result[`pageStats_${currentTab.id}`] || { pageBlocked: 0, pageTotal: 0 };
     const originalKeywords = result.originalKeywords || {};
+    const filteringEnabled = result.filteringEnabled !== undefined ? result.filteringEnabled : true;
 
     // Determine if the extension is enabled on this URL
     const isExtensionEnabled = isExtensionEnabledOnUrl(
       currentUrl,
       ignoredDomains,
-      disabledDomainGroups
+      disabledDomainGroups,
+      filteringEnabled
     );
 
     // Set the toggle state based on whether the extension is enabled
@@ -174,26 +178,50 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
 
     toggle.addEventListener('change', async function () {
-      const result = await chrome.storage.local.get(['ignoredDomains']);
+      const result = await chrome.storage.local.get(['ignoredDomains', 'filteringEnabled']);
       let ignoredDomains = result.ignoredDomains || {};
+      const filteringEnabled = result.filteringEnabled !== undefined ? result.filteringEnabled : true;
 
       // Initialize 'Other' category if it doesn't exist
       if (!ignoredDomains['Other']) {
         ignoredDomains['Other'] = [];
       }
 
-      if (this.checked) {
-        // Remove the domain from ignoredDomains when enabling
-        ignoredDomains['Other'] = ignoredDomains['Other'].filter(domain => domain !== currentDomain);
-        updateVisibility(true);
+      const isEnabled = this.checked;
+
+      // Update ignoredDomains based on filteringEnabled setting
+      if (filteringEnabled) {
+        // In enabled mode: checked = filter (not in list), unchecked = don't filter (in list)
+        if (isEnabled) {
+          // Remove from list to enable filtering
+          ignoredDomains['Other'] = ignoredDomains['Other'].filter(domain => domain !== currentDomain);
+        } else {
+          // Add to list to disable filtering
+          if (!ignoredDomains['Other'].includes(currentDomain)) {
+            ignoredDomains['Other'].push(currentDomain);
+            ignoredDomains['Other'].sort();
+          }
+        }
+      } else {
+        // In disabled mode: checked = filter (in list), unchecked = don't filter (not in list)
+        if (isEnabled) {
+          // Add to list to enable filtering
+          if (!ignoredDomains['Other'].includes(currentDomain)) {
+            ignoredDomains['Other'].push(currentDomain);
+            ignoredDomains['Other'].sort();
+          }
+        } else {
+          // Remove from list to disable filtering
+          ignoredDomains['Other'] = ignoredDomains['Other'].filter(domain => domain !== currentDomain);
+        }
+      }
+
+      updateVisibility(isEnabled);
+
+      // Set icon based on actual filtering state
+      if (isEnabled) {
         chrome.runtime.sendMessage({ type: 'setColorIcon' });
       } else {
-        // Add the domain to ignoredDomains when disabling
-        if (!ignoredDomains['Other'].includes(currentDomain)) {
-          ignoredDomains['Other'].push(currentDomain);
-          ignoredDomains['Other'].sort();
-        }
-        updateVisibility(false);
         chrome.runtime.sendMessage({ type: 'setGrayIcon' });
       }
 
