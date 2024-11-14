@@ -204,7 +204,8 @@ function updateDomainGroups(domainGroups, disabledDomainGroups, disabledDomains,
 
       const domainCheckbox = document.createElement('input');
       domainCheckbox.type = 'checkbox';
-      domainCheckbox.checked = !disabledDomains.includes(domain);
+      // Invert the checkbox state based on filtering mode
+      domainCheckbox.checked = filteringEnabled ? !disabledDomains.includes(domain) : disabledDomains.includes(domain);
       domainCheckbox.onchange = () => toggleDomain(domain);
 
       const label = document.createElement('label');
@@ -240,7 +241,8 @@ function updateDomainGroups(domainGroups, disabledDomainGroups, disabledDomains,
 
     const domainCheckbox = document.createElement('input');
     domainCheckbox.type = 'checkbox';
-    domainCheckbox.checked = !disabledDomains.includes(domain);
+    // Invert the checkbox state based on filtering mode
+    domainCheckbox.checked = filteringEnabled ? !disabledDomains.includes(domain) : disabledDomains.includes(domain);
     domainCheckbox.onchange = () => toggleDomain(domain);
 
     const label = document.createElement('label');
