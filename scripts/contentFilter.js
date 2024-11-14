@@ -55,8 +55,8 @@ function getIgnoredDomainsPatterns(ignoredDomains, disabledDomainGroups) {
 }
 
 // Function to determine if the extension is enabled on the URL
-function isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomainGroups) {
-  if (!url || (!url.startsWith('http://') && !url.startsWith('https://'))) {
+function isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomainGroups, globalEnabled) {
+  if (!globalEnabled || !url || (!url.startsWith('http://') && !url.startsWith('https://'))) {
     return false;
   }
   const domain = new URL(url).hostname;
@@ -352,13 +352,14 @@ function filterContent() {
   const currentUrl = window.location.href;
 
   // Check if extension is enabled for this URL first
-  chromeStorageGet(['ignoredDomains', 'disabledDomainGroups'], function (result) {
+  chromeStorageGet(['ignoredDomains', 'disabledDomainGroups', 'globalEnabled'], function (result) {
     try {
       const ignoredDomains = result.ignoredDomains || {};
       const disabledDomainGroups = result.disabledDomainGroups || [];
+      const globalEnabled = result.globalEnabled ?? true;
 
-      // Check if extension is enabled for this URL
-      if (!isExtensionEnabledOnUrl(currentUrl, ignoredDomains, disabledDomainGroups)) {
+      // Check if extension is enabled globally and for this URL
+      if (!isExtensionEnabledOnUrl(currentUrl, ignoredDomains, disabledDomainGroups, globalEnabled)) {
         console.log('Content filtering is disabled for this URL:', currentUrl);
         return;
       }

@@ -28,8 +28,8 @@ function getIgnoredDomainsPatterns(ignoredDomains, disabledDomainGroups) {
 }
 
 // Function to determine if the extension is enabled on the URL
-function isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomainGroups) {
-  if (!url || (!url.startsWith('http://') && !url.startsWith('https://'))) {
+function isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomainGroups, globalEnabled) {
+  if (!globalEnabled || !url || (!url.startsWith('http://') && !url.startsWith('https://'))) {
     return false;
   }
   const domain = new URL(url).hostname;
@@ -59,15 +59,17 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   }
 
   // Initialize default settings on installation
-  chrome.storage.local.get(['ignoredDomains', 'checkForUpdates', 'importUrl'], (result) => {
+  chrome.storage.local.get(['ignoredDomains', 'checkForUpdates', 'importUrl', 'globalEnabled'], (result) => {
     const ignoredDomains = result.ignoredDomains || DEFAULT_IGNORED_URLS;
     const checkForUpdates = result.checkForUpdates !== undefined ? result.checkForUpdates : true;
     const importUrl = result.importUrl || '';
+    const globalEnabled = result.globalEnabled !== undefined ? result.globalEnabled : true;
 
     chrome.storage.local.set({
       ignoredDomains,
       checkForUpdates,
       importUrl,
+      globalEnabled,
     });
 
     // If enabled, check for updates on install
@@ -161,11 +163,12 @@ const updateBadge = debounce((pageCount, url) => {
     return;
   }
 
-  chrome.storage.local.get(['ignoredDomains', 'disabledDomainGroups'], (result) => {
+  chrome.storage.local.get(['ignoredDomains', 'disabledDomainGroups', 'globalEnabled'], (result) => {
     const ignoredDomains = result.ignoredDomains || {};
     const disabledDomainGroups = result.disabledDomainGroups || [];
+    const globalEnabled = result.globalEnabled ?? true;
 
-    const isEnabled = isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomainGroups);
+    const isEnabled = isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomainGroups, globalEnabled);
 
     let text = '';
     if (isEnabled) {
@@ -184,11 +187,12 @@ function updateIcon(url) {
     return;
   }
 
-  chrome.storage.local.get(['ignoredDomains', 'disabledDomainGroups'], (result) => {
+  chrome.storage.local.get(['ignoredDomains', 'disabledDomainGroups', 'globalEnabled'], (result) => {
     const ignoredDomains = result.ignoredDomains || {};
     const disabledDomainGroups = result.disabledDomainGroups || [];
+    const globalEnabled = result.globalEnabled ?? true;
 
-    const isEnabled = isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomainGroups);
+    const isEnabled = isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomainGroups, globalEnabled);
 
     if (isEnabled) {
       setColorIcon();

@@ -11,10 +11,14 @@ document.addEventListener('DOMContentLoaded', async function () {
       ).join(' ');
     }
 
-    function updateVisibility(isEnabled) {
+    function updateVisibility(isEnabled, isGlobalEnabled) {
       const statsAndKeywords = document.getElementById('statsAndKeywords');
+      const urlSection = document.querySelector('.url-section');
       if (statsAndKeywords) {
-        statsAndKeywords.style.display = isEnabled ? 'block' : 'none';
+        statsAndKeywords.style.display = (isEnabled && isGlobalEnabled) ? 'block' : 'none';
+      }
+      if (urlSection) {
+        urlSection.style.display = isGlobalEnabled ? 'block' : 'none';
       }
     }
 
@@ -72,6 +76,8 @@ document.addEventListener('DOMContentLoaded', async function () {
       'ignoredDomains',
       'disabledDomainGroups',
       'stats',
+      'globalEnabled',
+      'previousState',
       `pageStats_${currentTab.id}`,
       `blockedKeywords_${currentTab.id}`,
       'originalKeywords'
@@ -80,6 +86,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const ignoredDomains = result.ignoredDomains || {};
     const disabledDomainGroups = result.disabledDomainGroups || [];
     const stats = result.stats || { totalBlocked: 0, totalScanned: 0 };
+    const globalEnabled = result.globalEnabled ?? true; // Default to true if not set
     let pageStats = result[`pageStats_${currentTab.id}`] || { pageBlocked: 0, pageTotal: 0 };
     const originalKeywords = result.originalKeywords || {};
 
@@ -90,16 +97,18 @@ document.addEventListener('DOMContentLoaded', async function () {
       disabledDomainGroups
     );
 
-    // Set the toggle state based on whether the extension is enabled
-    const toggle = document.getElementById('domainToggle');
-    if (toggle) {
-      toggle.checked = isExtensionEnabled;
+    // Set the toggle states
+    const globalToggle = document.getElementById('globalToggle');
+    const siteToggle = document.getElementById('domainToggle');
+
+    if (globalToggle && siteToggle) {
+      globalToggle.checked = globalEnabled;
+      siteToggle.checked = isExtensionEnabled;
+      updateVisibility(isExtensionEnabled, globalEnabled);
     } else {
-      console.error('Toggle element not found');
+      console.error('Toggle elements not found');
       return;
     }
-
-    updateVisibility(isExtensionEnabled);
 
     const statsElements = document.querySelectorAll('.stat-number');
     if (statsElements.length >= 2) {
@@ -173,11 +182,48 @@ document.addEventListener('DOMContentLoaded', async function () {
       }
     });
 
-    toggle.addEventListener('change', async function () {
+    // Global toggle event listener
+    globalToggle.addEventListener('change', async function() {
+      const isGlobalEnabled = this.checked;
+
+      if (isGlobalEnabled) {
+        // Restore previous state if available
+        const result = await chrome.storage.local.get(['previousState']);
+        if (result.previousState) {
+          await chrome.storage.local.set({
+            ignoredDomains: result.previousState.ignoredDomains,
+            disabledDomainGroups: result.previousState.disabledDomainGroups,
+            globalEnabled: true
+          });
+          // Clear the stored state after restoring
+          await chrome.storage.local.remove('previousState');
+        } else {
+          await chrome.storage.local.set({ globalEnabled: true });
+        }
+        chrome.runtime.sendMessage({ type: 'setColorIcon' });
+      } else {
+        // Store current state before disabling globally
+        const currentState = await chrome.storage.local.get(['ignoredDomains', 'disabledDomainGroups']);
+        await chrome.storage.local.set({
+          previousState: {
+            ignoredDomains: currentState.ignoredDomains,
+            disabledDomainGroups: currentState.disabledDomainGroups
+          },
+          globalEnabled: false
+        });
+        chrome.runtime.sendMessage({ type: 'setGrayIcon' });
+      }
+
+      updateVisibility(siteToggle.checked, isGlobalEnabled);
+      chrome.tabs.reload(currentTab.id);
+    });
+
+    // Site-specific toggle event listener
+    siteToggle.addEventListener('change', async function () {
       const result = await chrome.storage.local.get(['ignoredDomains']);
       let ignoredDomains = result.ignoredDomains || {};
 
-      // Initialize 'Custom' category if it doesn't exist
+      // Initialize 'Other' category if it doesn't exist
       if (!ignoredDomains['Other']) {
         ignoredDomains['Other'] = [];
       }
@@ -185,7 +231,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       if (this.checked) {
         // Remove the URL from ignoredDomains when enabling
         ignoredDomains['Other'] = ignoredDomains['Other'].filter(domain => domain !== currentDomain);
-        updateVisibility(true);
+        updateVisibility(true, globalToggle.checked);
         chrome.runtime.sendMessage({ type: 'setColorIcon' });
       } else {
         // Add the URL to ignoredDomains when disabling
@@ -193,7 +239,7 @@ document.addEventListener('DOMContentLoaded', async function () {
           ignoredDomains['Other'].push(currentDomain);
           ignoredDomains['Other'].sort();
         }
-        updateVisibility(false);
+        updateVisibility(false, globalToggle.checked);
         chrome.runtime.sendMessage({ type: 'setGrayIcon' });
       }
 
