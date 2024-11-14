@@ -11,7 +11,7 @@
     <div class="tab-container">
       <div class="tab-buttons">
         <button class="tab-button active" data-tab="keywords">Keywords</button>
-        <button class="tab-button" data-tab="domains">Domains</button>
+        <button class="tab-button" data-tab="domains">URLs</button>
         <button class="tab-button" data-tab="elements">Elements</button>
         <button class="tab-button" data-tab="settings">Import/Export</button>
       </div>
@@ -61,25 +61,25 @@
 
     <div id="domains" class="tab-content">
       <div class="settings-section">
-        <h3>Domain Groups</h3>
+        <h3>URL Groups</h3>
         <div class="info">
-          Add domains to ignore from content filtering. Use * for wildcards.
-          <br>Examples: mail.*, outlook.com*, *.google.com
+          Add URLs or URL patterns to ignore from content filtering. Use * for wildcards.
+          <br>Examples: mail.*, outlook.com*, *.google.com/news*
         </div>
         <div class="search-container">
-          <input type="text" id="domainFilterInput" placeholder="Search ignored domains..." class="search-input">
+          <input type="text" id="domainFilterInput" placeholder="Search ignored URLs..." class="search-input">
         </div>
         <div id="domainList"></div>
       </div>
 
       <div class="settings-section">
-        <h3>Add New Domain</h3>
+        <h3>Add New URL Pattern</h3>
         <div class="info">
-          Domains added here will be saved to your custom group.
+          URLs added here will be saved to your custom group.
         </div>
         <div class="add-keyword">
-          <input type="text" id="newDomain" placeholder="Enter domain pattern">
-          <button id="addDomain">Add Domain</button>
+          <input type="text" id="newDomain" placeholder="Enter URL pattern">
+          <button id="addDomain">Add URL Pattern</button>
         </div>
       </div>
     </div>

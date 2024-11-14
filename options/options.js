@@ -150,8 +150,13 @@ function updateDomainGroups(domainGroups, disabledDomainGroups) {
   const domainList = document.getElementById('domainList');
   domainList.innerHTML = '';
 
-  // Sort group names alphabetically
-  const sortedGroupNames = Object.keys(domainGroups).sort();
+  // Sort group names alphabetically, but ensure Custom (formerly Other) is last
+  const sortedGroupNames = Object.keys(domainGroups)
+    .sort((a, b) => {
+      if (a === 'Other') return 1;
+      if (b === 'Other') return -1;
+      return a.localeCompare(b);
+    });
 
   sortedGroupNames.forEach(groupName => {
     const domains = domainGroups[groupName];
@@ -168,7 +173,7 @@ function updateDomainGroups(domainGroups, disabledDomainGroups) {
 
     const title = document.createElement('div');
     title.className = 'group-title';
-    title.textContent = groupName;
+    title.textContent = groupName === 'Other' ? 'Custom' : groupName;
 
     header.appendChild(checkbox);
     header.appendChild(title);

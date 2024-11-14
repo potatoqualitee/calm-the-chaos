@@ -18,8 +18,8 @@ document.addEventListener('DOMContentLoaded', async function () {
       }
     }
 
-    // Function to check if domain matches patterns
-    function domainMatchesPatterns(domain, patterns) {
+    // Function to check if URL matches patterns
+    function urlMatchesPatterns(domain, patterns) {
       return patterns.some(pattern => {
         const regexPattern = pattern
           .replace(/\./g, '\\.')
@@ -29,8 +29,8 @@ document.addEventListener('DOMContentLoaded', async function () {
       });
     }
 
-    // Function to get all ignored domain patterns
-    function getIgnoredDomainsPatterns(ignoredDomains, disabledDomainGroups) {
+    // Function to get all ignored URL patterns
+    function getIgnoredUrlPatterns(ignoredDomains, disabledDomainGroups) {
       const patterns = [];
       Object.entries(ignoredDomains).forEach(([groupName, domains]) => {
         if (!disabledDomainGroups.includes(groupName)) {
@@ -46,8 +46,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         return false;
       }
       const domain = new URL(url).hostname;
-      const ignoredDomainsPatterns = getIgnoredDomainsPatterns(ignoredDomains, disabledDomainGroups);
-      return !domainMatchesPatterns(domain, ignoredDomainsPatterns);
+      const ignoredUrlPatterns = getIgnoredUrlPatterns(ignoredDomains, disabledDomainGroups);
+      return !urlMatchesPatterns(domain, ignoredUrlPatterns);
     }
 
     const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -62,10 +62,10 @@ document.addEventListener('DOMContentLoaded', async function () {
     const currentUrl = new URL(currentTab.url).href;
     const currentDomain = new URL(currentTab.url).hostname;
 
-    // Display the current domain
+    // Display the current URL
     const currentDomainElement = document.getElementById('currentDomain');
     if (currentDomainElement) {
-      currentDomainElement.textContent = `Current Domain: ${currentDomain}`;
+      currentDomainElement.textContent = `Current URL: ${currentDomain}`;
     }
 
     const result = await chrome.storage.local.get([
@@ -177,18 +177,18 @@ document.addEventListener('DOMContentLoaded', async function () {
       const result = await chrome.storage.local.get(['ignoredDomains']);
       let ignoredDomains = result.ignoredDomains || {};
 
-      // Initialize 'Other' category if it doesn't exist
+      // Initialize 'Custom' category if it doesn't exist
       if (!ignoredDomains['Other']) {
         ignoredDomains['Other'] = [];
       }
 
       if (this.checked) {
-        // Remove the domain from ignoredDomains when enabling
+        // Remove the URL from ignoredDomains when enabling
         ignoredDomains['Other'] = ignoredDomains['Other'].filter(domain => domain !== currentDomain);
         updateVisibility(true);
         chrome.runtime.sendMessage({ type: 'setColorIcon' });
       } else {
-        // Add the domain to ignoredDomains when disabling
+        // Add the URL to ignoredDomains when disabling
         if (!ignoredDomains['Other'].includes(currentDomain)) {
           ignoredDomains['Other'].push(currentDomain);
           ignoredDomains['Other'].sort();

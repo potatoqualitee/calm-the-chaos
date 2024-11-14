@@ -91,12 +91,12 @@
     background: rgba(33, 150, 243, 0.1);
   }
 
-  /* Domain Section */
-  .domain-section {
+  /* URL Section */
+  .url-section {
     margin-bottom: 1.5rem;
   }
 
-  .domain-info {
+  .url-info {
     font-size: 0.875rem;
     color: var(--text);
     margin-bottom: 1rem;
@@ -114,8 +114,8 @@
     justify-content: space-between;
     padding: 0.5rem;
     color: var(--text);
-    font-size: 1rem; /* Added this line */
-    font-weight: 500; /* Added this for better visibility */
+    font-size: 1rem;
+    font-weight: 500;
   }
 
   .toggle {
@@ -196,11 +196,11 @@
 
   /* Keywords Section */
   .keywords-title {
-    font-size: 1rem;  /* Increased from 0.875rem */
+    font-size: 1rem;
     color: var(--text);
     margin-bottom: 0.75rem;
     padding: 0 0.5rem;
-    font-weight: 500;  /* Made it a bit bolder too */
+    font-weight: 500;
   }
 
   .keywords-grid {
@@ -237,13 +237,13 @@
         <img src="../images/icon48.png" alt="" class="logo">
         <h1 class="title">Calm the Chaos</h1>
       </div>
-      <a href="#" class="settings-link" id="openSettings">Manage Keywords & Domains</a>
+      <a href="#" class="settings-link" id="openSettings">Manage Keywords & URLs</a>
     </header>
 
-    <div class="domain-section">
-      <div class="domain-info" id="currentDomain"></div>
+    <div class="url-section">
+      <div class="url-info" id="currentDomain"></div>
       <div class="toggle-container">
-        <span>Enable on this domain</span>
+        <span>Enable on this URL</span>
         <label class="toggle">
           <input type="checkbox" id="domainToggle">
           <span class="toggle-slider"></span>
