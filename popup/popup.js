@@ -86,6 +86,12 @@ document.addEventListener('DOMContentLoaded', async function () {
     const originalKeywords = result.originalKeywords || {};
     const filteringEnabled = result.filteringEnabled !== undefined ? result.filteringEnabled : true;
 
+    // Set the filter all sites toggle state
+    const filterAllSitesToggle = document.getElementById('filterAllSites');
+    if (filterAllSitesToggle) {
+      filterAllSitesToggle.checked = filteringEnabled;
+    }
+
     // Determine if the extension is enabled on this URL
     const isExtensionEnabled = isExtensionEnabledOnUrl(
       currentUrl,
@@ -226,6 +232,31 @@ document.addEventListener('DOMContentLoaded', async function () {
       }
 
       await chrome.storage.local.set({ ignoredDomains });
+      chrome.tabs.reload(currentTab.id);
+    });
+
+    // Add event listener for filter all sites toggle
+    filterAllSitesToggle.addEventListener('change', async function() {
+      const filteringEnabled = this.checked;
+      await chrome.storage.local.set({ filteringEnabled });
+
+      // Update domain toggle to reflect new state
+      const isEnabled = isExtensionEnabledOnUrl(
+        currentUrl,
+        ignoredDomains,
+        disabledDomainGroups,
+        filteringEnabled
+      );
+      toggle.checked = isEnabled;
+      updateVisibility(isEnabled);
+
+      // Set icon based on actual filtering state
+      if (isEnabled) {
+        chrome.runtime.sendMessage({ type: 'setColorIcon' });
+      } else {
+        chrome.runtime.sendMessage({ type: 'setGrayIcon' });
+      }
+
       chrome.tabs.reload(currentTab.id);
     });
 
