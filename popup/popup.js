@@ -41,17 +41,13 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     // Function to determine if the extension is enabled on the URL
-    function isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomains, disabledDomainGroups) {
+    function isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomainGroups) {
       if (!url || (!url.startsWith('http://') && !url.startsWith('https://'))) {
         return false;
       }
       const domain = new URL(url).hostname;
       const ignoredDomainsPatterns = getIgnoredDomainsPatterns(ignoredDomains, disabledDomainGroups);
-
-      const isIgnoredDomain = domainMatchesPatterns(domain, ignoredDomainsPatterns);
-      const isDisabledDomain = domainMatchesPatterns(domain, disabledDomains);
-
-      return !isIgnoredDomain && !isDisabledDomain;
+      return !domainMatchesPatterns(domain, ignoredDomainsPatterns);
     }
 
     const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -74,7 +70,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     const result = await chrome.storage.local.get([
       'ignoredDomains',
-      'disabledDomains',
       'disabledDomainGroups',
       'stats',
       `pageStats_${currentTab.id}`,
@@ -83,7 +78,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     ]);
 
     const ignoredDomains = result.ignoredDomains || {};
-    const disabledDomains = result.disabledDomains || [];
     const disabledDomainGroups = result.disabledDomainGroups || [];
     const stats = result.stats || { totalBlocked: 0, totalScanned: 0 };
     let pageStats = result[`pageStats_${currentTab.id}`] || { pageBlocked: 0, pageTotal: 0 };
@@ -93,7 +87,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     const isExtensionEnabled = isExtensionEnabledOnUrl(
       currentUrl,
       ignoredDomains,
-      disabledDomains,
       disabledDomainGroups
     );
 
@@ -181,25 +174,30 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
 
     toggle.addEventListener('change', async function () {
-      const result = await chrome.storage.local.get(['disabledDomains']);
-      let disabledDomains = result.disabledDomains || [];
+      const result = await chrome.storage.local.get(['ignoredDomains']);
+      let ignoredDomains = result.ignoredDomains || {};
+
+      // Initialize 'Other' category if it doesn't exist
+      if (!ignoredDomains['Other']) {
+        ignoredDomains['Other'] = [];
+      }
 
       if (this.checked) {
-        // Remove the domain from disabledDomains when enabling
-        disabledDomains = disabledDomains.filter(domain => domain !== currentDomain);
+        // Remove the domain from ignoredDomains when enabling
+        ignoredDomains['Other'] = ignoredDomains['Other'].filter(domain => domain !== currentDomain);
         updateVisibility(true);
         chrome.runtime.sendMessage({ type: 'setColorIcon' });
       } else {
-        // Add the domain to disabledDomains when disabling
-        if (!disabledDomains.includes(currentDomain)) {
-          disabledDomains.push(currentDomain);
-          disabledDomains.sort();
+        // Add the domain to ignoredDomains when disabling
+        if (!ignoredDomains['Other'].includes(currentDomain)) {
+          ignoredDomains['Other'].push(currentDomain);
+          ignoredDomains['Other'].sort();
         }
         updateVisibility(false);
         chrome.runtime.sendMessage({ type: 'setGrayIcon' });
       }
 
-      await chrome.storage.local.set({ disabledDomains });
+      await chrome.storage.local.set({ ignoredDomains });
       chrome.tabs.reload(currentTab.id);
     });
 

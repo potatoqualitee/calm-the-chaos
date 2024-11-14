@@ -3,7 +3,7 @@ import { DEFAULT_IGNORED_URLS } from '../scripts/ignoredUrls.js';
 import { DEFAULT_KEYWORD_GROUPS } from '../scripts/keywords.js';
 import { DEFAULT_ELEMENT_GROUPS } from '../scripts/elements.js';
 import { exportSettings, importSettings } from '../scripts/settingsManager.js';
-import { initializeRegex } from '../scripts/regexManager.js'; // Import initializeRegex
+import { initializeRegex } from '../scripts/regexManager.js';
 
 // Initialize the settings
 async function initializeSettings() {
@@ -13,7 +13,6 @@ async function initializeSettings() {
     'customKeywords',
     'disabledGroups',
     'disabledKeywords',
-    'disabledDomains',
     'disabledDomainGroups',
     'elementGroups',
     'disabledElementGroups',
@@ -48,7 +47,6 @@ async function initializeSettings() {
   let customKeywords = result.customKeywords || [];
   let disabledGroups = result.disabledGroups || [];
   let disabledKeywords = result.disabledKeywords || [];
-  let disabledDomains = result.disabledDomains || [];
   let disabledDomainGroups = result.disabledDomainGroups || [];
   let disabledElementGroups = result.disabledElementGroups || [];
   let disabledElements = result.disabledElements || [];
@@ -63,7 +61,6 @@ async function initializeSettings() {
     customKeywords,
     disabledGroups,
     disabledKeywords,
-    disabledDomains,
     disabledDomainGroups,
     disabledElementGroups,
     disabledElements,
@@ -73,7 +70,7 @@ async function initializeSettings() {
   });
 
   // Update UI elements
-  updateDomainGroups(ignoredDomains, disabledDomains, disabledDomainGroups);
+  updateDomainGroups(ignoredDomains, disabledDomainGroups);
   updateKeywordGroups(keywordGroups, customKeywords, disabledGroups, disabledKeywords);
   updateElementGroups(elementGroups, disabledElementGroups, disabledElements);
   document.querySelector(`input[name="matchingOptions"][value="${matchingOption}"]`).checked = true;
@@ -149,7 +146,7 @@ function setupFilter() {
 }
 
 // Update the domain groups display
-function updateDomainGroups(domainGroups, disabledDomains, disabledDomainGroups) {
+function updateDomainGroups(domainGroups, disabledDomainGroups) {
   const domainList = document.getElementById('domainList');
   domainList.innerHTML = '';
 
@@ -186,8 +183,8 @@ function updateDomainGroups(domainGroups, disabledDomains, disabledDomainGroups)
 
       const domainCheckbox = document.createElement('input');
       domainCheckbox.type = 'checkbox';
-      domainCheckbox.checked = !disabledDomains.includes(domain);
-      domainCheckbox.onchange = () => toggleDomain(domain);
+      domainCheckbox.checked = true;
+      domainCheckbox.onchange = () => removeDomain(domain, groupName);
 
       const label = document.createElement('label');
       label.textContent = domain;
@@ -276,26 +273,29 @@ async function addDomain(domain) {
   }
 }
 
-async function toggleDomainGroup(groupName) {
-  const result = await chrome.storage.local.get(['disabledDomainGroups', 'ignoredDomains', 'disabledDomains']);
-  let disabledDomainGroups = result.disabledDomainGroups || [];
-  let disabledDomains = result.disabledDomains || [];
+async function removeDomain(domain, groupName) {
+  const result = await chrome.storage.local.get(['ignoredDomains']);
   const ignoredDomains = result.ignoredDomains || {};
+
+  if (ignoredDomains[groupName]) {
+    ignoredDomains[groupName] = ignoredDomains[groupName].filter(d => d !== domain);
+    await chrome.storage.local.set({ ignoredDomains });
+    initializeSettings();
+  }
+}
+
+async function toggleDomainGroup(groupName) {
+  const result = await chrome.storage.local.get(['disabledDomainGroups']);
+  let disabledDomainGroups = result.disabledDomainGroups || [];
 
   if (disabledDomainGroups.includes(groupName)) {
     disabledDomainGroups = disabledDomainGroups.filter(g => g !== groupName);
-    const domains = ignoredDomains[groupName] || [];
-    disabledDomains = disabledDomains.filter(d => !domains.includes(d));
   } else {
     disabledDomainGroups.push(groupName);
-    const domains = ignoredDomains[groupName] || [];
-    disabledDomains = [...new Set([...disabledDomains, ...domains])];
   }
 
   disabledDomainGroups.sort();
-  disabledDomains.sort();
-
-  await chrome.storage.local.set({ disabledDomainGroups, disabledDomains });
+  await chrome.storage.local.set({ disabledDomainGroups });
   initializeSettings();
 }
 
@@ -334,21 +334,6 @@ async function toggleElement(element) {
 
   disabledElements.sort();
   await chrome.storage.local.set({ disabledElements });
-  initializeSettings();
-}
-
-async function toggleDomain(domain) {
-  const result = await chrome.storage.local.get('disabledDomains');
-  let disabledDomains = result.disabledDomains || [];
-
-  if (disabledDomains.includes(domain)) {
-    disabledDomains = disabledDomains.filter(d => d !== domain);
-  } else {
-    disabledDomains.push(domain);
-  }
-
-  disabledDomains.sort();
-  await chrome.storage.local.set({ disabledDomains });
   initializeSettings();
 }
 

@@ -28,17 +28,13 @@ function getIgnoredDomainsPatterns(ignoredDomains, disabledDomainGroups) {
 }
 
 // Function to determine if the extension is enabled on the URL
-function isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomains, disabledDomainGroups) {
+function isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomainGroups) {
   if (!url || (!url.startsWith('http://') && !url.startsWith('https://'))) {
     return false;
   }
   const domain = new URL(url).hostname;
   const ignoredDomainsPatterns = getIgnoredDomainsPatterns(ignoredDomains, disabledDomainGroups);
-
-  const isIgnoredDomain = domainMatchesPatterns(domain, ignoredDomainsPatterns);
-  const isDisabledDomain = domainMatchesPatterns(domain, disabledDomains);
-
-  return !isIgnoredDomain && !isDisabledDomain;
+  return !domainMatchesPatterns(domain, ignoredDomainsPatterns);
 }
 
 // Function to inject content scripts into existing tabs
@@ -165,12 +161,11 @@ const updateBadge = debounce((pageCount, url) => {
     return;
   }
 
-  chrome.storage.local.get(['ignoredDomains', 'disabledDomains', 'disabledDomainGroups'], (result) => {
+  chrome.storage.local.get(['ignoredDomains', 'disabledDomainGroups'], (result) => {
     const ignoredDomains = result.ignoredDomains || {};
-    const disabledDomains = result.disabledDomains || [];
     const disabledDomainGroups = result.disabledDomainGroups || [];
 
-    const isEnabled = isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomains, disabledDomainGroups);
+    const isEnabled = isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomainGroups);
 
     let text = '';
     if (isEnabled) {
@@ -189,12 +184,11 @@ function updateIcon(url) {
     return;
   }
 
-  chrome.storage.local.get(['ignoredDomains', 'disabledDomains', 'disabledDomainGroups'], (result) => {
+  chrome.storage.local.get(['ignoredDomains', 'disabledDomainGroups'], (result) => {
     const ignoredDomains = result.ignoredDomains || {};
-    const disabledDomains = result.disabledDomains || [];
     const disabledDomainGroups = result.disabledDomainGroups || [];
 
-    const isEnabled = isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomains, disabledDomainGroups);
+    const isEnabled = isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomainGroups);
 
     if (isEnabled) {
       setColorIcon();
@@ -253,8 +247,15 @@ chrome.runtime.onMessage.addListener((message, sender) => {
     return true; // Acknowledge ping
   }
 
-  console.log('Received message:', message, 'from tab:', sender.tab ? sender.tab.id : 'unknown');
+  // Add null check for sender.tab
+  if (!sender || !sender.tab) {
+    console.debug('Received message without valid tab:', message);
+    return;
+  }
+
+  console.log('Received message:', message, 'from tab:', sender.tab.id);
   const tabId = sender.tab.id;
+
   if (message.type === 'updateBlockCount') {
     chrome.storage.local.get(['stats', `pageStats_${tabId}`], (result) => {
       const stats = result.stats || { totalBlocked: 0, totalScanned: 0 };
