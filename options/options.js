@@ -19,7 +19,8 @@ async function initializeSettings() {
     'disabledElements',
     'matchingOption',
     'importUrl',
-    'checkForUpdates'
+    'checkForUpdates',
+    'filteringEnabled'
   ]);
 
   // Initialize domains
@@ -28,6 +29,10 @@ async function initializeSettings() {
     ignoredDomains = DEFAULT_IGNORED_URLS;
     await chrome.storage.local.set({ ignoredDomains });
   }
+
+  // Initialize filtering mode (enabled by default)
+  let filteringEnabled = result.filteringEnabled !== undefined ? result.filteringEnabled : true;
+  await chrome.storage.local.set({ filteringEnabled });
 
   // Initialize keyword groups
   let keywordGroups = result.keywordGroups;
@@ -70,15 +75,27 @@ async function initializeSettings() {
   });
 
   // Update UI elements
-  updateDomainGroups(ignoredDomains, disabledDomainGroups);
+  updateDomainGroups(ignoredDomains, disabledDomainGroups, filteringEnabled);
   updateKeywordGroups(keywordGroups, customKeywords, disabledGroups, disabledKeywords);
   updateElementGroups(elementGroups, disabledElementGroups, disabledElements);
   document.querySelector(`input[name="matchingOptions"][value="${matchingOption}"]`).checked = true;
   document.getElementById('urlInput').value = importUrl;
   document.getElementById('checkForUpdates').checked = checkForUpdates;
+  document.getElementById('filteringMode').checked = filteringEnabled;
+  updateFilteringModeText(filteringEnabled);
 
   // Recompile regex after settings are initialized
   initializeRegex();
+}
+
+function updateFilteringModeText(enabled) {
+  const modeText = document.querySelector('.mode-text');
+  const modeDescription = document.querySelector('.mode-description');
+
+  modeText.textContent = enabled ? 'Filtering Enabled by Default' : 'Filtering Disabled by Default';
+  modeDescription.innerHTML = enabled ?
+    'When enabled by default: Listed domains will NOT be filtered<br>When disabled by default: Listed domains will BE filtered' :
+    'When disabled by default: Listed domains will BE filtered<br>When enabled by default: Listed domains will NOT be filtered';
 }
 
 function setupFilter() {
@@ -146,7 +163,7 @@ function setupFilter() {
 }
 
 // Update the domain groups display
-function updateDomainGroups(domainGroups, disabledDomainGroups) {
+function updateDomainGroups(domainGroups, disabledDomainGroups, filteringEnabled) {
   const domainList = document.getElementById('domainList');
   domainList.innerHTML = '';
 
@@ -163,7 +180,8 @@ function updateDomainGroups(domainGroups, disabledDomainGroups) {
 
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
-    checkbox.checked = !disabledDomainGroups.includes(groupName);
+    // Invert the checkbox state based on filtering mode
+    checkbox.checked = filteringEnabled ? !disabledDomainGroups.includes(groupName) : disabledDomainGroups.includes(groupName);
     checkbox.onchange = () => toggleDomainGroup(groupName);
 
     const title = document.createElement('div');
@@ -183,7 +201,9 @@ function updateDomainGroups(domainGroups, disabledDomainGroups) {
 
       const domainCheckbox = document.createElement('input');
       domainCheckbox.type = 'checkbox';
-      domainCheckbox.checked = true;
+      // In enabled mode: checked = don't filter (true)
+      // In disabled mode: checked = do filter (false)
+      domainCheckbox.checked = filteringEnabled;
       domainCheckbox.onchange = () => removeDomain(domain, groupName);
 
       const label = document.createElement('label');
@@ -285,8 +305,9 @@ async function removeDomain(domain, groupName) {
 }
 
 async function toggleDomainGroup(groupName) {
-  const result = await chrome.storage.local.get(['disabledDomainGroups']);
+  const result = await chrome.storage.local.get(['disabledDomainGroups', 'filteringEnabled']);
   let disabledDomainGroups = result.disabledDomainGroups || [];
+  const filteringEnabled = result.filteringEnabled !== undefined ? result.filteringEnabled : true;
 
   if (disabledDomainGroups.includes(groupName)) {
     disabledDomainGroups = disabledDomainGroups.filter(g => g !== groupName);
@@ -565,6 +586,14 @@ document.addEventListener('DOMContentLoaded', () => {
       addCustomKeyword(keyword);
       e.target.value = '';
     }
+  });
+
+  // Add event listener for filtering mode toggle
+  document.getElementById('filteringMode').addEventListener('change', async (e) => {
+    const filteringEnabled = e.target.checked;
+    await chrome.storage.local.set({ filteringEnabled });
+    // Refresh the UI to update checkbox states
+    initializeSettings();
   });
 
   // Add event listener for matching options

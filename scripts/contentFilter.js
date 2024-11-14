@@ -55,13 +55,21 @@ function getIgnoredDomainsPatterns(ignoredDomains, disabledDomainGroups) {
 }
 
 // Function to determine if the extension is enabled on the URL
-function isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomainGroups) {
+function isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomainGroups, filteringEnabled = true) {
   if (!url || (!url.startsWith('http://') && !url.startsWith('https://'))) {
     return false;
   }
   const domain = new URL(url).hostname;
   const ignoredDomainsPatterns = getIgnoredDomainsPatterns(ignoredDomains, disabledDomainGroups);
-  return !domainMatchesPatterns(domain, ignoredDomainsPatterns);
+  const matches = domainMatchesPatterns(domain, ignoredDomainsPatterns);
+
+  // If filtering is enabled by default (true):
+  //   - matches = true means domain is in list, so DON'T filter (return false)
+  //   - matches = false means domain is not in list, so DO filter (return true)
+  // If filtering is disabled by default (false):
+  //   - matches = true means domain is in list, so DO filter (return true)
+  //   - matches = false means domain is not in list, so DON'T filter (return false)
+  return filteringEnabled ? !matches : matches;
 }
 
 function containsBlockedContent(text) {
@@ -352,13 +360,14 @@ function filterContent() {
   const currentUrl = window.location.href;
 
   // Check if extension is enabled for this URL first
-  chromeStorageGet(['ignoredDomains', 'disabledDomainGroups'], function (result) {
+  chromeStorageGet(['ignoredDomains', 'disabledDomainGroups', 'filteringEnabled'], function (result) {
     try {
       const ignoredDomains = result.ignoredDomains || {};
       const disabledDomainGroups = result.disabledDomainGroups || [];
+      const filteringEnabled = result.filteringEnabled !== undefined ? result.filteringEnabled : true;
 
       // Check if extension is enabled for this URL
-      if (!isExtensionEnabledOnUrl(currentUrl, ignoredDomains, disabledDomainGroups)) {
+      if (!isExtensionEnabledOnUrl(currentUrl, ignoredDomains, disabledDomainGroups, filteringEnabled)) {
         console.log('Content filtering is disabled for this URL:', currentUrl);
         return;
       }

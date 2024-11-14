@@ -28,13 +28,21 @@ function getIgnoredDomainsPatterns(ignoredDomains, disabledDomainGroups) {
 }
 
 // Function to determine if the extension is enabled on the URL
-function isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomainGroups) {
+function isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomainGroups, filteringEnabled) {
   if (!url || (!url.startsWith('http://') && !url.startsWith('https://'))) {
     return false;
   }
   const domain = new URL(url).hostname;
   const ignoredDomainsPatterns = getIgnoredDomainsPatterns(ignoredDomains, disabledDomainGroups);
-  return !domainMatchesPatterns(domain, ignoredDomainsPatterns);
+  const matches = domainMatchesPatterns(domain, ignoredDomainsPatterns);
+
+  // If filtering is enabled by default:
+  //   - matches = true means domain is in list, so DON'T filter (return false)
+  //   - matches = false means domain is not in list, so DO filter (return true)
+  // If filtering is disabled by default:
+  //   - matches = true means domain is in list, so DO filter (return true)
+  //   - matches = false means domain is not in list, so DON'T filter (return false)
+  return filteringEnabled ? !matches : matches;
 }
 
 // Function to inject content scripts into existing tabs
@@ -59,15 +67,17 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   }
 
   // Initialize default settings on installation
-  chrome.storage.local.get(['ignoredDomains', 'checkForUpdates', 'importUrl'], (result) => {
+  chrome.storage.local.get(['ignoredDomains', 'checkForUpdates', 'importUrl', 'filteringEnabled'], (result) => {
     const ignoredDomains = result.ignoredDomains || DEFAULT_IGNORED_URLS;
     const checkForUpdates = result.checkForUpdates !== undefined ? result.checkForUpdates : true;
     const importUrl = result.importUrl || '';
+    const filteringEnabled = result.filteringEnabled !== undefined ? result.filteringEnabled : true;
 
     chrome.storage.local.set({
       ignoredDomains,
       checkForUpdates,
       importUrl,
+      filteringEnabled
     });
 
     // If enabled, check for updates on install
@@ -161,11 +171,12 @@ const updateBadge = debounce((pageCount, url) => {
     return;
   }
 
-  chrome.storage.local.get(['ignoredDomains', 'disabledDomainGroups'], (result) => {
+  chrome.storage.local.get(['ignoredDomains', 'disabledDomainGroups', 'filteringEnabled'], (result) => {
     const ignoredDomains = result.ignoredDomains || {};
     const disabledDomainGroups = result.disabledDomainGroups || [];
+    const filteringEnabled = result.filteringEnabled !== undefined ? result.filteringEnabled : true;
 
-    const isEnabled = isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomainGroups);
+    const isEnabled = isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomainGroups, filteringEnabled);
 
     let text = '';
     if (isEnabled) {
@@ -184,12 +195,26 @@ function updateIcon(url) {
     return;
   }
 
-  chrome.storage.local.get(['ignoredDomains', 'disabledDomainGroups'], (result) => {
+  chrome.storage.local.get(['ignoredDomains', 'disabledDomainGroups', 'filteringEnabled'], (result) => {
     const ignoredDomains = result.ignoredDomains || {};
     const disabledDomainGroups = result.disabledDomainGroups || [];
+    const filteringEnabled = result.filteringEnabled !== undefined ? result.filteringEnabled : true;
 
-    const isEnabled = isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomainGroups);
+    // If filtering is disabled by default, show gray icon unless the domain is in the list
+    if (!filteringEnabled) {
+      const domain = new URL(url).hostname;
+      const ignoredDomainsPatterns = getIgnoredDomainsPatterns(ignoredDomains, disabledDomainGroups);
+      const shouldFilter = domainMatchesPatterns(domain, ignoredDomainsPatterns);
+      if (shouldFilter) {
+        setColorIcon();
+      } else {
+        setGrayIcon();
+      }
+      return;
+    }
 
+    // If filtering is enabled by default, use the original logic
+    const isEnabled = isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomainGroups, filteringEnabled);
     if (isEnabled) {
       setColorIcon();
     } else {
