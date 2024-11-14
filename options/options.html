@@ -18,7 +18,7 @@
     </div>
 
     <div id="keywords" class="tab-content active">
-      <div class="settings-section">
+      <div class="content-section">
         <h3>Keyword Groups</h3>
         <div class="info">
           Enable or disable entire groups or individual keywords. Changes are saved automatically.
@@ -29,7 +29,7 @@
         <div class="keyword-groups" id="keywordGroups"></div>
       </div>
 
-      <div class="settings-section">
+      <div class="content-section">
         <h3>Custom Keywords</h3>
         <div class="info">
           Add your own keywords to filter. These will be saved separately from the default groups.
@@ -41,7 +41,7 @@
         </div>
       </div>
 
-      <div class="settings-section">
+      <div class="content-section">
         <h3>Matching Options</h3>
         <div class="info">
           Choose how strictly keywords should match content.
@@ -60,23 +60,42 @@
     </div>
 
     <div id="domains" class="tab-content">
-      <div class="settings-section">
+      <div class="content-section">
+        <h3>Domain Filtering Mode</h3>
+        <div class="info">
+          Choose whether filtering is enabled or disabled by default for all domains.
+        </div>
+        <div class="auto-update-option">
+          <label class="switch">
+            <input type="checkbox" id="filteringMode" checked>
+            <span class="slider"></span>
+          </label>
+          <span class="mode-text">Filtering Enabled by Default</span>
+        </div>
+        <div class="mode-description">
+          When enabled by default: Listed domains will NOT be filtered<br>
+          When disabled by default: Listed domains will BE filtered
+        </div>
+      </div>
+
+      <div class="content-section">
         <h3>Domain Groups</h3>
         <div class="info">
-          Add domains to ignore from content filtering. Use * for wildcards.
+          Add domains to the list. Use * for wildcards.
           <br>Examples: mail.*, outlook.com*, *.google.com
         </div>
         <div class="search-container">
-          <input type="text" id="domainFilterInput" placeholder="Search ignored domains..." class="search-input">
+          <input type="text" id="domainFilterInput" placeholder="Search domains..." class="search-input">
         </div>
         <div id="domainList"></div>
       </div>
 
-      <div class="settings-section">
-        <h3>Add New Domain</h3>
+      <div class="content-section">
+        <h3>Custom Domains</h3>
         <div class="info">
-          Domains added here will be saved to your custom group.
+          Add your own domains to filter. These will be saved separately from the default groups.
         </div>
+        <div class="keyword-list" id="customDomains"></div>
         <div class="add-keyword">
           <input type="text" id="newDomain" placeholder="Enter domain pattern">
           <button id="addDomain">Add Domain</button>
@@ -85,7 +104,7 @@
     </div>
 
     <div id="elements" class="tab-content">
-      <div class="settings-section">
+      <div class="content-section">
         <h3>Element Groups</h3>
         <div class="info">
           Enable or disable filtering for different types of web elements. These control which parts of websites are

@@ -1,6 +1,7 @@
-
-# ![Extension Icon](images/icon128.png) Calm the Chaos
+# ![Extension Icon](images/icon128.png) Calm the Chaos - Preview
 ### v0.1.0-alpha
+
+> ⚠️ **Official Preview Release**: This is the official preview/alpha version of Calm the Chaos. Features may be incomplete or subject to change. Use with caution.
 
 ## 🌟 Overview
 

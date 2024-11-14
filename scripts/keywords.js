@@ -589,6 +589,7 @@ export const DEFAULT_KEYWORD_GROUPS = {
     'Marjorie Taylor Greene',
     'Mark Milley',
     'Matt Gaetz',
+    'Gaetz',
     'Melania',
     'Merrick Garland',
     'Mike Johnson',

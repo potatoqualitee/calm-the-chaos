@@ -15,7 +15,7 @@ import { handleBBC } from './platformHandlers/handleBBC.js';
 import { handleGoogleNews } from './platformHandlers/handleGoogleNews.js'
 import { handleStackOverflow } from './platformHandlers/handleStackOverflow.js';
 import { handleBluesky } from './platformHandlers/handleBluesky.js';
-import { handleYahoo } from './platformHandlers/handleYahoo.js'; // Import Yahoo handler
+import { handleYahoo } from './platformHandlers/handleYahoo.js';
 
 const history = new Set();
 let currentPageBlockedCount = 0;  // Track current page's blocked items only
@@ -31,6 +31,46 @@ window.addEventListener('beforeunload', () => {
   currentPageBlockedCount = 0;
   history.clear();
 });
+
+// Helper function to check if a domain matches any patterns
+function domainMatchesPatterns(domain, patterns) {
+  return patterns.some(pattern => {
+    const regexPattern = pattern
+      .replace(/\./g, '\\.')
+      .replace(/\*/g, '.*');
+    const regex = new RegExp(`^${regexPattern}$`, 'i');
+    return regex.test(domain);
+  });
+}
+
+// Function to get all ignored domain patterns
+function getIgnoredDomainsPatterns(ignoredDomains, disabledDomainGroups) {
+  const patterns = [];
+  Object.entries(ignoredDomains).forEach(([groupName, domains]) => {
+    if (!disabledDomainGroups.includes(groupName)) {
+      patterns.push(...domains);
+    }
+  });
+  return patterns;
+}
+
+// Function to determine if the extension is enabled on the URL
+function isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomainGroups, filteringEnabled = true) {
+  if (!url || (!url.startsWith('http://') && !url.startsWith('https://'))) {
+    return false;
+  }
+  const domain = new URL(url).hostname;
+  const ignoredDomainsPatterns = getIgnoredDomainsPatterns(ignoredDomains, disabledDomainGroups);
+  const matches = domainMatchesPatterns(domain, ignoredDomainsPatterns);
+
+  // If filtering is enabled by default (true):
+  //   - matches = true means domain is in list, so DON'T filter (return false)
+  //   - matches = false means domain is not in list, so DO filter (return true)
+  // If filtering is disabled by default (false):
+  //   - matches = true means domain is in list, so DO filter (return true)
+  //   - matches = false means domain is not in list, so DON'T filter (return false)
+  return filteringEnabled ? !matches : matches;
+}
 
 function containsBlockedContent(text) {
   try {
@@ -303,10 +343,12 @@ function hideNodes(nodesToHide) {
 
       // Store blocked keywords in chrome.storage.local
       chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        const currentTab = tabs[0];
-        const storageKey = `blockedKeywords_${currentTab.id}`;
-        console.log('Storing blocked keywords:', blockedItems.map(item => item.blockedKeywords).flat());
-        chrome.storage.local.set({ [storageKey]: blockedItems.map(item => item.blockedKeywords).flat() });
+        if (tabs && tabs[0]) {
+          const currentTab = tabs[0];
+          const storageKey = `blockedKeywords_${currentTab.id}`;
+          console.log('Storing blocked keywords:', blockedItems.map(item => item.blockedKeywords).flat());
+          chrome.storage.local.set({ [storageKey]: blockedItems.map(item => item.blockedKeywords).flat() });
+        }
       });
     }
   } catch (error) {
@@ -315,34 +357,17 @@ function hideNodes(nodesToHide) {
 }
 
 function filterContent() {
-  const nodesToHide = new Set();
-  const hostname = window.location.hostname;
   const currentUrl = window.location.href;
 
-  chromeStorageGet(['ignoredDomains', 'disabledDomains', 'disabledDomainGroups'], function (result) {
+  // Check if extension is enabled for this URL first
+  chromeStorageGet(['ignoredDomains', 'disabledDomainGroups', 'filteringEnabled'], function (result) {
     try {
       const ignoredDomains = result.ignoredDomains || {};
-      const disabledDomains = result.disabledDomains || [];
       const disabledDomainGroups = result.disabledDomainGroups || [];
+      const filteringEnabled = result.filteringEnabled !== undefined ? result.filteringEnabled : true;
 
-      // Get all enabled domains
-      const enabledDomains = [];
-      Object.entries(ignoredDomains).forEach(([groupName, domains]) => {
-        if (!disabledDomainGroups.includes(groupName)) {
-          domains.forEach(domain => {
-            if (!disabledDomains.includes(domain)) {
-              enabledDomains.push(domain);
-            }
-          });
-        }
-      });
-
-      const isIgnoredUrl = enabledDomains.some(urlPattern => {
-        const pattern = urlPattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
-        return new RegExp(`^${pattern}$`).test(currentUrl);
-      }) || !/^https?:\/\//.test(currentUrl);
-
-      if (isIgnoredUrl) {
+      // Check if extension is enabled for this URL
+      if (!isExtensionEnabledOnUrl(currentUrl, ignoredDomains, disabledDomainGroups, filteringEnabled)) {
         console.log('Content filtering is disabled for this URL:', currentUrl);
         return;
       }
@@ -354,6 +379,9 @@ function filterContent() {
         console.log('Content filtering is disabled - all keywords are disabled');
         return;
       }
+
+      const nodesToHide = new Set();
+      const hostname = window.location.hostname;
 
       try {
         handleGenericSites(nodesToHide);
@@ -395,7 +423,7 @@ function filterContent() {
           handleBluesky(nodesToHide);
         }
         if (hostname.includes('yahoo.com')) {
-          handleYahoo(nodesToHide); // Add Yahoo handler
+          handleYahoo(nodesToHide);
         }
 
         hideNodes(nodesToHide);
@@ -403,7 +431,7 @@ function filterContent() {
         console.error('Error during content filtering:', error);
       }
     } catch (error) {
-      console.debug('Error checking disabled domains:', error);
+      console.debug('Error checking extension enabled status:', error);
     }
   });
 }

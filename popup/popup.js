@@ -41,17 +41,14 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     // Function to determine if the extension is enabled on the URL
-    function isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomains, disabledDomainGroups) {
+    function isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomainGroups, filteringEnabled) {
       if (!url || (!url.startsWith('http://') && !url.startsWith('https://'))) {
         return false;
       }
       const domain = new URL(url).hostname;
       const ignoredDomainsPatterns = getIgnoredDomainsPatterns(ignoredDomains, disabledDomainGroups);
-
-      const isIgnoredDomain = domainMatchesPatterns(domain, ignoredDomainsPatterns);
-      const isDisabledDomain = domainMatchesPatterns(domain, disabledDomains);
-
-      return !isIgnoredDomain && !isDisabledDomain;
+      const matches = domainMatchesPatterns(domain, ignoredDomainsPatterns);
+      return filteringEnabled ? !matches : matches;
     }
 
     const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -74,27 +71,33 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     const result = await chrome.storage.local.get([
       'ignoredDomains',
-      'disabledDomains',
       'disabledDomainGroups',
       'stats',
       `pageStats_${currentTab.id}`,
       `blockedKeywords_${currentTab.id}`,
-      'originalKeywords'
+      'originalKeywords',
+      'filteringEnabled'
     ]);
 
     const ignoredDomains = result.ignoredDomains || {};
-    const disabledDomains = result.disabledDomains || [];
     const disabledDomainGroups = result.disabledDomainGroups || [];
     const stats = result.stats || { totalBlocked: 0, totalScanned: 0 };
     let pageStats = result[`pageStats_${currentTab.id}`] || { pageBlocked: 0, pageTotal: 0 };
     const originalKeywords = result.originalKeywords || {};
+    const filteringEnabled = result.filteringEnabled !== undefined ? result.filteringEnabled : true;
+
+    // Set the filter all sites toggle state
+    const filterAllSitesToggle = document.getElementById('filterAllSites');
+    if (filterAllSitesToggle) {
+      filterAllSitesToggle.checked = filteringEnabled;
+    }
 
     // Determine if the extension is enabled on this URL
     const isExtensionEnabled = isExtensionEnabledOnUrl(
       currentUrl,
       ignoredDomains,
-      disabledDomains,
-      disabledDomainGroups
+      disabledDomainGroups,
+      filteringEnabled
     );
 
     // Set the toggle state based on whether the extension is enabled
@@ -181,25 +184,79 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
 
     toggle.addEventListener('change', async function () {
-      const result = await chrome.storage.local.get(['disabledDomains']);
-      let disabledDomains = result.disabledDomains || [];
+      const result = await chrome.storage.local.get(['ignoredDomains', 'filteringEnabled']);
+      let ignoredDomains = result.ignoredDomains || {};
+      const filteringEnabled = result.filteringEnabled !== undefined ? result.filteringEnabled : true;
 
-      if (this.checked) {
-        // Remove the domain from disabledDomains when enabling
-        disabledDomains = disabledDomains.filter(domain => domain !== currentDomain);
-        updateVisibility(true);
+      // Initialize 'Other' category if it doesn't exist
+      if (!ignoredDomains['Other']) {
+        ignoredDomains['Other'] = [];
+      }
+
+      const isEnabled = this.checked;
+
+      // Update ignoredDomains based on filteringEnabled setting
+      if (filteringEnabled) {
+        // In enabled mode: checked = filter (not in list), unchecked = don't filter (in list)
+        if (isEnabled) {
+          // Remove from list to enable filtering
+          ignoredDomains['Other'] = ignoredDomains['Other'].filter(domain => domain !== currentDomain);
+        } else {
+          // Add to list to disable filtering
+          if (!ignoredDomains['Other'].includes(currentDomain)) {
+            ignoredDomains['Other'].push(currentDomain);
+            ignoredDomains['Other'].sort();
+          }
+        }
+      } else {
+        // In disabled mode: checked = filter (in list), unchecked = don't filter (not in list)
+        if (isEnabled) {
+          // Add to list to enable filtering
+          if (!ignoredDomains['Other'].includes(currentDomain)) {
+            ignoredDomains['Other'].push(currentDomain);
+            ignoredDomains['Other'].sort();
+          }
+        } else {
+          // Remove from list to disable filtering
+          ignoredDomains['Other'] = ignoredDomains['Other'].filter(domain => domain !== currentDomain);
+        }
+      }
+
+      updateVisibility(isEnabled);
+
+      // Set icon based on actual filtering state
+      if (isEnabled) {
         chrome.runtime.sendMessage({ type: 'setColorIcon' });
       } else {
-        // Add the domain to disabledDomains when disabling
-        if (!disabledDomains.includes(currentDomain)) {
-          disabledDomains.push(currentDomain);
-          disabledDomains.sort();
-        }
-        updateVisibility(false);
         chrome.runtime.sendMessage({ type: 'setGrayIcon' });
       }
 
-      await chrome.storage.local.set({ disabledDomains });
+      await chrome.storage.local.set({ ignoredDomains });
+      chrome.tabs.reload(currentTab.id);
+    });
+
+    // Add event listener for filter all sites toggle
+    filterAllSitesToggle.addEventListener('change', async function() {
+      const filteringEnabled = this.checked;
+      await chrome.storage.local.set({ filteringEnabled });
+
+      // Update domain toggle to reflect new state
+      const isEnabled = isExtensionEnabledOnUrl(
+        currentUrl,
+        ignoredDomains,
+        disabledDomainGroups,
+        filteringEnabled
+      );
+      toggle.checked = isEnabled;
+      updateVisibility(isEnabled);
+
+      // Set icon based on actual filtering state
+      if (isEnabled) {
+        chrome.runtime.sendMessage({ type: 'setColorIcon' });
+      } else {
+        chrome.runtime.sendMessage({ type: 'setGrayIcon' });
+      }
+
       chrome.tabs.reload(currentTab.id);
     });
 
