@@ -14,6 +14,7 @@ async function initializeSettings() {
     'disabledGroups',
     'disabledKeywords',
     'disabledDomainGroups',
+    'disabledDomains',
     'elementGroups',
     'disabledElementGroups',
     'disabledElements',
@@ -53,6 +54,7 @@ async function initializeSettings() {
   let disabledGroups = result.disabledGroups || [];
   let disabledKeywords = result.disabledKeywords || [];
   let disabledDomainGroups = result.disabledDomainGroups || [];
+  let disabledDomains = result.disabledDomains || [];
   let disabledElementGroups = result.disabledElementGroups || [];
   let disabledElements = result.disabledElements || [];
   let matchingOption = result.matchingOption !== undefined ? result.matchingOption : 'flexible';
@@ -67,6 +69,7 @@ async function initializeSettings() {
     disabledGroups,
     disabledKeywords,
     disabledDomainGroups,
+    disabledDomains,
     disabledElementGroups,
     disabledElements,
     matchingOption,
@@ -75,7 +78,7 @@ async function initializeSettings() {
   });
 
   // Update UI elements
-  updateDomainGroups(ignoredDomains, disabledDomainGroups, filteringEnabled);
+  updateDomainGroups(ignoredDomains, disabledDomainGroups, disabledDomains, filteringEnabled);
   updateKeywordGroups(keywordGroups, customKeywords, disabledGroups, disabledKeywords);
   updateElementGroups(elementGroups, disabledElementGroups, disabledElements);
   document.querySelector(`input[name="matchingOptions"][value="${matchingOption}"]`).checked = true;
@@ -128,7 +131,7 @@ function setupFilter() {
     const searchTerm = e.target.value.toLowerCase();
 
     // Filter domain items
-    document.querySelectorAll('#domainList .keyword-item').forEach(item => {
+    document.querySelectorAll('#domainList .keyword-item, #customDomains .keyword-item').forEach(item => {
       const text = item.querySelector('label').textContent.toLowerCase();
       item.style.display = text.includes(searchTerm) ? '' : 'none';
     });
@@ -163,7 +166,7 @@ function setupFilter() {
 }
 
 // Update the domain groups display
-function updateDomainGroups(domainGroups, disabledDomainGroups, filteringEnabled) {
+function updateDomainGroups(domainGroups, disabledDomainGroups, disabledDomains, filteringEnabled) {
   const domainList = document.getElementById('domainList');
   domainList.innerHTML = '';
 
@@ -201,21 +204,58 @@ function updateDomainGroups(domainGroups, disabledDomainGroups, filteringEnabled
 
       const domainCheckbox = document.createElement('input');
       domainCheckbox.type = 'checkbox';
-      // In enabled mode: checked = don't filter (true)
-      // In disabled mode: checked = do filter (false)
-      domainCheckbox.checked = filteringEnabled;
-      domainCheckbox.onchange = () => removeDomain(domain, groupName);
+      domainCheckbox.checked = !disabledDomains.includes(domain);
+      domainCheckbox.onchange = () => toggleDomain(domain);
 
       const label = document.createElement('label');
       label.textContent = domain;
 
       item.appendChild(domainCheckbox);
       item.appendChild(label);
+
+      // Add remove button for custom domains (in "Other" group)
+      if (groupName === 'Other') {
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-btn';
+        removeBtn.textContent = '×';
+        removeBtn.onclick = () => removeDomain(domain, groupName);
+        item.appendChild(removeBtn);
+      }
+
       domainsList.appendChild(item);
     });
 
     group.appendChild(domainsList);
     domainList.appendChild(group);
+  });
+
+  // Custom domains
+  const customList = document.getElementById('customDomains');
+  customList.innerHTML = '';
+
+  const customDomains = domainGroups['Other'] || [];
+  [...customDomains].sort().forEach(domain => {
+    const item = document.createElement('div');
+    item.className = 'keyword-item';
+
+    const domainCheckbox = document.createElement('input');
+    domainCheckbox.type = 'checkbox';
+    domainCheckbox.checked = !disabledDomains.includes(domain);
+    domainCheckbox.onchange = () => toggleDomain(domain);
+
+    const label = document.createElement('label');
+    label.textContent = domain;
+
+    item.appendChild(domainCheckbox);
+    item.appendChild(label);
+
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'remove-btn';
+    removeBtn.textContent = '×';
+    removeBtn.onclick = () => removeDomain(domain, 'Other');
+    item.appendChild(removeBtn);
+
+    customList.appendChild(item);
   });
 }
 
@@ -299,9 +339,27 @@ async function removeDomain(domain, groupName) {
 
   if (ignoredDomains[groupName]) {
     ignoredDomains[groupName] = ignoredDomains[groupName].filter(d => d !== domain);
+    if (ignoredDomains[groupName].length === 0 && groupName === 'Other') {
+      delete ignoredDomains[groupName];
+    }
     await chrome.storage.local.set({ ignoredDomains });
     initializeSettings();
   }
+}
+
+async function toggleDomain(domain) {
+  const result = await chrome.storage.local.get('disabledDomains');
+  let disabledDomains = result.disabledDomains || [];
+
+  if (disabledDomains.includes(domain)) {
+    disabledDomains = disabledDomains.filter(d => d !== domain);
+  } else {
+    disabledDomains.push(domain);
+  }
+
+  disabledDomains.sort();
+  await chrome.storage.local.set({ disabledDomains });
+  initializeSettings();
 }
 
 async function toggleDomainGroup(groupName) {
