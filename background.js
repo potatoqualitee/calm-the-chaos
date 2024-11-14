@@ -179,8 +179,8 @@ const updateBadge = debounce((pageCount, url) => {
     const isEnabled = isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomainGroups, filteringEnabled);
 
     let text = '';
-    if (isEnabled) {
-      text = (typeof pageCount === 'number' ? pageCount.toString() : '0');
+    if (isEnabled && pageCount > 0) { // Only show badge if count is greater than 0
+      text = pageCount.toString();
     }
 
     chrome.action.setBadgeText({ text });
@@ -247,7 +247,7 @@ function setColorIcon() {
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status === 'loading') {
     chrome.storage.local.set({ [`pageStats_${tabId}`]: { pageBlocked: 0, pageTotal: 0 } });
-    chrome.action.setBadgeText({ text: '0' });
+    chrome.action.setBadgeText({ text: '' }); // Start with no badge
     const url = tab.url || '';
     updateBadge(0, url);
     updateIcon(url);
