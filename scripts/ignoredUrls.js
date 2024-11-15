@@ -150,23 +150,3 @@ export const DEFAULT_IGNORED_URLS = {
     '.twilio.com'
   ]
 };
-
-// Function to ensure wildcards are added to URLs
-function ensureWildcards(urls) {
-  return urls.map(url => {
-    if (!url.startsWith('*')) {
-      url = '*' + url;
-    }
-    if (!url.endsWith('*')) {
-      url = url + '*';
-    }
-    return url;
-  });
-}
-
-// Apply the function to each category in DEFAULT_IGNORED_URLS
-for (const category in DEFAULT_IGNORED_URLS) {
-  if (DEFAULT_IGNORED_URLS.hasOwnProperty(category)) {
-    DEFAULT_IGNORED_URLS[category] = ensureWildcards(DEFAULT_IGNORED_URLS[category]);
-  }
-}

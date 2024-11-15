@@ -21,11 +21,16 @@ document.addEventListener('DOMContentLoaded', async function () {
     // Function to check if domain matches patterns
     function domainMatchesPatterns(domain, patterns) {
       return patterns.some(pattern => {
+        if (pattern.startsWith('.')) {
+          // Handle .domain.com patterns - match both exact and subdomains
+          const baseDomain = pattern.substring(1);
+          return domain === baseDomain || domain.endsWith(pattern);
+        }
+        // Handle other patterns
         const regexPattern = pattern
           .replace(/\./g, '\\.')
           .replace(/\*/g, '.*');
-        const regex = new RegExp(`^${regexPattern}$`, 'i');
-        return regex.test(domain);
+        return new RegExp(`^${regexPattern}$`, 'i').test(domain);
       });
     }
 

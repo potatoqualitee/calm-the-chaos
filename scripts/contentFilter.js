@@ -36,11 +36,21 @@ window.addEventListener('beforeunload', () => {
 function domainOrPathMatchesPatterns(url, patterns) {
   const { hostname, pathname } = new URL(url);
   return patterns.some(pattern => {
-    const regexPattern = pattern
-      .replace(/\./g, '\\.')
-      .replace(/\*/g, '.*');
-    const regex = new RegExp(`^${regexPattern}$`, 'i');
-    return regex.test(hostname) || regex.test(pathname);
+    if (pattern.startsWith('.')) {
+      // Handle .domain.com patterns
+      const domainPart = pattern.substring(1);
+      const exactDomain = `^${domainPart}$`;
+      const subDomain = `\\.${domainPart}$`;
+      return new RegExp(exactDomain, 'i').test(hostname) ||
+        new RegExp(subDomain, 'i').test(hostname);
+    } else {
+      // Handle regular patterns
+      const regexPattern = pattern
+        .replace(/\./g, '\\.')
+        .replace(/\*/g, '.*');
+      return new RegExp(`^${regexPattern}$`, 'i').test(hostname) ||
+        new RegExp(`^${regexPattern}$`, 'i').test(pathname);
+    }
   });
 }
 
@@ -270,9 +280,8 @@ function elementContainsBlockedContent(element) {
 
 function hideNodes(nodesToHide) {
   try {
-    let newBlockedCount = 0;
     const processedNodes = new Set();
-    const blockedItems = [];
+    const blockedItemsMap = new Map(); // Track unique blocked elements and their keywords
 
     chromeStorageGet(['collapseStyle'], function (result) {
       const collapseStyle = result.collapseStyle || 'hideCompletely';
@@ -297,36 +306,32 @@ function hideNodes(nodesToHide) {
               blockedKeywords: blockedKeywords
             };
 
+            // Store unique blocked elements with their keywords
+            blockedItemsMap.set(container, blockedKeywords);
+
             console.log('Blocked Element:', itemInfo);
-            blockedItems.push(itemInfo);
           }
 
           if (window.getComputedStyle(container).display !== 'none') {
             if (collapseStyle === 'hideCompletely') {
               container.style.cssText = 'display: none !important;';
             } else {
-              // Keep container but only hide the content
-              // This preserves the site's own placeholder/skeleton UI
               Array.from(container.children).forEach(child => {
-                // Hide child elements while preserving layout
                 child.style.visibility = 'hidden';
               });
 
-              // For text nodes directly in the container
               const textNodes = Array.from(container.childNodes)
                 .filter(node => node.nodeType === Node.TEXT_NODE);
               if (textNodes.length > 0) {
                 container.style.visibility = 'hidden';
               }
 
-              // Preserve original dimensions and spacing
               const computedStyle = window.getComputedStyle(container);
               const minHeight = computedStyle.height;
               if (minHeight !== 'auto' && minHeight !== '0px') {
                 container.style.minHeight = minHeight;
               }
             }
-            newBlockedCount++;
           }
 
           let parent = container.parentElement;
@@ -352,31 +357,36 @@ function hideNodes(nodesToHide) {
         }
       });
 
-      if (newBlockedCount > 0) {
-        currentPageBlockedCount += newBlockedCount;
-        const totalElements = document.body.getElementsByTagName('*').length;
+      // Update the counter based on unique blocked elements
+      currentPageBlockedCount = blockedItemsMap.size;
+      const totalElements = document.body.getElementsByTagName('*').length;
 
-        chromeRuntimeSendMessage({
-          type: 'updateBlockCount',
-          count: currentPageBlockedCount,
-          total: totalElements
-        });
+      chromeRuntimeSendMessage({
+        type: 'updateBlockCount',
+        count: currentPageBlockedCount,
+        total: totalElements
+      });
 
-        chromeRuntimeSendMessage({
-          type: 'blockedItems',
-          items: blockedItems
-        });
+      // Convert blocked items for storage
+      const blockedItems = Array.from(blockedItemsMap.entries()).map(([_, keywords]) => ({
+        blockedKeywords: keywords,
+        count: 1  // Each element counts as 1
+      }));
 
-        // Store blocked keywords in chrome.storage.local
-        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-          if (tabs && tabs[0]) {
-            const currentTab = tabs[0];
-            const storageKey = `blockedKeywords_${currentTab.id}`;
-            console.log('Storing blocked keywords:', blockedItems.map(item => item.blockedKeywords).flat());
-            chrome.storage.local.set({ [storageKey]: blockedItems.map(item => item.blockedKeywords).flat() });
-          }
-        });
-      }
+      chromeRuntimeSendMessage({
+        type: 'blockedItems',
+        items: blockedItems
+      });
+
+      // Store blocked keywords in chrome.storage.local
+      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        if (tabs && tabs[0]) {
+          const currentTab = tabs[0];
+          const storageKey = `blockedKeywords_${currentTab.id}`;
+          console.log('Storing blocked keywords:', blockedItems);
+          chrome.storage.local.set({ [storageKey]: blockedItems });
+        }
+      });
     });
   } catch (error) {
     console.debug('Error in hideNodes:', error);
