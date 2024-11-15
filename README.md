@@ -1,13 +1,13 @@
 # ![Extension Icon](images/icon128.png) Calm the Chaos - Preview
-### v0.1.0-alpha
+### v0.1.0-preview
 
-> ⚠️ **Official Preview Release**: This is the official preview/alpha version of Calm the Chaos. Features may be incomplete or subject to change. Use with caution.
+> ⚠️ **Official Preview Release**: This is the official preview ersion of Calm the Chaos. Features may be incomplete or subject to change.
 
 ## 🌟 Overview
 
 A browser extension that filters unwanted content across every website.
 
-(Total alpha version, I mostly tested my most visited websites.)
+(Total preview version, I mostly tested my most visited websites.)
 
 ### Filtered Categories
 
