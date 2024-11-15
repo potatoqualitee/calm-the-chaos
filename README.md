@@ -15,17 +15,25 @@ The extension filters content based on the following categories:
 
 | Category | Description |
 |----------|-------------|
-| Environmental | Topics related to climate change, natural disasters, and environmental issues |
+| Education | Topics related to educational policies, practices, and institutions |
+| Environment and Climate Change | Topics related to climate change, natural disasters, and environmental issues |
 | Financial/Economic | Terms associated with market trends, economic conditions, and financial jargon |
+| Gun Rights | Keywords related to gun control, rights, and legislation |
+| Immigration | Topics related to immigration policies, practices, and debates |
 | International Political Figures | Names of prominent political figures from around the world |
 | International Relations | Topics related to global conflicts, diplomacy, and international policies |
-| Media and Business Figures | Names of influential media personalities and business leaders |
+| LGBTQ | Keywords related to LGBTQ rights, identities, and issues |
+| Media Figures | Names of influential media personalities |
+| Other | Miscellaneous keywords covering conspiracy theories, government control, and other controversial topics |
 | Political and Government | Keywords related to political ideologies, government policies, and political events |
+| Political Ideologies | Terms associated with various political ideologies and movements |
+| Race Relations | Topics related to racial equality, justice, and issues |
+| Reproductive Health | Keywords related to reproductive rights and health |
 | Social Issues | Terms associated with social justice, cultural debates, and societal challenges |
 | Technology | Keywords related to tech platforms, digital trends, and online behaviors |
-| US Political Figures | Names of notable political figures in the United States |
+| US Political Figures | Notable political figures in the United States |
+| Vaccine Controversies | Keywords related to vaccine debates and controversies |
 | Violence and Extremism | Terms related to violent acts, extremism, and security threats |
-| Other | Miscellaneous keywords covering conspiracy theories, government control, and other controversial topics |
 
 ### 🌍 Regional Customization
 
