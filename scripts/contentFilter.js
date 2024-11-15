@@ -19,18 +19,64 @@ import { handleYahoo } from './platformHandlers/handleYahoo.js';
 
 const history = new Set();
 let currentPageBlockedCount = 0;  // Track current page's blocked items only
+let observer = null; // Store the MutationObserver instance
 
-// Reset counter when page loads
+// Reset counter and observer when page loads
 document.addEventListener('DOMContentLoaded', () => {
   currentPageBlockedCount = 0;
   history.clear();
+  setupObserver();
 });
 
-// Reset counter on navigation
+// Reset counter and disconnect observer on navigation
 window.addEventListener('beforeunload', () => {
   currentPageBlockedCount = 0;
   history.clear();
+  if (observer) {
+    observer.disconnect();
+    observer = null;
+  }
 });
+
+// Set up MutationObserver to watch for new content
+function setupObserver() {
+  // Disconnect existing observer if any
+  if (observer) {
+    observer.disconnect();
+    observer = null;
+  }
+
+  // Create new observer
+  observer = new MutationObserver((mutations) => {
+    let shouldFilter = false;
+
+    for (const mutation of mutations) {
+      // Check for added nodes
+      if (mutation.addedNodes.length > 0) {
+        shouldFilter = true;
+        break;
+      }
+    }
+
+    if (shouldFilter) {
+      // Debounce the filtering to avoid excessive processing
+      if (observer.timeout) {
+        clearTimeout(observer.timeout);
+      }
+      observer.timeout = setTimeout(() => {
+        filterContent();
+      }, 100);
+    }
+  });
+
+  // Start observing with configuration
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+    attributes: false,
+    characterData: false
+  });
+}
 
 // Helper function to check if a domain or path matches any patterns
 function domainOrPathMatchesPatterns(url, patterns) {
@@ -73,12 +119,6 @@ function isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomainGroups, filt
   const ignoredDomainsPatterns = getIgnoredDomainsPatterns(ignoredDomains, disabledDomainGroups);
   const matches = domainOrPathMatchesPatterns(url, ignoredDomainsPatterns);
 
-  // If filtering is enabled by default (true):
-  //   - matches = true means domain or path is in list, so DON'T filter (return false)
-  //   - matches = false means domain or path is not in list, so DO filter (return true)
-  // If filtering is disabled by default (false):
-  //   - matches = true means domain or path is in list, so DO filter (return true)
-  //   - matches = false means domain or path is not in list, so DON'T filter (return false)
   return filteringEnabled ? !matches : matches;
 }
 
