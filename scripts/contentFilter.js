@@ -228,13 +228,13 @@ function handleGenericMedia(nodesToHide) {
         .join(',');
 
       const adjustedImgSelector = imgSelector.split(',')
-        .map(selector => `${selector.trim()}:not(footer *)`)
+        .map(selector => `${selector.trim()}:not(footer *):not(header *):not(nav *):not(aside *)`)
         .join(',');
 
       document.querySelectorAll(adjustedImgSelector).forEach(media => {
         try {
           if (media instanceof Element) {
-            const container = media.closest('figure, .image-container, article, .media-wrapper') || media;
+            const container = media.closest('figure, .image-container, article, .media-wrapper, [data-contentid]') || media;
             nodesToHide.add(container);
           }
         } catch (error) {
@@ -491,6 +491,9 @@ async function getContainerSelectors() {
         });
       }
     });
+
+    // Add specific classes for filtering
+    enabledSelectors.push('[data-contentid]');
 
     return enabledSelectors;
   } catch (error) {
