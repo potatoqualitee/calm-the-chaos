@@ -21,7 +21,8 @@ async function initializeSettings() {
     'matchingOption',
     'importUrl',
     'checkForUpdates',
-    'filteringEnabled'
+    'filteringEnabled',
+    'collapseStyle' // Add collapseStyle to the list of settings
   ]);
 
   // Initialize domains
@@ -60,6 +61,7 @@ async function initializeSettings() {
   let matchingOption = result.matchingOption !== undefined ? result.matchingOption : 'flexible';
   let importUrl = result.importUrl || '';
   let checkForUpdates = result.checkForUpdates !== undefined ? result.checkForUpdates : true;
+  let collapseStyle = result.collapseStyle || 'hideCompletely'; // Default to hideCompletely
 
   // Sort custom keywords alphabetically
   customKeywords.sort();
@@ -74,7 +76,8 @@ async function initializeSettings() {
     disabledElements,
     matchingOption,
     importUrl,
-    checkForUpdates
+    checkForUpdates,
+    collapseStyle // Store collapseStyle
   });
 
   // Update UI elements
@@ -86,6 +89,7 @@ async function initializeSettings() {
   document.getElementById('checkForUpdates').checked = checkForUpdates;
   document.getElementById('filteringMode').checked = filteringEnabled;
   updateFilteringModeText(filteringEnabled);
+  document.querySelector(`input[name="collapseStyle"][value="${collapseStyle}"]`).checked = true; // Set collapseStyle
 
   // Recompile regex after settings are initialized
   initializeRegex();
@@ -690,6 +694,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // Add event listener for check for updates toggle
   document.getElementById('checkForUpdates').addEventListener('change', async (e) => {
     await chrome.storage.local.set({ checkForUpdates: e.target.checked });
+  });
+
+  // Add event listener for collapse style options
+  document.getElementById('collapseOptions').addEventListener('change', async (e) => {
+    const collapseStyle = e.target.value;
+    await chrome.storage.local.set({ collapseStyle });
+    // Refresh the UI to reflect the new collapse style
+    initializeSettings();
   });
 });
 

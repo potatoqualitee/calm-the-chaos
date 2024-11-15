@@ -274,83 +274,110 @@ function hideNodes(nodesToHide) {
     const processedNodes = new Set();
     const blockedItems = [];
 
-    nodesToHide.forEach(container => {
-      try {
-        if (!(container instanceof Element)) {
-          return;
-        }
+    chromeStorageGet(['collapseStyle'], function (result) {
+      const collapseStyle = result.collapseStyle || 'hideCompletely';
 
-        if (processedNodes.has(container)) {
-          return;
-        }
-        processedNodes.add(container);
-
-        const blockedKeywords = containsBlockedContent(container.textContent);
-        if (blockedKeywords.length > 0) {
-          const itemInfo = {
-            id: container.id || null,
-            classList: Array.from(container.classList).join(' ') || null,
-            textContent: container.textContent.trim().substring(0, 200) || null,
-            blockedKeywords: blockedKeywords
-          };
-
-          console.log('Blocked Element:', itemInfo);
-          blockedItems.push(itemInfo);
-        }
-
-        if (window.getComputedStyle(container).display !== 'none') {
-          container.style.cssText = 'display: none !important;';
-          newBlockedCount++;
-        }
-
-        let parent = container.parentElement;
-        while (parent && parent !== document.body) {
-          if (parent.tagName === 'SHREDDIT-POST') break;
-
-          const style = window.getComputedStyle(parent);
-          if (style.display.includes('grid') || style.display.includes('flex')) {
-            parent.style.gap = '0.5rem';
+      nodesToHide.forEach(container => {
+        try {
+          if (!(container instanceof Element)) {
+            return;
           }
 
-          const hasVisibleContent = Array.from(parent.children).some(child =>
-            window.getComputedStyle(child).display !== 'none'
-          );
-
-          if (!hasVisibleContent) {
-            parent.style.display = 'none';
+          if (processedNodes.has(container)) {
+            return;
           }
-          parent = parent.parentElement;
+          processedNodes.add(container);
+
+          const blockedKeywords = containsBlockedContent(container.textContent);
+          if (blockedKeywords.length > 0) {
+            const itemInfo = {
+              id: container.id || null,
+              classList: Array.from(container.classList).join(' ') || null,
+              textContent: container.textContent.trim().substring(0, 200) || null,
+              blockedKeywords: blockedKeywords
+            };
+
+            console.log('Blocked Element:', itemInfo);
+            blockedItems.push(itemInfo);
+          }
+
+          if (window.getComputedStyle(container).display !== 'none') {
+            if (collapseStyle === 'hideCompletely') {
+              container.style.cssText = 'display: none !important;';
+            } else {
+              // Keep container but only hide the content
+              // This preserves the site's own placeholder/skeleton UI
+              Array.from(container.children).forEach(child => {
+                // Hide child elements while preserving layout
+                child.style.visibility = 'hidden';
+              });
+
+              // For text nodes directly in the container
+              const textNodes = Array.from(container.childNodes)
+                .filter(node => node.nodeType === Node.TEXT_NODE);
+              if (textNodes.length > 0) {
+                container.style.visibility = 'hidden';
+              }
+
+              // Preserve original dimensions and spacing
+              const computedStyle = window.getComputedStyle(container);
+              const minHeight = computedStyle.height;
+              if (minHeight !== 'auto' && minHeight !== '0px') {
+                container.style.minHeight = minHeight;
+              }
+            }
+            newBlockedCount++;
+          }
+
+          let parent = container.parentElement;
+          while (parent && parent !== document.body) {
+            if (parent.tagName === 'SHREDDIT-POST') break;
+
+            const style = window.getComputedStyle(parent);
+            if (style.display.includes('grid') || style.display.includes('flex')) {
+              parent.style.gap = '0.5rem';
+            }
+
+            const hasVisibleContent = Array.from(parent.children).some(child =>
+              window.getComputedStyle(child).display !== 'none'
+            );
+
+            if (!hasVisibleContent && collapseStyle === 'hideCompletely') {
+              parent.style.display = 'none';
+            }
+            parent = parent.parentElement;
+          }
+        } catch (error) {
+          console.debug('Error processing container in hideNodes:', error);
         }
-      } catch (error) {
-        console.debug('Error processing container in hideNodes:', error);
+      });
+
+      if (newBlockedCount > 0) {
+        currentPageBlockedCount += newBlockedCount;
+        const totalElements = document.body.getElementsByTagName('*').length;
+
+        chromeRuntimeSendMessage({
+          type: 'updateBlockCount',
+          count: currentPageBlockedCount,
+          total: totalElements
+        });
+
+        chromeRuntimeSendMessage({
+          type: 'blockedItems',
+          items: blockedItems
+        });
+
+        // Store blocked keywords in chrome.storage.local
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+          if (tabs && tabs[0]) {
+            const currentTab = tabs[0];
+            const storageKey = `blockedKeywords_${currentTab.id}`;
+            console.log('Storing blocked keywords:', blockedItems.map(item => item.blockedKeywords).flat());
+            chrome.storage.local.set({ [storageKey]: blockedItems.map(item => item.blockedKeywords).flat() });
+          }
+        });
       }
     });
-
-    if (newBlockedCount > 0) {
-      currentPageBlockedCount += newBlockedCount;
-      const totalElements = document.body.getElementsByTagName('*').length;
-
-      chromeRuntimeSendMessage({
-        type: 'updateBlockCount',
-        count: currentPageBlockedCount,
-        total: totalElements
-      });
-
-      chromeRuntimeSendMessage({
-        type: 'blockedItems',
-        items: blockedItems
-      });
-
-      // Store blocked keywords in chrome.storage.local
-      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        if (tabs && tabs[0]) {
-          const currentTab = tabs[0];
-          const storageKey = `blockedKeywords_${currentTab.id}`;
-          console.log('Storing blocked keywords:', blockedItems.map(item => item.blockedKeywords).flat());
-          chrome.storage.local.set({ [storageKey]: blockedItems.map(item => item.blockedKeywords).flat() });
-        }
-      });
-    }
   } catch (error) {
     console.debug('Error in hideNodes:', error);
   }

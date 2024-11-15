@@ -105,6 +105,23 @@
 
     <div id="elements" class="tab-content">
       <div class="content-section">
+        <h3>Collapse Style</h3>
+        <div class="info">
+          Choose how filtered content should be hidden from view.
+        </div>
+        <div id="collapseOptions" class="matching-options">
+          <div class="radio-option">
+            <input type="radio" id="hideCompletely" name="collapseStyle" value="hideCompletely" checked>
+            <label for="hideCompletely">Hide Completely - Remove entire element from view</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="keepContainer" name="collapseStyle" value="keepContainer">
+            <label for="keepContainer">Keep Container - Hide content but preserve layout space</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-section">
         <h3>Element Groups</h3>
         <div class="info">
           Enable or disable filtering for different types of web elements. These control which parts of websites are
