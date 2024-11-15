@@ -48,6 +48,22 @@ function handleReddit(nodesToHide) {
       }
     });
 
+    // Handle community highlights carousel
+    const communityHighlights = document.querySelectorAll('community-highlight-carousel');
+    communityHighlights.forEach(highlight => {
+      try {
+        const content = highlight.textContent || '';
+        if (containsBlockedContent(content).length > 0) {
+          nodesToHide.add(highlight);
+        } else {
+          // Always hide community highlights carousel regardless of content
+          nodesToHide.add(highlight);
+        }
+      } catch (error) {
+        console.debug('Error processing community highlights:', error);
+      }
+    });
+
     // Ensure main content is not blocked
     const mainContent = document.getElementById('main-content');
     if (mainContent && nodesToHide.has(mainContent)) {
