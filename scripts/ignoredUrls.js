@@ -21,7 +21,7 @@ export const DEFAULT_IGNORED_URLS = {
     'mozilla.org*'
   ],
   'AI and Technology': [
-    '*.ai/*',
+    '*.ai*',
     'chatgpt.com*'
   ],
   'Cloud Services': [

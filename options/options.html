@@ -11,7 +11,7 @@
     <div class="tab-container">
       <div class="tab-buttons">
         <button class="tab-button active" data-tab="keywords">Keywords</button>
-        <button class="tab-button" data-tab="domains">Domains</button>
+        <button class="tab-button" data-tab="domains">Exclude URL</button>
         <button class="tab-button" data-tab="elements">Elements</button>
         <button class="tab-button" data-tab="settings">Import/Export</button>
       </div>
@@ -61,9 +61,9 @@
 
     <div id="domains" class="tab-content">
       <div class="content-section">
-        <h3>Domain Filtering Mode</h3>
+        <h3>URL Filtering Mode</h3>
         <div class="info">
-          Choose whether filtering is enabled or disabled by default for all domains.
+          Choose whether filtering is enabled or disabled by default for all websites.
         </div>
         <div class="auto-update-option">
           <label class="switch">
@@ -73,32 +73,34 @@
           <span class="mode-text">Filtering Enabled by Default</span>
         </div>
         <div class="mode-description">
-          When enabled by default: Listed domains will NOT be filtered<br>
-          When disabled by default: Listed domains will BE filtered
+          When enabled by default: Listed URLs will be EXCLUDED from filtering<br>
+          When disabled by default: Listed URLs will be INCLUDED in filtering
         </div>
       </div>
 
       <div class="content-section">
-        <h3>Domain Groups</h3>
+        <h3>URL Groups</h3>
         <div class="info">
-          Add domains to the list. Use * for wildcards.
-          <br>Examples: mail.*, outlook.com*, *.google.com
+          Add URLs that should be excluded from filtering. Use wildcards to match variations:<br>
+          gmail.com* (matches gmail.com and all its pages)<br>
+          *.google.com (matches all Google subdomains)<br>
+          */messages (matches any site's message pages)
         </div>
         <div class="search-container">
-          <input type="text" id="domainFilterInput" placeholder="Search domains..." class="search-input">
+          <input type="text" id="domainFilterInput" placeholder="Search URLs..." class="search-input">
         </div>
         <div id="domainList"></div>
       </div>
 
       <div class="content-section">
-        <h3>Custom Domains</h3>
+        <h3>Custom URLs</h3>
         <div class="info">
-          Add your own domains to filter. These will be saved separately from the default groups.
+          Add your own URLs to exclude from filtering. Remember to use wildcards for matching variations.
         </div>
         <div class="keyword-list" id="customDomains"></div>
         <div class="add-keyword">
-          <input type="text" id="newDomain" placeholder="Enter domain pattern">
-          <button id="addDomain">Add Domain</button>
+          <input type="text" id="newDomain" placeholder="Enter URL to exclude">
+          <button id="addDomain">Add URL</button>
         </div>
       </div>
     </div>
