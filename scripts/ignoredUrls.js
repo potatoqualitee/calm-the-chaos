@@ -10,6 +10,7 @@ export const DEFAULT_IGNORED_URLS = {
     'mail.',
     'outlook.com',
     '/notifications*',
+    '/search*',
     '/messages*',
     '/direct*'
   ],

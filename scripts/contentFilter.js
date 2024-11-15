@@ -32,14 +32,15 @@ window.addEventListener('beforeunload', () => {
   history.clear();
 });
 
-// Helper function to check if a domain matches any patterns
-function domainMatchesPatterns(domain, patterns) {
+// Helper function to check if a domain or path matches any patterns
+function domainOrPathMatchesPatterns(url, patterns) {
+  const { hostname, pathname } = new URL(url);
   return patterns.some(pattern => {
     const regexPattern = pattern
       .replace(/\./g, '\\.')
       .replace(/\*/g, '.*');
     const regex = new RegExp(`^${regexPattern}$`, 'i');
-    return regex.test(domain);
+    return regex.test(hostname) || regex.test(pathname);
   });
 }
 
@@ -59,16 +60,15 @@ function isExtensionEnabledOnUrl(url, ignoredDomains, disabledDomainGroups, filt
   if (!url || (!url.startsWith('http://') && !url.startsWith('https://'))) {
     return false;
   }
-  const domain = new URL(url).hostname;
   const ignoredDomainsPatterns = getIgnoredDomainsPatterns(ignoredDomains, disabledDomainGroups);
-  const matches = domainMatchesPatterns(domain, ignoredDomainsPatterns);
+  const matches = domainOrPathMatchesPatterns(url, ignoredDomainsPatterns);
 
   // If filtering is enabled by default (true):
-  //   - matches = true means domain is in list, so DON'T filter (return false)
-  //   - matches = false means domain is not in list, so DO filter (return true)
+  //   - matches = true means domain or path is in list, so DON'T filter (return false)
+  //   - matches = false means domain or path is not in list, so DO filter (return true)
   // If filtering is disabled by default (false):
-  //   - matches = true means domain is in list, so DO filter (return true)
-  //   - matches = false means domain is not in list, so DON'T filter (return false)
+  //   - matches = true means domain or path is in list, so DO filter (return true)
+  //   - matches = false means domain or path is not in list, so DON'T filter (return false)
   return filteringEnabled ? !matches : matches;
 }
 
