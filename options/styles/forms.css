@@ -1,0 +1,170 @@
+/* Form Elements */
+.checkbox-option {
+    margin-bottom: 12px;
+    display: grid;
+    grid-template-columns: 16px 1fr;
+    gap: 8px;
+    min-height: 24px;
+    align-items: start;
+}
+
+.checkbox-option label {
+    padding-top: 1px;
+    line-height: 1.4;
+    word-break: break-word;
+    hyphens: auto;
+}
+
+input[type="checkbox"] {
+    width: 16px !important;
+    height: 16px !important;
+    min-width: 16px !important;
+    min-height: 16px !important;
+    max-width: 16px !important;
+    max-height: 16px !important;
+    cursor: pointer;
+    border: 1.5px solid #5f6368;
+    border-radius: 3px;
+    appearance: none;
+    -webkit-appearance: none;
+    position: relative;
+    background: white;
+    transition: all 0.2s ease;
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    flex-grow: 0;
+    box-sizing: border-box !important;
+}
+
+input[type="checkbox"]:checked {
+    background: #4285f4;
+    border-color: #4285f4;
+}
+
+input[type="checkbox"]:checked::after {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) translate(-1px, -1px);
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 16px;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.search-input:focus {
+    border-color: #4285f4;
+    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.1);
+    outline: none;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 46px;
+    height: 24px;
+    margin-right: 10px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #dadce0;
+    transition: .2s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .2s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #4285f4;
+}
+
+input:checked + .slider:before {
+    transform: translateX(22px);
+}
+
+.remove-btn {
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 0 8px;
+    transition: color 0.2s ease;
+}
+
+.remove-btn:hover {
+    color: #bd2130;
+}
+
+#newKeyword,
+#newDomain,
+#urlInput {
+    flex: 1;
+    padding: 10px 16px;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    font-size: 14px;
+    margin: 0;
+}
+
+#addKeyword,
+#addDomain,
+#addConfigUrl,
+#exportSettings,
+#importSettingsButton,
+#importFromUrlButton {
+    background: #4285f4;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+    min-width: 100px;
+    flex-shrink: 0;
+}
+
+#addKeyword:hover,
+#addDomain:hover,
+#addConfigUrl:hover,
+#exportSettings:hover,
+#importSettingsButton:hover,
+#importFromUrlButton:hover {
+    background: #3367d6;
+}

@@ -1,0 +1,315 @@
+{
+    "Race Relations": {
+        "description": "Terms related to racial issues, civil rights, and discrimination that consistently generate intense public discourse",
+        "keywords": {
+            "affirmative action": {
+                "weight": 3,
+                "description": "Highly frequent policy debate term"
+            },
+            "anti-asian": {
+                "weight": 2,
+                "description": "Frequent discrimination term"
+            },
+            "anti-black": {
+                "weight": 2,
+                "description": "Frequent discrimination term"
+            },
+            "anti-discrimination": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "anti-diversity": {
+                "weight": 1,
+                "description": "Common criticism term"
+            },
+            "anti-racism": {
+                "weight": 2,
+                "description": "Frequent social movement term"
+            },
+            "bias ban": {
+                "weight": 1,
+                "description": "Regular policy term"
+            },
+            "bias incident": {
+                "weight": 1,
+                "description": "Common discrimination term"
+            },
+            "black students": {
+                "weight": 0,
+                "description": "Common demographic term"
+            },
+            "bias law": {
+                "weight": 1,
+                "description": "Regular legal term"
+            },
+            "book removal": {
+                "weight": 1,
+                "description": "Common controversy term"
+            },
+            "civil rights attack": {
+                "weight": 2,
+                "description": "Frequent criticism term"
+            },
+            "civil rights ban": {
+                "weight": 2,
+                "description": "Frequent policy term"
+            },
+            "civil rights erosion": {
+                "weight": 1,
+                "description": "Common criticism term"
+            },
+            "civil rights movement": {
+                "weight": 1,
+                "description": "Common historical term"
+            },
+            "civil rights restriction": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "civil rights rollback": {
+                "weight": 1,
+                "description": "Common criticism term"
+            },
+            "colorblind law": {
+                "weight": 1,
+                "description": "Regular policy term"
+            },
+            "confederacy": {
+                "weight": 1,
+                "description": "Common historical term"
+            },
+            "critical race theory": {
+                "weight": 3,
+                "description": "Highly frequent education controversy"
+            },
+            "DEI": {
+                "weight": 3,
+                "description": "Highly frequent institutional term"
+            },
+            "DEI ban": {
+                "weight": 3,
+                "description": "Highly frequent policy term"
+            },
+            "DEI elimination": {
+                "weight": 2,
+                "description": "Frequent policy term"
+            },
+            "DEI restriction": {
+                "weight": 2,
+                "description": "Frequent policy term"
+            },
+            "demographic replacement": {
+                "weight": 1,
+                "description": "Common conspiracy term"
+            },
+            "discrimination": {
+                "weight": 2,
+                "description": "Frequent social issue term"
+            },
+            "diversity": {
+                "weight": 2,
+                "description": "Frequent social term"
+            },
+            "diversity ban": {
+                "weight": 2,
+                "description": "Frequent policy term"
+            },
+            "diversity elimination": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "diversity training": {
+                "weight": 1,
+                "description": "Regular institutional term"
+            },
+            "equity ban": {
+                "weight": 2,
+                "description": "Frequent policy term"
+            },
+            "ethnic cleansing": {
+                "weight": 3,
+                "description": "Highly frequent violence term"
+            },
+            "ethnic studies ban": {
+                "weight": 1,
+                "description": "Common education policy term"
+            },
+            "ethnic studies restriction": {
+                "weight": 1,
+                "description": "Common education policy term"
+            },
+            "great replacement": {
+                "weight": 2,
+                "description": "Frequent conspiracy theory"
+            },
+            "hate incident": {
+                "weight": 1,
+                "description": "Common violence term"
+            },
+            "inclusion ban": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "institutional racism": {
+                "weight": 2,
+                "description": "Frequent systemic term"
+            },
+            "lynch": {
+                "weight": 3,
+                "description": "Highly sensitive racial violence term"
+            },
+            "lynching": {
+                "weight": 3,
+                "description": "Highly sensitive racial violence term"
+            },
+            "minority rights": {
+                "weight": 1,
+                "description": "Common civil rights term"
+            },
+            "minority voter": {
+                "weight": 2,
+                "description": "Frequent electoral term"
+            },
+            "nazi": {
+                "weight": 3,
+                "description": "Highly frequent extremist term"
+            },
+            "race based": {
+                "weight": 1,
+                "description": "Regular policy descriptor"
+            },
+            "race neutral": {
+                "weight": 1,
+                "description": "Regular policy term"
+            },
+            "racial ban": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "racial bias": {
+                "weight": 2,
+                "description": "Frequent discrimination term"
+            },
+            "racial discrimination": {
+                "weight": 2,
+                "description": "Frequent social issue term"
+            },
+            "racial disparity": {
+                "weight": 1,
+                "description": "Common inequality term"
+            },
+            "racial equity": {
+                "weight": 1,
+                "description": "Common policy goal term"
+            },
+            "racial harassment": {
+                "weight": 2,
+                "description": "Frequent discrimination term"
+            },
+            "racial hatred": {
+                "weight": 2,
+                "description": "Frequent discrimination term"
+            },
+            "racial justice": {
+                "weight": 2,
+                "description": "Frequent social movement term"
+            },
+            "racial profiling": {
+                "weight": 2,
+                "description": "Frequent discrimination term"
+            },
+            "racial purge": {
+                "weight": 1,
+                "description": "Common discrimination term"
+            },
+            "racial reckoning": {
+                "weight": 1,
+                "description": "Common social change term"
+            },
+            "racial restriction": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "racial tension": {
+                "weight": 2,
+                "description": "Frequent social conflict term"
+            },
+            "racial unrest": {
+                "weight": 2,
+                "description": "Frequent social conflict term"
+            },
+            "racial violence": {
+                "weight": 3,
+                "description": "Highly frequent hate crime term"
+            },
+            "racism": {
+                "weight": 3,
+                "description": "Highly frequent social issue term"
+            },
+            "racist attack": {
+                "weight": 3,
+                "description": "Highly frequent violence term"
+            },
+            "racist incident": {
+                "weight": 1,
+                "description": "Common discrimination term"
+            },
+            "racist policy": {
+                "weight": 1,
+                "description": "Common criticism term"
+            },
+            "racist violence": {
+                "weight": 3,
+                "description": "Highly frequent hate crime term"
+            },
+            "reparations": {
+                "weight": 2,
+                "description": "Frequent policy debate term"
+            },
+            "replacement theory": {
+                "weight": 1,
+                "description": "Common conspiracy term"
+            },
+            "segregation": {
+                "weight": 1,
+                "description": "Regular historical term"
+            },
+            "systemic racism": {
+                "weight": 3,
+                "description": "Highly frequent institutional term"
+            },
+            "voter intimidation": {
+                "weight": 2,
+                "description": "Frequent electoral term"
+            },
+            "voter purge": {
+                "weight": 1,
+                "description": "Common electoral controversy"
+            },
+            "voter restriction": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "white nationalism": {
+                "weight": 3,
+                "description": "Highly frequent extremist term"
+            },
+            "white nationalist": {
+                "weight": 3,
+                "description": "Highly frequent extremist term"
+            },
+            "white power": {
+                "weight": 3,
+                "description": "Highly frequent extremist term"
+            },
+            "white replacement": {
+                "weight": 1,
+                "description": "Common conspiracy term"
+            },
+            "white supremacy": {
+                "weight": 3,
+                "description": "Highly frequent extremist term"
+            }
+        }
+    }
+}

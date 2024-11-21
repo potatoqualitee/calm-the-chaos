@@ -1,0 +1,259 @@
+{
+    "US Political Figures - Single Name": {
+        "description": "Common single-name references to US political figures that frequently appear in public discourse",
+        "keywords": {
+            "AOC": {
+                "weight": 3,
+                "description": "Highly frequent House representative"
+            },
+            "Alito": {
+                "weight": 1,
+                "description": "Regular Supreme Court justice"
+            },
+            "Bannon": {
+                "weight": 2,
+                "description": "Common political figure"
+            },
+            "Biden": {
+                "weight": 3,
+                "description": "Highly frequent president"
+            },
+            "Blinken": {
+                "weight": 1,
+                "description": "Regular cabinet official"
+            },
+            "Boebert": {
+                "weight": 3,
+                "description": "Frequent House figure"
+            },
+            "Booker": {
+                "weight": 1,
+                "description": "Regular Senate figure"
+            },
+            "Buttigieg": {
+                "weight": 2,
+                "description": "Common cabinet official"
+            },
+            "Cheney": {
+                "weight": 2,
+                "description": "Common political figure"
+            },
+            "Clinton": {
+                "weight": 2,
+                "description": "Common political figure"
+            },
+            "Coney Barrett": {
+                "weight": 2,
+                "description": "Common Supreme Court justice"
+            },
+            "DeSantis": {
+                "weight": 3,
+                "description": "Highly frequent governor"
+            },
+            "DJT": {
+                "weight": 3,
+                "description": "Highly frequent former president acronym"
+            },
+            "donaldjtrump": {
+                "weight": 3,
+                "description": "Highly frequent president handle"
+            },
+            "Dr. Oz": {
+                "weight": 2,
+                "description": "Common political figure"
+            },
+            "Duckworth": {
+                "weight": 1,
+                "description": "Moderate-use Senate figure"
+            },
+            "Elon": {
+                "weight": 3,
+                "description": "Highly frequent public figure"
+            },
+            "Fetterman": {
+                "weight": 2,
+                "description": "Common Senate figure"
+            },
+            "Gaetz": {
+                "weight": 3,
+                "description": "Frequent House figure"
+            },
+            "Garland": {
+                "weight": 3,
+                "description": "Frequent cabinet official"
+            },
+            "Giuliani": {
+                "weight": 2,
+                "description": "Common political figure"
+            },
+            "Gorsuch": {
+                "weight": 1,
+                "description": "Regular Supreme Court justice"
+            },
+            "Grassley": {
+                "weight": 1,
+                "description": "Regular Senate figure"
+            },
+            "Hawley": {
+                "weight": 2,
+                "description": "Common Senate figure"
+            },
+            "Hegseth": {
+                "weight": 1,
+                "description": "Moderate-use media figure"
+            },
+            "Higgins": {
+                "weight": 1,
+                "description": "Moderate-use House figure"
+            },
+            "Hochul": {
+                "weight": 0,
+                "description": "Regular governor"
+            },
+            "Ilhan": {
+                "weight": 2,
+                "description": "Common House figure"
+            },
+            "Ivanka": {
+                "weight": 2,
+                "description": "Common political figure"
+            },
+            "Kamala": {
+                "weight": 3,
+                "description": "Highly frequent vice president"
+            },
+            "Kagan": {
+                "weight": 1,
+                "description": "Regular Supreme Court justice"
+            },
+            "Kissinger": {
+                "weight": 1,
+                "description": "Regular historical figure"
+            },
+            "Klobuchar": {
+                "weight": 1,
+                "description": "Regular Senate figure"
+            },
+            "Kushner": {
+                "weight": 2,
+                "description": "Common political figure"
+            },
+            "Manchin": {
+                "weight": 2,
+                "description": "Common Senate figure"
+            },
+            "Mangione": {
+                "weight": 3,
+                "description": "Frequent political figure"
+            },
+            "McConnell": {
+                "weight": 3,
+                "description": "Frequent Senate leader"
+            },
+            "Melania": {
+                "weight": 1,
+                "description": "Regular political figure"
+            },
+            "MTG": {
+                "weight": 3,
+                "description": "Highly frequent House figure"
+            },
+            "Musk": {
+                "weight": 3,
+                "description": "Highly frequent public figure"
+            },
+            "Netanyahu": {
+                "weight": 0,
+                "description": "World leader name"
+            },
+            "Newsom": {
+                "weight": 3,
+                "description": "Frequent governor"
+            },
+            "Noem": {
+                "weight": 1,
+                "description": "Regular governor"
+            },
+            "Obama": {
+                "weight": 3,
+                "description": "Frequent former president"
+            },
+            "Ocasio-Cortez": {
+                "weight": 3,
+                "description": "Highly frequent House representative"
+            },
+            "Pelosi": {
+                "weight": 3,
+                "description": "Highly frequent House figure"
+            },
+            "Pence": {
+                "weight": 2,
+                "description": "Common former vice president"
+            },
+            "Ramaswamy": {
+                "weight": 3,
+                "description": "Frequent political figure"
+            },
+            "RFK Jr": {
+                "weight": 2,
+                "description": "Common political figure"
+            },
+            "R.F.K. Jr": {
+                "weight": 2,
+                "description": "Common political figure"
+            },
+            "Romney": {
+                "weight": 2,
+                "description": "Common Senate figure"
+            },
+            "Schumer": {
+                "weight": 3,
+                "description": "Frequent Senate leader"
+            },
+            "Sinema": {
+                "weight": 2,
+                "description": "Common Senate figure"
+            },
+            "Sotomayor": {
+                "weight": 1,
+                "description": "Regular Supreme Court justice"
+            },
+            "Stefanik": {
+                "weight": 2,
+                "description": "Common House leader"
+            },
+            "Swalwell": {
+                "weight": 1,
+                "description": "Regular House figure"
+            },
+            "Tlaib": {
+                "weight": 3,
+                "description": "Frequent House figure"
+            },
+            "Trump": {
+                "weight": 3,
+                "description": "Highly frequent president"
+            },
+            "Tuberville": {
+                "weight": 1,
+                "description": "Regular Senate figure"
+            },
+            "Vance": {
+                "weight": 1,
+                "description": "Regular Senate figure"
+            },
+            "Warnock": {
+                "weight": 1,
+                "description": "Regular Senate figure"
+            },
+            "Whitmer": {
+                "weight": 1,
+                "description": "Regular governor"
+            },
+            "Youngkin": {
+                "weight": 1,
+                "description": "Regular governor"
+            }
+        }
+    }
+}

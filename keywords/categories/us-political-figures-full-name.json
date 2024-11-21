@@ -1,0 +1,463 @@
+{
+    "US Political Figures - Full Name": {
+        "description": "Full names of US political figures who consistently generate significant public discourse",
+        "keywords": {
+            "Alexandria Ocasio-Cortez": {
+                "weight": 3,
+                "description": "Highly frequent House representative"
+            },
+            "Amy Coney Barrett": {
+                "weight": 2,
+                "description": "Common Supreme Court justice"
+            },
+            "Amy Klobuchar": {
+                "weight": 1,
+                "description": "Regular Senate figure"
+            },
+            "Andrew Cuomo": {
+                "weight": 1,
+                "description": "Regular former governor"
+            },
+            "Andrew Yang": {
+                "weight": 1,
+                "description": "Regular political figure"
+            },
+            "Andy Beshear": {
+                "weight": 1,
+                "description": "Regular governor"
+            },
+            "Anthony Blinken": {
+                "weight": 1,
+                "description": "Regular cabinet official"
+            },
+            "Asa Hutchinson": {
+                "weight": 1,
+                "description": "Moderate-use political figure"
+            },
+            "Bernie Sanders": {
+                "weight": 3,
+                "description": "Frequent Senate figure"
+            },
+            "Brian Thompson": {
+                "weight": 3,
+                "description": "Frequent political figure"
+            },
+            "Bill Barr": {
+                "weight": 1,
+                "description": "Regular former official"
+            },
+            "Brian Kemp": {
+                "weight": 1,
+                "description": "Regular governor"
+            },
+            "Chris Christie": {
+                "weight": 2,
+                "description": "Common political figure"
+            },
+            "Chris Murphy": {
+                "weight": 1,
+                "description": "Regular Senate figure"
+            },
+            "Chuck Grassley": {
+                "weight": 1,
+                "description": "Regular Senate figure"
+            },
+            "Chuck Schumer": {
+                "weight": 3,
+                "description": "Frequent Senate leader"
+            },
+            "Clarence Thomas": {
+                "weight": 2,
+                "description": "Common Supreme Court justice"
+            },
+            "Clay Higgins": {
+                "weight": 1,
+                "description": "Moderate-use House figure"
+            },
+            "Cory Booker": {
+                "weight": 1,
+                "description": "Regular Senate figure"
+            },
+            "Dan Crenshaw": {
+                "weight": 1,
+                "description": "Regular House figure"
+            },
+            "David McCormick": {
+                "weight": 1,
+                "description": "Moderate-use political figure"
+            },
+            "Dianne Feinstein": {
+                "weight": 1,
+                "description": "Regular Senate figure"
+            },
+            "Donald Trump": {
+                "weight": 3,
+                "description": "Highly frequent president"
+            },
+            "Donald Trump Jr.": {
+                "weight": 3,
+                "description": "Frequent political figure"
+            },
+            "Doug Burgum": {
+                "weight": 1,
+                "description": "Moderate-use political figure"
+            },
+            "Dr. Mehmet Oz": {
+                "weight": 2,
+                "description": "Common political figure"
+            },
+            "Elena Kagan": {
+                "weight": 1,
+                "description": "Regular Supreme Court justice"
+            },
+            "Elise Stefanik": {
+                "weight": 2,
+                "description": "Common House leader"
+            },
+            "Elizabeth Warren": {
+                "weight": 2,
+                "description": "Common Senate figure"
+            },
+            "Elon Musk": {
+                "weight": 3,
+                "description": "Highly frequent public figure"
+            },
+            "Eric Garcetti": {
+                "weight": 1,
+                "description": "Moderate-use political figure"
+            },
+            "Eric Swalwell": {
+                "weight": 1,
+                "description": "Regular House figure"
+            },
+            "Fani Willis": {
+                "weight": 2,
+                "description": "Common legal figure"
+            },
+            "Francis Suarez": {
+                "weight": 1,
+                "description": "Moderate-use political figure"
+            },
+            "Gavin Newsom": {
+                "weight": 3,
+                "description": "Frequent governor"
+            },
+            "George Santos": {
+                "weight": 2,
+                "description": "Common controversy figure"
+            },
+            "Glenn Youngkin": {
+                "weight": 1,
+                "description": "Regular governor"
+            },
+            "Greg Abbott": {
+                "weight": 2,
+                "description": "Common governor"
+            },
+            "Gretchen Whitmer": {
+                "weight": 1,
+                "description": "Regular governor"
+            },
+            "Hakeem Jeffries": {
+                "weight": 2,
+                "description": "Common House leader"
+            },
+            "Herschel Walker": {
+                "weight": 1,
+                "description": "Regular political figure"
+            },
+            "Hillary Clinton": {
+                "weight": 2,
+                "description": "Common political figure"
+            },
+            "Ilhan Omar": {
+                "weight": 3,
+                "description": "Frequent House figure"
+            },
+            "John Roberts": {
+                "weight": 2,
+                "description": "Common Supreme Court justice"
+            },
+            "Kamala Harris": {
+                "weight": 3,
+                "description": "Highly frequent vice president"
+            },
+            "J.D. Vance": {
+                "weight": 1,
+                "description": "Regular Senate figure"
+            },
+            "Jamaal Bowman": {
+                "weight": 2,
+                "description": "Common House figure"
+            },
+            "JD Vance": {
+                "weight": 1,
+                "description": "Regular Senate figure"
+            },
+            "Jeff Landry": {
+                "weight": 1,
+                "description": "Moderate-use political figure"
+            },
+            "Jim Jordan": {
+                "weight": 3,
+                "description": "Frequent House figure"
+            },
+            "Joe Biden": {
+                "weight": 3,
+                "description": "Highly frequent president"
+            },
+            "Joe Kennedy III": {
+                "weight": 1,
+                "description": "Moderate-use political figure"
+            },
+            "Joe Manchin": {
+                "weight": 2,
+                "description": "Common Senate figure"
+            },
+            "John Bolton": {
+                "weight": 1,
+                "description": "Regular former official"
+            },
+            "John Fetterman": {
+                "weight": 2,
+                "description": "Common Senate figure"
+            },
+            "John Kennedy": {
+                "weight": 1,
+                "description": "Regular Senate figure"
+            },
+            "Josh Hawley": {
+                "weight": 2,
+                "description": "Common Senate figure"
+            },
+            "Kari Lake": {
+                "weight": 2,
+                "description": "Common political figure"
+            },
+            "Katie Britt": {
+                "weight": 1,
+                "description": "Moderate-use Senate figure"
+            },
+            "Katie Porter": {
+                "weight": 1,
+                "description": "Regular House figure"
+            },
+            "Kelly Tshibaka": {
+                "weight": 1,
+                "description": "Moderate-use political figure"
+            },
+            "Ketanji Brown Jackson": {
+                "weight": 2,
+                "description": "Common Supreme Court justice"
+            },
+            "Kevin McCarthy": {
+                "weight": 3,
+                "description": "Frequent House figure"
+            },
+            "Kris Kobach": {
+                "weight": 1,
+                "description": "Moderate-use political figure"
+            },
+            "Kristi Noem": {
+                "weight": 1,
+                "description": "Regular governor"
+            },
+            "Kyrsten Sinema": {
+                "weight": 2,
+                "description": "Common Senate figure"
+            },
+            "Larry Elder": {
+                "weight": 1,
+                "description": "Regular political figure"
+            },
+            "Lauren Boebert": {
+                "weight": 3,
+                "description": "Frequent House figure"
+            },
+            "Lindsey Graham": {
+                "weight": 2,
+                "description": "Common Senate figure"
+            },
+            "Liz Cheney": {
+                "weight": 2,
+                "description": "Common political figure"
+            },
+            "Lloyd Austin": {
+                "weight": 1,
+                "description": "Regular cabinet official"
+            },
+            "Laura Loomer": {
+                "weight": 1,
+                "description": "Regular political figure"
+            },
+            "Luigi Mangione": {
+                "weight": 3,
+                "description": "Highly frequent political figure"
+            },
+            "Marjorie Taylor Greene": {
+                "weight": 3,
+                "description": "Highly frequent House figure"
+            },
+            "Mark Kelly": {
+                "weight": 1,
+                "description": "Regular Senate figure"
+            },
+            "Mark Milley": {
+                "weight": 1,
+                "description": "Regular military figure"
+            },
+            "Matt Gaetz": {
+                "weight": 3,
+                "description": "Frequent House figure"
+            },
+            "Meghan McCain": {
+                "weight": 1,
+                "description": "Regular media figure"
+            },
+            "Merrick Garland": {
+                "weight": 3,
+                "description": "Frequent cabinet official"
+            },
+            "Mike Garcia": {
+                "weight": 1,
+                "description": "Moderate-use House figure"
+            },
+            "Mike Johnson": {
+                "weight": 3,
+                "description": "Frequent House speaker"
+            },
+            "Mike Lindell": {
+                "weight": 1,
+                "description": "Regular political figure"
+            },
+            "Mike Pence": {
+                "weight": 2,
+                "description": "Common former vice president"
+            },
+            "Mike Pompeo": {
+                "weight": 1,
+                "description": "Regular former official"
+            },
+            "Mitch McConnell": {
+                "weight": 3,
+                "description": "Frequent Senate leader"
+            },
+            "Mitt Romney": {
+                "weight": 2,
+                "description": "Common Senate figure"
+            },
+            "Nancy Mace": {
+                "weight": 1,
+                "description": "Regular House figure"
+            },
+            "Nancy Pelosi": {
+                "weight": 3,
+                "description": "Highly frequent House figure"
+            },
+            "Neil Gorsuch": {
+                "weight": 1,
+                "description": "Regular Supreme Court justice"
+            },
+            "Nikki Haley": {
+                "weight": 3,
+                "description": "Frequent political figure"
+            },
+            "Pete Buttigieg": {
+                "weight": 2,
+                "description": "Common cabinet official"
+            },
+            "Rand Paul": {
+                "weight": 1,
+                "description": "Regular Senate figure"
+            },
+            "Raphael Warnock": {
+                "weight": 1,
+                "description": "Regular Senate figure"
+            },
+            "Rashida Tlaib": {
+                "weight": 3,
+                "description": "Frequent House figure"
+            },
+            "Rick Scott": {
+                "weight": 1,
+                "description": "Regular Senate figure"
+            },
+            "Roger Stone": {
+                "weight": 1,
+                "description": "Regular political figure"
+            },
+            "Ron DeSantis": {
+                "weight": 3,
+                "description": "Highly frequent governor"
+            },
+            "Ron Johnson": {
+                "weight": 1,
+                "description": "Regular Senate figure"
+            },
+            "Ron Klain": {
+                "weight": 1,
+                "description": "Regular former official"
+            },
+            "Samuel Alito": {
+                "weight": 1,
+                "description": "Regular Supreme Court justice"
+            },
+            "Sarah Huckabee Sanders": {
+                "weight": 1,
+                "description": "Regular governor"
+            },
+            "Sidney Powell": {
+                "weight": 1,
+                "description": "Regular controversy figure"
+            },
+            "Sonia Sotomayor": {
+                "weight": 1,
+                "description": "Regular Supreme Court justice"
+            },
+            "Speaker Johnson": {
+                "weight": 3,
+                "description": "Highly frequent House Speaker"
+            },
+            "Stacey Abrams": {
+                "weight": 1,
+                "description": "Regular political figure"
+            },
+            "Steve Bannon": {
+                "weight": 3,
+                "description": "Frequent political figure"
+            },
+            "Steve Scalise": {
+                "weight": 1,
+                "description": "Regular House figure"
+            },
+            "Ted Cruz": {
+                "weight": 3,
+                "description": "Frequent Senate figure"
+            },
+            "Tim Scott": {
+                "weight": 1,
+                "description": "Regular political figure"
+            },
+            "Tim Walz": {
+                "weight": 1,
+                "description": "Regular governor"
+            },
+            "Tom Cotton": {
+                "weight": 1,
+                "description": "Regular Senate figure"
+            },
+            "Tommy Tuberville": {
+                "weight": 1,
+                "description": "Regular Senate figure"
+            },
+            "Tulsi Gabbard": {
+                "weight": 1,
+                "description": "Regular political figure"
+            },
+            "Vivek Ramaswamy": {
+                "weight": 3,
+                "description": "Frequent political figure"
+            }
+        }
+    }
+}

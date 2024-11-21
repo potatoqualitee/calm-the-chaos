@@ -1,0 +1,215 @@
+{
+    "International Coverage": {
+        "description": "Terms related to international relations",
+        "keywords": {
+            "Afghanistan": {
+                "weight": 0,
+                "description": "Country name"
+            },
+            "Baltic": {
+                "weight": 0,
+                "description": "Regional name"
+            },
+            "Beijing": {
+                "weight": 0,
+                "description": "City name"
+            },
+            "CCP": {
+                "weight": 0,
+                "description": "Organization name"
+            },
+            "conflict zone": {
+                "weight": 1,
+                "description": "Common military term"
+            },
+            "diplomatic crisis": {
+                "weight": 1,
+                "description": "Common international term"
+            },
+            "diplomatic tension": {
+                "weight": 1,
+                "description": "Common relations term"
+            },
+            "disputed territory": {
+                "weight": 0,
+                "description": "Regular conflict term"
+            },
+            "embassy closure": {
+                "weight": 0,
+                "description": "Regular diplomatic term"
+            },
+            "European Union": {
+                "weight": 0,
+                "description": "Organization name"
+            },
+            "foreign interference": {
+                "weight": 3,
+                "description": "Frequent international concern"
+            },
+            "foreign involvement": {
+                "weight": 2,
+                "description": "Frequent international term"
+            },
+            "foreign relations": {
+                "weight": 1,
+                "description": "Regular diplomatic term"
+            },
+            "Gaza": {
+                "weight": 0,
+                "description": "Region name"
+            },
+            "global conflict": {
+                "weight": 3,
+                "description": "Frequent international term"
+            },
+            "IDF": {
+                "weight": 0,
+                "description": "Military organization name"
+            },
+            "independence movement": {
+                "weight": 2,
+                "description": "Frequent political term"
+            },
+            "international dispute": {
+                "weight": 1,
+                "description": "Common diplomatic term"
+            },
+            "Iran": {
+                "weight": 0,
+                "description": "Country name"
+            },
+            "Iraq": {
+                "weight": 0,
+                "description": "Country name"
+            },
+            "Israel": {
+                "weight": 0,
+                "description": "Country name"
+            },
+            "Kashmir": {
+                "weight": 0,
+                "description": "Region name"
+            },
+            "Kyiv": {
+                "weight": 0,
+                "description": "City name"
+            },
+            "Kremlin": {
+                "weight": 3,
+                "description": "Russian government center/metonym"
+            },
+            "Lebanon": {
+                "weight": 0,
+                "description": "Country name"
+            },
+            "Middle East": {
+                "weight": 0,
+                "description": "Region name"
+            },
+            "missile strike": {
+                "weight": 1,
+                "description": "Frequent military term"
+            },
+            "NATO": {
+                "weight": 0,
+                "description": "Organization name"
+            },
+            "North Korea": {
+                "weight": 0,
+                "description": "Country name"
+            },
+            "nuclear talks": {
+                "weight": 3,
+                "description": "Frequent diplomatic term"
+            },
+            "Palestine": {
+                "weight": 0,
+                "description": "Region name"
+            },
+            "peace negotiation": {
+                "weight": 1,
+                "description": "Common diplomatic term"
+            },
+            "peace talks": {
+                "weight": 1,
+                "description": "Common diplomatic term"
+            },
+            "political asylum": {
+                "weight": 0,
+                "description": "Regular international term"
+            },
+            "Russia": {
+                "weight": 0,
+                "description": "Country name"
+            },
+            "sanctions": {
+                "weight": 1,
+                "description": "Frequent diplomatic term"
+            },
+            "Saudi Arabia": {
+                "weight": 0,
+                "description": "Country name"
+            },
+            "South China Sea": {
+                "weight": 0,
+                "description": "Region name"
+            },
+            "Strait of Hormuz": {
+                "weight": 0,
+                "description": "Region name"
+            },
+            "Syria": {
+                "weight": 0,
+                "description": "Country name"
+            },
+            "Taiwan": {
+                "weight": 0,
+                "description": "Region name"
+            },
+            "territorial dispute": {
+                "weight": 1,
+                "description": "Regular conflict term"
+            },
+            "trade dispute": {
+                "weight": 1,
+                "description": "Common economic term"
+            },
+            "treaty violation": {
+                "weight": 1,
+                "description": "Common diplomatic term"
+            },
+            "UAE": {
+                "weight": 0,
+                "description": "Country name"
+            },
+            "Ukraine": {
+                "weight": 0,
+                "description": "Country name"
+            },
+            "UN resolution": {
+                "weight": 0,
+                "description": "Regular diplomatic term"
+            },
+            "West Bank": {
+                "weight": 0,
+                "description": "Region name"
+            },
+            "Yemen": {
+                "weight": 0,
+                "description": "Country name"
+            },
+            "world war": {
+                "weight": 3,
+                "description": "Highly frequent conflict term"
+            },
+            "world war 3": {
+                "weight": 3,
+                "description": "Highly frequent conflict term"
+            },
+            "world war III": {
+                "weight": 3,
+                "description": "Highly frequent conflict term"
+            }
+        }
+    }
+}

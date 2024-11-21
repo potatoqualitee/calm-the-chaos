@@ -1,0 +1,983 @@
+{
+    "US Government Institutions": {
+        "description": "Terms related to US government bodies, positions, and processes that appear in public discourse",
+        "keywords": {
+            "Acting Secretary": {
+                "weight": 0,
+                "description": "Regular position title"
+            },
+            "America First Policy": {
+                "weight": 1,
+                "description": "Common political term"
+            },
+            "Appropriations Committee": {
+                "weight": 0,
+                "description": "Regular committee name"
+            },
+            "Armed Services Committee": {
+                "weight": 0,
+                "description": "Regular committee name"
+            },
+            "Assistant Secretary": {
+                "weight": 0,
+                "description": "Basic position title"
+            },
+            "Attorney General": {
+                "weight": 1,
+                "description": "Frequent official title"
+            },
+            "bicameral": {
+                "weight": 0,
+                "description": "Basic legislative term"
+            },
+            "Budget Committee": {
+                "weight": 0,
+                "description": "Regular committee name"
+            },
+            "Cabinet appointment": {
+                "weight": 1,
+                "description": "Common process term"
+            },
+            "Cabinet confirmation": {
+                "weight": 1,
+                "description": "Common process term"
+            },
+            "Cabinet nominee": {
+                "weight": 1,
+                "description": "Common process term"
+            },
+            "Cabinet pick": {
+                "weight": 1,
+                "description": "Common process term"
+            },
+            "Cabinet position": {
+                "weight": 0,
+                "description": "Regular position term"
+            },
+            "Cabinet purge": {
+                "weight": 1,
+                "description": "Frequent controversy term"
+            },
+            "Cabinet Secretary": {
+                "weight": 0,
+                "description": "Regular position title"
+            },
+            "Chief Justice": {
+                "weight": 1,
+                "description": "Frequent official title"
+            },
+            "Chief Medical Officer": {
+                "weight": 0,
+                "description": "Regular position title"
+            },
+            "Chief of Staff": {
+                "weight": 1,
+                "description": "Common position title"
+            },
+            "child care bills": {
+                "weight": 0,
+                "description": "Common legislation term"
+            },
+            "CIA": {
+                "weight": 1,
+                "description": "Frequent agency name"
+            },
+            "Civil Service": {
+                "weight": 0,
+                "description": "Regular system term"
+            },
+            "committee chair": {
+                "weight": 0,
+                "description": "Basic position title"
+            },
+            "committee hearing": {
+                "weight": 0,
+                "description": "Regular process term"
+            },
+            "committee markup": {
+                "weight": 0,
+                "description": "Basic process term"
+            },
+            "committee report": {
+                "weight": 0,
+                "description": "Basic document term"
+            },
+            "committee vote": {
+                "weight": 0,
+                "description": "Regular process term"
+            },
+            "Communications Director": {
+                "weight": 0,
+                "description": "Basic position title"
+            },
+            "Congress": {
+                "weight": 1,
+                "description": "Frequent institution term"
+            },
+            "Congressional Budget Office": {
+                "weight": 0,
+                "description": "Regular agency name"
+            },
+            "Congressional hearing": {
+                "weight": 1,
+                "description": "Common process term"
+            },
+            "Congressional investigation": {
+                "weight": 1,
+                "description": "Frequent oversight term"
+            },
+            "Congressional oversight": {
+                "weight": 1,
+                "description": "Common process term"
+            },
+            "Congressional record": {
+                "weight": 0,
+                "description": "Basic document term"
+            },
+            "Congressional report": {
+                "weight": 0,
+                "description": "Basic document term"
+            },
+            "Congressional session": {
+                "weight": 0,
+                "description": "Basic process term"
+            },
+            "Congressional staff": {
+                "weight": 0,
+                "description": "Basic personnel term"
+            },
+            "Congressional subcommittee": {
+                "weight": 0,
+                "description": "Basic structure term"
+            },
+            "Customs and Border Protection": {
+                "weight": 1,
+                "description": "Common agency name"
+            },
+            "Defense Intelligence Agency": {
+                "weight": 0,
+                "description": "Regular agency name"
+            },
+            "Department of Agriculture": {
+                "weight": 0,
+                "description": "Basic department name"
+            },
+            "Department of Commerce": {
+                "weight": 0,
+                "description": "Basic department name"
+            },
+            "Department of Defense": {
+                "weight": 1,
+                "description": "Frequent department name"
+            },
+            "Department of Education": {
+                "weight": 1,
+                "description": "Common department name"
+            },
+            "Department of Energy": {
+                "weight": 0,
+                "description": "Regular department name"
+            },
+            "Department of Government Efficiency": {
+                "weight": 0,
+                "description": "Basic department name"
+            },
+            "Department of Health and Human Services": {
+                "weight": 1,
+                "description": "Common department name"
+            },
+            "Department of Homeland Security": {
+                "weight": 1,
+                "description": "Frequent department name"
+            },
+            "Department of Housing and Urban Development": {
+                "weight": 0,
+                "description": "Regular department name"
+            },
+            "Department of Justice": {
+                "weight": 1,
+                "description": "Frequent department name"
+            },
+            "Department of Labor": {
+                "weight": 0,
+                "description": "Regular department name"
+            },
+            "Department of State": {
+                "weight": 1,
+                "description": "Common department name"
+            },
+            "Department of the Interior": {
+                "weight": 0,
+                "description": "Basic department name"
+            },
+            "Department of Transportation": {
+                "weight": 0,
+                "description": "Basic department name"
+            },
+            "Department of Treasury": {
+                "weight": 0,
+                "description": "Regular department name"
+            },
+            "Department of Veterans Affairs": {
+                "weight": 0,
+                "description": "Regular department name"
+            },
+            "Deputy Attorney General": {
+                "weight": 0,
+                "description": "Regular position title"
+            },
+            "Deputy Chief of Staff": {
+                "weight": 0,
+                "description": "Basic position title"
+            },
+            "Deputy Director": {
+                "weight": 0,
+                "description": "Basic position title"
+            },
+            "Deputy National Security Advisor": {
+                "weight": 0,
+                "description": "Regular position title"
+            },
+            "Deputy Press Secretary": {
+                "weight": 0,
+                "description": "Basic position title"
+            },
+            "Deputy Secretary": {
+                "weight": 0,
+                "description": "Basic position title"
+            },
+            "Deputy Secretary of State": {
+                "weight": 0,
+                "description": "Regular position title"
+            },
+            "Director of National Intelligence": {
+                "weight": 1,
+                "description": "Common position title"
+            },
+            "disaster relief": {
+                "weight": 0,
+                "description": "Common funding term"
+            },
+            "DNI": {
+                "weight": 0,
+                "description": "Regular acronym"
+            },
+            "DOD": {
+                "weight": 0,
+                "description": "Regular acronym"
+            },
+            "DOE": {
+                "weight": 0,
+                "description": "Basic acronym"
+            },
+            "DOGE": {
+                "weight": 0,
+                "description": "Basic acronym"
+            },
+            "DOJ": {
+                "weight": 1,
+                "description": "Common acronym"
+            },
+            "Electoral College": {
+                "weight": 1,
+                "description": "Frequent electoral term"
+            },
+            "Energy and Commerce Committee": {
+                "weight": 0,
+                "description": "Regular committee name"
+            },
+            "Environmental Protection Agency": {
+                "weight": 1,
+                "description": "Common agency name"
+            },
+            "EPA": {
+                "weight": 1,
+                "description": "Common agency name"
+            },
+            "EPA Administrator": {
+                "weight": 0,
+                "description": "Regular position title"
+            },
+            "Ethics Committee": {
+                "weight": 1,
+                "description": "Common committee name"
+            },
+            "Executive agency": {
+                "weight": 0,
+                "description": "Basic structure term"
+            },
+            "Executive Order": {
+                "weight": 1,
+                "description": "Frequent policy term"
+            },
+            "federal authority": {
+                "weight": 0,
+                "description": "Common governance term"
+            },
+            "executive session": {
+                "weight": 0,
+                "description": "Basic process term"
+            },
+            "FBI": {
+                "weight": 1,
+                "description": "Frequent agency name"
+            },
+            "FDA": {
+                "weight": 1,
+                "description": "Common agency name"
+            },
+            "FDA Commissioner": {
+                "weight": 0,
+                "description": "Regular position title"
+            },
+            "federal government": {
+                "weight": 1,
+                "description": "Common institution term"
+            },
+            "federal money": {
+                "weight": 1,
+                "description": "Common funding term"
+            },
+            "federal taxes": {
+                "weight": 1,
+                "description": "Common revenue term"
+            },
+            "Federal agency": {
+                "weight": 0,
+                "description": "Regular structure term"
+            },
+            "Federal Bureau of Investigation": {
+                "weight": 1,
+                "description": "Common agency name"
+            },
+            "Federal bureaucracy": {
+                "weight": 0,
+                "description": "Regular criticism term"
+            },
+            "Federal employee": {
+                "weight": 0,
+                "description": "Regular personnel term"
+            },
+            "Federal Trade Commission": {
+                "weight": 0,
+                "description": "Regular agency name"
+            },
+            "Federal worker": {
+                "weight": 0,
+                "description": "Regular personnel term"
+            },
+            "Federal workforce": {
+                "weight": 0,
+                "description": "Regular personnel term"
+            },
+            "FEMA": {
+                "weight": 1,
+                "description": "Common agency name"
+            },
+            "FEMA Administrator": {
+                "weight": 0,
+                "description": "Regular position title"
+            },
+            "filibuster": {
+                "weight": 1,
+                "description": "Frequent procedural term"
+            },
+            "First Lady": {
+                "weight": 1,
+                "description": "Official White House position"
+            },
+            "Financial Services Committee": {
+                "weight": 0,
+                "description": "Regular committee name"
+            },
+            "Food and Drug Administration": {
+                "weight": 1,
+                "description": "Common agency name"
+            },
+            "Foreign Affairs Committee": {
+                "weight": 0,
+                "description": "Regular committee name"
+            },
+            "Foreign Relations Committee": {
+                "weight": 0,
+                "description": "Regular committee name"
+            },
+            "FTC": {
+                "weight": 2,
+                "description": "Common regulatory agency"
+            },
+            "GAO": {
+                "weight": 0,
+                "description": "Basic acronym"
+            },
+            "Government Accountability Office": {
+                "weight": 0,
+                "description": "Basic agency name"
+            },
+            "government funded": {
+                "weight": 0,
+                "description": "Common budget term"
+            },
+            "Government agency": {
+                "weight": 0,
+                "description": "Basic structure term"
+            },
+            "government shutdown": {
+                "weight": 3,
+                "description": "Highly frequent crisis term"
+            },
+            "Heritage Foundation": {
+                "weight": 0,
+                "description": "Regular think tank name"
+            },
+            "HHS": {
+                "weight": 0,
+                "description": "Regular acronym"
+            },
+            "House clerk": {
+                "weight": 0,
+                "description": "Basic position title"
+            },
+            "House Committee": {
+                "weight": 0,
+                "description": "Basic structure term"
+            },
+            "House floor": {
+                "weight": 0,
+                "description": "Regular location term"
+            },
+            "House Judiciary": {
+                "weight": 1,
+                "description": "Common committee name"
+            },
+            "House Majority Leader": {
+                "weight": 1,
+                "description": "Common position title"
+            },
+            "House Majority Whip": {
+                "weight": 0,
+                "description": "Regular position title"
+            },
+            "House Minority Leader": {
+                "weight": 1,
+                "description": "Common position title"
+            },
+            "House Minority Whip": {
+                "weight": 0,
+                "description": "Regular position title"
+            },
+            "House of Representatives": {
+                "weight": 1,
+                "description": "Common institution name"
+            },
+            "House passes": {
+                "weight": 0,
+                "description": "Common legislative action term"
+            },
+            "House parliamentarian": {
+                "weight": 0,
+                "description": "Basic position title"
+            },
+            "House rules": {
+                "weight": 0,
+                "description": "Regular process term"
+            },
+            "House Speaker": {
+                "weight": 1,
+                "description": "Frequent position title"
+            },
+            "House vote": {
+                "weight": 1,
+                "description": "Common process term"
+            },
+            "Immigration and Customs": {
+                "weight": 1,
+                "description": "Common agency name"
+            },
+            "Intelligence agency": {
+                "weight": 0,
+                "description": "Regular structure term"
+            },
+            "Intelligence Committee": {
+                "weight": 1,
+                "description": "Common committee name"
+            },
+            "Intelligence community": {
+                "weight": 1,
+                "description": "Common structure term"
+            },
+            "intel officials": {
+                "weight": 0,
+                "description": "Common government personnel term"
+            },
+            "Internal Revenue Service": {
+                "weight": 1,
+                "description": "Common agency name"
+            },
+            "IRS": {
+                "weight": 1,
+                "description": "Frequent agency name"
+            },
+            "Joint Chiefs of Staff": {
+                "weight": 1,
+                "description": "Common military term"
+            },
+            "Judiciary Committee": {
+                "weight": 1,
+                "description": "Common committee name"
+            },
+            "Justice Department": {
+                "weight": 1,
+                "description": "Frequent department name"
+            },
+            "legislative agenda": {
+                "weight": 0,
+                "description": "Regular process term"
+            },
+            "legislative aide": {
+                "weight": 0,
+                "description": "Basic position title"
+            },
+            "legislative branch": {
+                "weight": 0,
+                "description": "Basic structure term"
+            },
+            "legislative calendar": {
+                "weight": 0,
+                "description": "Basic process term"
+            },
+            "legislative committee": {
+                "weight": 0,
+                "description": "Basic structure term"
+            },
+            "legislative counsel": {
+                "weight": 0,
+                "description": "Basic position title"
+            },
+            "legislative director": {
+                "weight": 0,
+                "description": "Basic position title"
+            },
+            "legislative hearing": {
+                "weight": 0,
+                "description": "Basic process term"
+            },
+            "legislative markup": {
+                "weight": 0,
+                "description": "Basic process term"
+            },
+            "legislative oversight": {
+                "weight": 0,
+                "description": "Regular process term"
+            },
+            "legislative process": {
+                "weight": 0,
+                "description": "Basic process term"
+            },
+            "legislative proposal": {
+                "weight": 0,
+                "description": "Basic process term"
+            },
+            "legislative record": {
+                "weight": 0,
+                "description": "Basic document term"
+            },
+            "legislative report": {
+                "weight": 0,
+                "description": "Basic document term"
+            },
+            "legislative session": {
+                "weight": 0,
+                "description": "Basic process term"
+            },
+            "legislative staff": {
+                "weight": 0,
+                "description": "Basic personnel term"
+            },
+            "legislative vote": {
+                "weight": 0,
+                "description": "Basic process term"
+            },
+            "majority leader": {
+                "weight": 1,
+                "description": "Common position title"
+            },
+            "minority leader": {
+                "weight": 1,
+                "description": "Common position title"
+            },
+            "National Economic Advisor": {
+                "weight": 0,
+                "description": "Regular position title"
+            },
+            "National Security Advisor": {
+                "weight": 1,
+                "description": "Frequent position title"
+            },
+            "National Security Council": {
+                "weight": 1,
+                "description": "Common agency name"
+            },
+            "NIH Director": {
+                "weight": 0,
+                "description": "Regular position title"
+            },
+            "NSA": {
+                "weight": 1,
+                "description": "Frequent agency name"
+            },
+            "NSC": {
+                "weight": 0,
+                "description": "Regular acronym"
+            },
+            "Office of Management and Budget": {
+                "weight": 0,
+                "description": "Regular agency name"
+            },
+            "Office of Personnel": {
+                "weight": 0,
+                "description": "Basic agency name"
+            },
+            "OMB": {
+                "weight": 0,
+                "description": "Regular acronym"
+            },
+            "OMB Director": {
+                "weight": 0,
+                "description": "Regular position title"
+            },
+            "OPM": {
+                "weight": 0,
+                "description": "Basic acronym"
+            },
+            "Oversight Committee": {
+                "weight": 1,
+                "description": "Common committee name"
+            },
+            "parliamentary procedure": {
+                "weight": 0,
+                "description": "Basic process term"
+            },
+            "parliamentarian": {
+                "weight": 0,
+                "description": "Basic position title"
+            },
+            "party whip": {
+                "weight": 0,
+                "description": "Regular position title"
+            },
+            "Pentagon": {
+                "weight": 1,
+                "description": "Frequent institution name"
+            },
+            "POTUS": {
+                "weight": 1,
+                "description": "Frequent position acronym"
+            },
+            "political power struggle": {
+                "weight": 0,
+                "description": "Common political conflict term"
+            },
+            "Press Secretary": {
+                "weight": 1,
+                "description": "Common position title"
+            },
+            "president-elect": {
+                "weight": 3,
+                "description": "Highly frequent transitional position term"
+            },
+            "Principal Deputy": {
+                "weight": 0,
+                "description": "Basic position title"
+            },
+            "Project 2025": {
+                "weight": 1,
+                "description": "Common initiative name"
+            },
+            "proof of citizenship": {
+                "weight": 0,
+                "description": "Common documentation term"
+            },
+            "quorum call": {
+                "weight": 0,
+                "description": "Basic process term"
+            },
+            "ranking member": {
+                "weight": 0,
+                "description": "Basic position title"
+            },
+            "representatives": {
+                "weight": 1,
+                "description": "Common legislative term"
+            },
+            "Rules Committee": {
+                "weight": 0,
+                "description": "Regular committee name"
+            },
+            "Schedule F": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "SCOTUS": {
+                "weight": 1,
+                "description": "Frequent court acronym"
+            },
+            "Secretary of Agriculture": {
+                "weight": 0,
+                "description": "Basic position title"
+            },
+            "Secretary of Commerce": {
+                "weight": 0,
+                "description": "Basic position title"
+            },
+            "Secretary of Defense": {
+                "weight": 1,
+                "description": "Frequent position title"
+            },
+            "Secretary of Education": {
+                "weight": 1,
+                "description": "Common position title"
+            },
+            "Secretary of Energy": {
+                "weight": 0,
+                "description": "Regular position title"
+            },
+            "secession": {
+                "weight": 0,
+                "description": "Common political conflict term"
+            },
+            "Secretary of Health and Human Services": {
+                "weight": 1,
+                "description": "Common position title"
+            },
+            "Secretary of Homeland Security": {
+                "weight": 1,
+                "description": "Frequent position title"
+            },
+            "Secretary of Housing and Urban Development": {
+                "weight": 0,
+                "description": "Regular position title"
+            },
+            "Secretary of Labor": {
+                "weight": 0,
+                "description": "Regular position title"
+            },
+            "Secretary of State": {
+                "weight": 1,
+                "description": "Frequent position title"
+            },
+            "Secretary of the Interior": {
+                "weight": 0,
+                "description": "Basic position title"
+            },
+            "Secretary of the Treasury": {
+                "weight": 1,
+                "description": "Common position title"
+            },
+            "Secretary of Transportation": {
+                "weight": 0,
+                "description": "Basic position title"
+            },
+            "Secretary of Veterans Affairs": {
+                "weight": 0,
+                "description": "Regular position title"
+            },
+            "shutdown threat": {
+                "weight": 3,
+                "description": "Highly frequent crisis term"
+            },
+            "shutdown looms": {
+                "weight": 0,
+                "description": "Common crisis term"
+            },
+            "Senate": {
+                "weight": 1,
+                "description": "Frequent institution term"
+            },
+            "Senate clerk": {
+                "weight": 0,
+                "description": "Basic position title"
+            },
+            "Senate Committee": {
+                "weight": 0,
+                "description": "Basic structure term"
+            },
+            "Senate floor": {
+                "weight": 0,
+                "description": "Regular location term"
+            },
+            "Senate Judiciary": {
+                "weight": 1,
+                "description": "Common committee name"
+            },
+            "Senate Majority Leader": {
+                "weight": 1,
+                "description": "Frequent position title"
+            },
+            "Senate Majority Whip": {
+                "weight": 0,
+                "description": "Regular position title"
+            },
+            "Senate Minority Leader": {
+                "weight": 1,
+                "description": "Frequent position title"
+            },
+            "Senate Minority Whip": {
+                "weight": 0,
+                "description": "Regular position title"
+            },
+            "Senate parliamentarian": {
+                "weight": 0,
+                "description": "Basic position title"
+            },
+            "Senate rules": {
+                "weight": 0,
+                "description": "Regular process term"
+            },
+            "Senate vote": {
+                "weight": 1,
+                "description": "Common process term"
+            },
+            "Senior Advisor": {
+                "weight": 0,
+                "description": "Regular position title"
+            },
+            "Speaker of the House": {
+                "weight": 1,
+                "description": "Frequent position title"
+            },
+            "spending bill": {
+                "weight": 0,
+                "description": "Common legislation term"
+            },
+            "Speakership": {
+                "weight": 2,
+                "description": "Frequent leadership term"
+            },
+            "Social Security Administration": {
+                "weight": 1,
+                "description": "Common agency name"
+            },
+            "Solicitor General": {
+                "weight": 0,
+                "description": "Regular position title"
+            },
+            "SSA": {
+                "weight": 0,
+                "description": "Regular acronym"
+            },
+            "State Department": {
+                "weight": 1,
+                "description": "Frequent department name"
+            },
+            "subcommittee": {
+                "weight": 0,
+                "description": "Basic structure term"
+            },
+            "subcommittee chair": {
+                "weight": 0,
+                "description": "Basic position title"
+            },
+            "subcommittee hearing": {
+                "weight": 0,
+                "description": "Basic process term"
+            },
+            "Supreme Court": {
+                "weight": 2,
+                "description": "Highly frequent institution name"
+            },
+            "Surgeon General": {
+                "weight": 1,
+                "description": "Common position title"
+            },
+            "Teamsters": {
+                "weight": 1,
+                "description": "Common labor organization"
+            },
+            "Trade Representative": {
+                "weight": 0,
+                "description": "Regular position title"
+            },
+            "top court": {
+                "weight": 0,
+                "description": "Common judicial term"
+            },
+            "Transportation Security Administration": {
+                "weight": 0,
+                "description": "Regular agency name"
+            },
+            "Treasury Department": {
+                "weight": 1,
+                "description": "Common department name"
+            },
+            "TSA": {
+                "weight": 1,
+                "description": "Common agency acronym"
+            },
+            "Under Secretary": {
+                "weight": 0,
+                "description": "Basic position title"
+            },
+            "US Government": {
+                "weight": 1,
+                "description": "Common institution term"
+            },
+            "USAID": {
+                "weight": 0,
+                "description": "Basic agency acronym"
+            },
+            "USDA": {
+                "weight": 0,
+                "description": "Basic agency acronym"
+            },
+            "USPS": {
+                "weight": 0,
+                "description": "Regular agency acronym"
+            },
+            "USTR": {
+                "weight": 0,
+                "description": "Basic agency acronym"
+            },
+            "US House": {
+                "weight": 0,
+                "description": "Common legislative body term"
+            },
+            "US restrictions": {
+                "weight": 0,
+                "description": "Common policy term"
+            },
+            "Veterans Affairs Committee": {
+                "weight": 0,
+                "description": "Regular committee name"
+            },
+            "veto": {
+                "weight": 0,
+                "description": "Common executive action term"
+            },
+            "Vice President": {
+                "weight": 1,
+                "description": "Frequent position title"
+            },
+            "Ways and Means Committee": {
+                "weight": 0,
+                "description": "Regular committee name"
+            },
+            "White House": {
+                "weight": 2,
+                "description": "Highly frequent institution term"
+            },
+            "White House Communications": {
+                "weight": 0,
+                "description": "Regular office name"
+            },
+            "White House Counsel": {
+                "weight": 1,
+                "description": "Common position title"
+            },
+            "White House Staff": {
+                "weight": 0,
+                "description": "Regular personnel term"
+            }
+        }
+    }
+}

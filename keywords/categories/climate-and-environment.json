@@ -1,0 +1,215 @@
+{
+    "Climate and Environment": {
+        "description": "Terms related to climate change, environmental issues, and natural disasters that drive significant public discourse",
+        "keywords": {
+            "carbon emission": {
+                "weight": 1,
+                "description": "Common environmental policy term"
+            },
+            "carbon footprint": {
+                "weight": 0,
+                "description": "Regular environmental impact term"
+            },
+            "carbon tax": {
+                "weight": 1,
+                "description": "Frequently debated policy term"
+            },
+            "climate activist": {
+                "weight": 1,
+                "description": "Frequent protest movement term"
+            },
+            "climate change": {
+                "weight": 3,
+                "description": "Highly frequent environmental term"
+            },
+            "climate crisis": {
+                "weight": 1,
+                "description": "Frequent environmental emergency term"
+            },
+            "climate deal": {
+                "weight": 0,
+                "description": "Regular policy agreement term"
+            },
+            "climate denier": {
+                "weight": 1,
+                "description": "Frequent controversy term"
+            },
+            "climate emergency": {
+                "weight": 1,
+                "description": "Frequent crisis declaration term"
+            },
+            "climate migration": {
+                "weight": 0,
+                "description": "Moderate-use displacement term"
+            },
+            "climate protest": {
+                "weight": 1,
+                "description": "Common activism term"
+            },
+            "climate refugee": {
+                "weight": 0,
+                "description": "Moderate-use humanitarian term"
+            },
+            "climate science": {
+                "weight": 1,
+                "description": "Common research term"
+            },
+            "climate shock": {
+                "weight": 0,
+                "description": "Common climate impact term"
+            },
+            "climate summit": {
+                "weight": 1,
+                "description": "Regular diplomatic term"
+            },
+            "climate-warming": {
+                "weight": 0,
+                "description": "Common climate change term"
+            },
+            "coal plant": {
+                "weight": 0,
+                "description": "Regular energy policy term"
+            },
+            "deforestation": {
+                "weight": 1,
+                "description": "Common environmental threat term"
+            },
+            "desertification": {
+                "weight": 0,
+                "description": "Occasional environmental term"
+            },
+            "drought": {
+                "weight": 1,
+                "description": "Frequent weather crisis term"
+            },
+            "eco-anxiety": {
+                "weight": 0,
+                "description": "Moderate-use psychological term"
+            },
+            "ecological disaster": {
+                "weight": 1,
+                "description": "Common environmental crisis term"
+            },
+            "environmental disaster": {
+                "weight": 1,
+                "description": "Common crisis term"
+            },
+            "environmental impact": {
+                "weight": 0,
+                "description": "Regular assessment term"
+            },
+            "extreme heat": {
+                "weight": 3,
+                "description": "Frequent weather crisis term"
+            },
+            "flash flood": {
+                "weight": 1,
+                "description": "Common weather emergency term"
+            },
+            "flooding": {
+                "weight": 3,
+                "description": "Highly frequent recurring disaster term"
+            },
+            "fossil fuel": {
+                "weight": 1,
+                "description": "Frequent energy debate term"
+            },
+            "glacier melt": {
+                "weight": 0,
+                "description": "Regular climate impact term"
+            },
+            "global warming": {
+                "weight": 3,
+                "description": "Frequent climate change term"
+            },
+            "Green New Deal": {
+                "weight": 1,
+                "description": "Frequent policy proposal term"
+            },
+            "greenhouse gas": {
+                "weight": 1,
+                "description": "Frequent environmental term"
+            },
+            "heat wave": {
+                "weight": 3,
+                "description": "Frequent weather crisis term"
+            },
+            "hottest year": {
+                "weight": 1,
+                "description": "Frequent climate record term"
+            },
+            "hurricane": {
+                "weight": 3,
+                "description": "Frequent natural disaster term"
+            },
+            "melting ice cap": {
+                "weight": 0,
+                "description": "Regular climate impact term"
+            },
+            "natural disaster": {
+                "weight": 1,
+                "description": "Common emergency term"
+            },
+            "ocean acidification": {
+                "weight": 0,
+                "description": "Moderate-use scientific term"
+            },
+            "ozone layer": {
+                "weight": 0,
+                "description": "Occasional environmental term"
+            },
+            "Paris Agreement": {
+                "weight": 1,
+                "description": "Common climate policy term"
+            },
+            "polar vortex": {
+                "weight": 0,
+                "description": "Regular weather phenomenon term"
+            },
+            "renewable energy": {
+                "weight": 1,
+                "description": "Frequent energy policy term"
+            },
+            "rising sea levels": {
+                "weight": 1,
+                "description": "Common climate impact term"
+            },
+            "sea level rise": {
+                "weight": 1,
+                "description": "Common climate impact term"
+            },
+            "species extinction": {
+                "weight": 0,
+                "description": "Regular biodiversity term"
+            },
+            "state of emergency": {
+                "weight": 1,
+                "description": "Common crisis declaration term"
+            },
+            "tornado": {
+                "weight": 0,
+                "description": "Regular weather event term"
+            },
+            "toxic waste": {
+                "weight": 0,
+                "description": "Moderate-use pollution term"
+            },
+            "typhoon": {
+                "weight": 0,
+                "description": "Regular natural disaster term"
+            },
+            "water crisis": {
+                "weight": 1,
+                "description": "Common resource scarcity term"
+            },
+            "water scarcity": {
+                "weight": 1,
+                "description": "Common resource issue term"
+            },
+            "wildfire": {
+                "weight": 3,
+                "description": "Highly frequent disaster term"
+            }
+        }
+    }
+}

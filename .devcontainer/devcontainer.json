@@ -1,0 +1,13 @@
+{
+  "name": "Chrome Extension Dev Container",
+  "image": "mcr.microsoft.com/vscode/devcontainers/javascript-node:0-14",
+  "extensions": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode"
+  ],
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash",
+    "editor.formatOnSave": true
+  },
+  "postCreateCommand": "npm install"
+}

@@ -1,0 +1,8 @@
+/* Import all modular stylesheets */
+@import url('styles/base.css');
+@import url('styles/tabs.css');
+@import url('styles/about.css');
+@import url('styles/stats.css');
+@import url('styles/keywords.css');
+@import url('styles/forms.css');
+@import url('styles/import-export.css');

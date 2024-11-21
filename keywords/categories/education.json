@@ -1,0 +1,139 @@
+{
+    "Education": {
+        "description": "Terms related to education policy, school controversies, and academic debates that generate significant public discourse",
+        "keywords": {
+            "academic freedom": {
+                "weight": 2,
+                "description": "Common educational rights term"
+            },
+            "book ban": {
+                "weight": 3,
+                "description": "Highly frequent controversy term"
+            },
+            "charter school": {
+                "weight": 1,
+                "description": "Common education policy term"
+            },
+            "classroom censorship": {
+                "weight": 2,
+                "description": "Frequent education controversy term"
+            },
+            "college debt": {
+                "weight": 2,
+                "description": "Frequent financial policy term"
+            },
+            "common core": {
+                "weight": 1,
+                "description": "Regular curriculum term"
+            },
+            "curriculum controversy": {
+                "weight": 2,
+                "description": "Frequent education debate term"
+            },
+            "education budget": {
+                "weight": 1,
+                "description": "Regular policy term"
+            },
+            "education reform": {
+                "weight": 1,
+                "description": "Regular policy term"
+            },
+            "free college": {
+                "weight": 1,
+                "description": "Common policy proposal term"
+            },
+            "gender curriculum": {
+                "weight": 3,
+                "description": "Highly frequent controversy term"
+            },
+            "homeschooling": {
+                "weight": 1,
+                "description": "Regular education option term"
+            },
+            "indoctrination": {
+                "weight": 3,
+                "description": "Highly frequent accusation term"
+            },
+            "library ban": {
+                "weight": 2,
+                "description": "Frequent controversy term"
+            },
+            "parental notification": {
+                "weight": 1,
+                "description": "Common policy requirement term"
+            },
+            "parental rights": {
+                "weight": 3,
+                "description": "Highly frequent education debate term"
+            },
+            "parents bill of rights": {
+                "weight": 2,
+                "description": "Frequent policy proposal term"
+            },
+            "school board protest": {
+                "weight": 1,
+                "description": "Common activism term"
+            },
+            "school choice": {
+                "weight": 2,
+                "description": "Frequent policy debate term"
+            },
+            "school indoctrination": {
+                "weight": 3,
+                "description": "Highly frequent accusation term"
+            },
+            "school prayer": {
+                "weight": 1,
+                "description": "Common religious debate term"
+            },
+            "sex-ed curriculum": {
+                "weight": 0,
+                "description": "Frequent education controversy term"
+            },
+            "sex education": {
+                "weight": 2,
+                "description": "Frequent curriculum debate term"
+            },
+            "sexualization children": {
+                "weight": 3,
+                "description": "Highly frequent accusation term"
+            },
+            "social emotional learning": {
+                "weight": 1,
+                "description": "Regular curriculum term"
+            },
+            "standardized testing": {
+                "weight": 1,
+                "description": "Moderate-use assessment term"
+            },
+            "student debt": {
+                "weight": 3,
+                "description": "Highly frequent financial term"
+            },
+            "student loan": {
+                "weight": 3,
+                "description": "Highly frequent financial term"
+            },
+            "teacher activism": {
+                "weight": 1,
+                "description": "Common protest term"
+            },
+            "teacher union activism": {
+                "weight": 1,
+                "description": "Common labor action term"
+            },
+            "teachers strike": {
+                "weight": 2,
+                "description": "Common labor action term"
+            },
+            "teachers union": {
+                "weight": 1,
+                "description": "Common labor organization term"
+            },
+            "textbook controversy": {
+                "weight": 1,
+                "description": "Common curriculum debate term"
+            }
+        }
+    }
+}

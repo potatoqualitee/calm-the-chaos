@@ -1,0 +1,239 @@
+{
+    "Military and Defense": {
+        "description": "Terms related to military operations, defense technology, and security threats that consistently generate significant public attention",
+        "keywords": {
+            "aerial bombardment": {
+                "weight": 3,
+                "description": "Critical military action term highly relevant to current conflicts"
+            },
+            "airstrike": {
+                "weight": 3,
+                "description": "Extremely frequent combat term in current conflicts"
+            },
+            "arms deal": {
+                "weight": 0,
+                "description": "Common military trade term"
+            },
+            "arms race": {
+                "weight": 1,
+                "description": "Frequent international tension term"
+            },
+            "arms trafficking": {
+                "weight": 0,
+                "description": "Regular illegal trade term"
+            },
+            "ballistic missile": {
+                "weight": 1,
+                "description": "Frequent weapons system term"
+            },
+            "battlefield casualties": {
+                "weight": 1,
+                "description": "Frequent combat impact term"
+            },
+            "biological weapon": {
+                "weight": 1,
+                "description": "Frequent WMD term"
+            },
+            "chemical weapon": {
+                "weight": 1,
+                "description": "Frequent WMD term"
+            },
+            "civilian casualties": {
+                "weight": 2,
+                "description": "Critical humanitarian concern in current conflicts"
+            },
+            "combat operation": {
+                "weight": 0,
+                "description": "Common military term"
+            },
+            "counter-terrorism": {
+                "weight": 0,
+                "description": "Common security term"
+            },
+            "cyber attack": {
+                "weight": 1,
+                "description": "Highly frequent digital threat term"
+            },
+            "cyber espionage": {
+                "weight": 1,
+                "description": "Frequent digital security term"
+            },
+            "cyber warfare": {
+                "weight": 1,
+                "description": "Frequent digital conflict term"
+            },
+            "defense budget": {
+                "weight": 0,
+                "description": "Common policy term"
+            },
+            "defense contractor": {
+                "weight": 0,
+                "description": "Regular industry term"
+            },
+            "defense spending": {
+                "weight": 0,
+                "description": "Common policy term"
+            },
+            "drone strike": {
+                "weight": 1,
+                "description": "Frequent military action term"
+            },
+            "ground invasion": {
+                "weight": 2,
+                "description": "Critical military operation in current conflicts"
+            },
+            "guerrilla warfare": {
+                "weight": 0,
+                "description": "Regular combat term"
+            },
+            "hacking group": {
+                "weight": 0,
+                "description": "Common cyber threat term"
+            },
+            "insurgency": {
+                "weight": 0,
+                "description": "Common conflict term"
+            },
+            "intercontinental missile": {
+                "weight": 1,
+                "description": "Frequent weapons system term"
+            },
+            "malware attack": {
+                "weight": 0,
+                "description": "Common cyber threat term"
+            },
+            "military action": {
+                "weight": 1,
+                "description": "Frequent operational term"
+            },
+            "military buildup": {
+                "weight": 1,
+                "description": "Frequent escalation term"
+            },
+            "military commander": {
+                "weight": 0,
+                "description": "Regular leadership term"
+            },
+            "military convoy": {
+                "weight": 0,
+                "description": "Common operational term"
+            },
+            "military deployment": {
+                "weight": 1,
+                "description": "Frequent operational term"
+            },
+            "military escalation": {
+                "weight": 2,
+                "description": "Critical escalation indicator in current conflicts"
+            },
+            "military invasion": {
+                "weight": 1,
+                "description": "Highly frequent conflict term"
+            },
+            "military occupation": {
+                "weight": 1,
+                "description": "Frequent conflict term"
+            },
+            "missile defense": {
+                "weight": 0,
+                "description": "Common defense system term"
+            },
+            "missile launch": {
+                "weight": 1,
+                "description": "Highly frequent military action term"
+            },
+            "missile test": {
+                "weight": 1,
+                "description": "Frequent military development term"
+            },
+            "naval blockade": {
+                "weight": 0,
+                "description": "Common military tactic term"
+            },
+            "no-fly zone": {
+                "weight": 1,
+                "description": "Frequent military policy term"
+            },
+            "nuclear arsenal": {
+                "weight": 1,
+                "description": "Frequent weapons term"
+            },
+            "nuclear capability": {
+                "weight": 1,
+                "description": "Frequent military power term"
+            },
+            "nuclear proliferation": {
+                "weight": 1,
+                "description": "Frequent international concern"
+            },
+            "nuclear stockpile": {
+                "weight": 0,
+                "description": "Common weapons term"
+            },
+            "nuclear threat": {
+                "weight": 1,
+                "description": "Highly frequent crisis term"
+            },
+            "nuclear warhead": {
+                "weight": 1,
+                "description": "Frequent weapons term"
+            },
+            "nuclear weapon": {
+                "weight": 1,
+                "description": "Highly frequent weapons term"
+            },
+            "peacekeeping force": {
+                "weight": 0,
+                "description": "Regular international term"
+            },
+            "precision strike": {
+                "weight": 0,
+                "description": "Common military action term"
+            },
+            "ransomware": {
+                "weight": 1,
+                "description": "Frequent cyber threat term"
+            },
+            "special forces": {
+                "weight": 0,
+                "description": "Common military unit term"
+            },
+            "state actor": {
+                "weight": 0,
+                "description": "Common international term"
+            },
+            "state backed": {
+                "weight": 0,
+                "description": "Common attribution term"
+            },
+            "strategic alliance": {
+                "weight": 0,
+                "description": "Regular diplomatic term"
+            },
+            "tactical nuclear": {
+                "weight": 1,
+                "description": "Highly frequent weapons term"
+            },
+            "troop deployment": {
+                "weight": 1,
+                "description": "Frequent military movement term"
+            },
+            "troop surge": {
+                "weight": 0,
+                "description": "Common military strategy term"
+            },
+            "war games": {
+                "weight": 0,
+                "description": "Regular military exercise term"
+            },
+            "weapons cache": {
+                "weight": 0,
+                "description": "Regular arms term"
+            },
+            "weapons system": {
+                "weight": 0,
+                "description": "Regular military technology term"
+            }
+        }
+    }
+}

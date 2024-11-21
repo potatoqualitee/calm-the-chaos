@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Content Filter Settings</title>
+  <link rel="stylesheet" href="options.css">
+  <script src="optionsErrorHandling.js" type="module"></script>
+  <script src="options.js" type="module"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="tab-container">
+      <div class="tab-buttons">
+        <button class="tab-button active" data-tab="keywords">Keywords</button>
+        <button class="tab-button" data-tab="domains">URL Groups</button>
+        <button class="tab-button" data-tab="elements">Elements</button>
+        <button class="tab-button" data-tab="images">Images</button>
+        <button class="tab-button" data-tab="stats">Statistics</button>
+        <button class="tab-button" data-tab="settings">Import/Export</button>
+        <button class="tab-button" data-tab="about">About</button>
+      </div>
+    </div>
+
+    <div id="keywords" class="tab-content active">
+      <div class="content-section">
+        <h3>Keyword Groups</h3>
+        <div class="info">
+          Enable or disable entire groups or individual keywords. Changes are saved automatically.
+        </div>
+        <nav>
+          <ul class="category-nav-list">
+            <li class="category-nav-item"><a href="#Climate-and-Environment">Climate and Environment</a></li>
+            <li class="category-nav-item"><a href="#Economic-Policy">Economic Policy</a></li>
+            <li class="category-nav-item"><a href="#Education">Education</a></li>
+            <li class="category-nav-item"><a href="#Gun-Policy">Gun Policy</a></li>
+            <li class="category-nav-item"><a href="#Healthcare-and-Public-Health">Healthcare and Public Health</a></li>
+            <li class="category-nav-item"><a href="#Immigration">Immigration</a></li>
+            <li class="category-nav-item"><a href="#International-Coverage">International Coverage</a></li>
+            <li class="category-nav-item"><a href="#LGBTQ">LGBTQ</a></li>
+            <li class="category-nav-item"><a href="#Media-Personalities">Media Personalities</a></li>
+            <li class="category-nav-item"><a href="#Military-and-Defense">Military and Defense</a></li>
+            <li class="category-nav-item"><a href="#New-Developments">New Developments</a></li>
+            <li class="category-nav-item"><a href="#Political-Organizations">Political Organizations</a></li>
+            <li class="category-nav-item"><a href="#Political-Rhetoric">Political Rhetoric</a></li>
+            <li class="category-nav-item"><a href="#Political-Violence-and-Security-Threats">Political Violence and Security Threats</a></li>
+            <li class="category-nav-item"><a href="#Race-Relations">Race Relations</a></li>
+            <li class="category-nav-item"><a href="#Relational-Violence">Relational Violence</a></li>
+            <li class="category-nav-item"><a href="#Religion">Religion</a></li>
+            <li class="category-nav-item"><a href="#Reproductive-Health">Reproductive Health</a></li>
+            <li class="category-nav-item"><a href="#Social-Policy">Social Policy</a></li>
+            <li class="category-nav-item"><a href="#US-Government-Institutions">US Government Institutions</a></li>
+            <li class="category-nav-item"><a href="#US-Political-Figures-Full-Name">US Political Figures (Full Name)</a></li>
+            <li class="category-nav-item"><a href="#US-Political-Figures-Single-Name">US Political Figures (Single Name)</a></li>
+            <li class="category-nav-item"><a href="#Vaccine-Policy">Vaccine Policy</a></li>
+            <li class="category-nav-item"><a href="#World-Leaders">World Leaders</a></li>
+          </ul>
+        </nav>
+        <div class="search-container">
+          <input type="text" id="filterInput" placeholder="Search ignored keywords..." class="search-input">
+          <div class="toggle-all-container">
+            <button id="enableAll" class="toggle-all-btn">Enable All</button>
+            <button id="disableAll" class="toggle-all-btn">Disable All</button>
+          </div>
+        </div>
+        <div class="keyword-groups" id="keywordGroups"></div>
+      </div>
+
+      <div class="content-section">
+        <h3>Custom Keywords</h3>
+        <div class="info">
+          Add your own keywords to filter. These will be saved separately from the default groups.
+        </div>
+        <div class="keyword-list" id="customKeywords"></div>
+        <div class="add-keyword">
+          <input type="text" id="newKeyword" placeholder="Enter new keyword">
+          <button id="addKeyword">Add Keyword</button>
+        </div>
+      </div>
+
+      <div class="content-section">
+        <h3>Matching Options</h3>
+        <div class="info">
+          Choose how strictly keywords should match content.
+        </div>
+        <div id="matchingOptions" class="matching-options">
+          <div class="radio-option">
+            <input type="radio" id="exact" name="matchingOptions" value="exact">
+            <label for="exact">Exact Matching - Matches keywords exactly</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="flexible" name="matchingOptions" value="flexible" checked>
+            <label for="flexible">Flexible Matching - Allows for slight variations</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="domains" class="tab-content">
+      <div class="content-section">
+        <h3>URL Filtering Mode</h3>
+        <div class="info">
+          Choose whether filtering is enabled or disabled by default for all websites.
+        </div>
+        <div class="auto-update-option">
+          <label class="switch">
+            <input type="checkbox" id="filteringMode">
+            <span class="slider"></span>
+          </label>
+          <span class="mode-text">Filtering Enabled by Default</span>
+        </div>
+        <div class="mode-description">
+          When enabled by default: Content is filtered everywhere EXCEPT on listed URLs<br>
+          When disabled by default: Content is filtered ONLY on listed URLs
+        </div>
+      </div>
+
+      <div class="content-section">
+        <h3>URL Groups</h3>
+        <div class="info"></div>
+        <div class="search-container">
+          <input type="text" id="domainFilterInput" placeholder="Search URLs..." class="search-input">
+        </div>
+        <div id="domainList"></div>
+      </div>
+
+      <div class="content-section">
+        <h3>Custom URLs</h3>
+        <div class="info">
+          Add your own URLs to the list above. Remember to use wildcards for matching variations.
+        </div>
+        <div class="keyword-list" id="customDomains"></div>
+        <div class="add-keyword">
+          <input type="text" id="newDomain" placeholder="Enter URL">
+          <button id="addDomain">Add URL</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="elements" class="tab-content">
+      <div class="content-section">
+        <h3>Platform Settings</h3>
+        <div class="info">
+          Configure platform-specific filtering behavior.
+        </div>
+        <div class="auto-update-option">
+          <label class="switch">
+            <input type="checkbox" id="filterRedditCommentThreads" checked>
+            <span class="slider"></span>
+          </label>
+          <span class="mode-text">Filter Reddit Comments</span>
+        </div>
+        <div class="auto-update-option">
+          <label class="switch">
+            <input type="checkbox" id="filterFacebookCommentThreads" checked>
+            <span class="slider"></span>
+            </label>
+            <span class="mode-text">Filter Facebook Comments</span>
+            </div>
+            <div class="auto-update-option">
+              <label class="switch">
+            <input type="checkbox" id="showBlurMessage" checked>
+            <span class="slider"></span>
+          </label>
+          <span class="mode-text">Show "Taking a mindful pause" Message</span>
+        </div>
+      </div>
+      <div class="content-section">
+        <h3>Element Groups</h3>
+        <div class="info">
+          Enable or disable filtering for different types of web elements. These control which parts of websites are
+          checked for keywords.
+        </div>
+        <div class="search-container">
+          <input type="text" id="elementFilterInput" placeholder="Search elements..." class="search-input">
+        </div>
+        <div id="elementGroups" class="keyword-groups"></div>
+      </div>
+<div class="content-section" style="opacity: 0.5">
+  <h3>Collapse Style: Coming Soon</h3>
+  <div class="info">
+    Choose how filtered content should be hidden from view
+  </div>
+  <div id="collapseOptions" class="matching-options">
+    <div class="radio-option">
+      <input type="radio" id="hideCompletely" name="collapseStyle" value="hideCompletely" checked disabled>
+      <label for="hideCompletely">Hide Completely - Remove entire element from view</label>
+    </div>
+    <div class="radio-option">
+      <input type="radio" id="keepContainer" name="collapseStyle" value="keepContainer" disabled>
+      <label for="keepContainer">Keep Container - Hide content but preserve layout space</label>
+    </div>
+  </div>
+</div>
+    </div>
+
+    <div id="images" class="tab-content">
+      <div class="content-section">
+        <h3>Image Filtering</h3>
+        <div class="info">
+          Configure how images are filtered based on their content and context.
+        </div>
+        <div class="auto-update-option">
+          <label class="switch">
+            <input type="checkbox" id="imageFilteringEnabled" checked>
+            <span class="slider"></span>
+          </label>
+          <span class="mode-text">Enable Image Filtering</span>
+        </div>
+      </div>
+
+      <div class="content-section">
+        <h3>Image Context</h3>
+        <div class="info">
+          Choose what content to consider when filtering images.
+        </div>
+        <div id="imageContextOptions" class="matching-options">
+          <div class="checkbox-option">
+            <input type="checkbox" id="checkAltText" name="imageContext" value="altText" checked>
+            <label for="checkAltText">Check Alt Text</label>
+          </div>
+          <div class="checkbox-option">
+            <input type="checkbox" id="checkCaptions" name="imageContext" value="captions" checked>
+            <label for="checkCaptions">Check Image Captions</label>
+          </div>
+          <div class="checkbox-option">
+            <input type="checkbox" id="checkNearbyText" name="imageContext" value="nearbyText" checked>
+            <label for="checkNearbyText">Check Nearby Text (Headings, Paragraphs)</label>
+          </div>
+          <div class="checkbox-option">
+            <input type="checkbox" id="checkSrcUrl" name="imageContext" value="srcUrl" checked>
+            <label for="checkSrcUrl">Check Image Source URL</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-section" style="opacity: 0.5">
+        <h3>Container Handling: Coming Soon</h3>
+        <div class="info">
+          Choose how to handle containers when filtering images
+        </div>
+        <div id="imageContainerOptions" class="matching-options">
+          <div class="radio-option">
+            <input type="radio" id="hideImage" name="imageContainerStyle" value="hideImage" checked disabled>
+            <label for="hideImage">Hide Only Image - Preserve surrounding content</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="hideContainer" name="imageContainerStyle" value="hideContainer" disabled>
+            <label for="hideContainer">Hide Container - Remove image and its container</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="stats" class="tab-content">
+      <div class="content-section">
+        <h3>Keyword Statistics</h3>
+        <div class="info">
+          View statistics about blocked keywords across all sites.
+        </div>
+        <div class="stats-container">
+          <div id="keywordStats" class="stats-table"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="settings" class="tab-content">
+      <div class="settings-section">
+        <h3>Settings Backup</h3>
+        <div class="info">
+          Export your current settings to a file for backup, or restore from a previous backup.
+        </div>
+        <div class="settings-actions">
+          <div id="settingsButtons">
+            <button id="exportSettings">Export Settings</button>
+            <input type="file" id="importSettings" accept=".json">
+            <button id="importSettingsButton">Import Settings</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="importStatus" class="import-status"></div>
+
+      <div class="settings-section">
+        <h3>Remote Configuration</h3>
+        <div class="info">
+          Import settings from shared URLs to sync with team configurations.
+        </div>
+        <div class="keyword-list" id="configUrls"></div>
+        <div class="add-keyword">
+          <input type="text" id="urlInput" class="search-input" placeholder="Enter configuration URL">
+          <button id="addConfigUrl" class="add-btn">Add URL</button>
+        </div>
+        <div class="auto-update-option">
+          <label class="switch">
+            <input type="checkbox" id="checkForUpdates">
+            <span class="slider"></span>
+          </label>
+          <span class="update-text">Check for new keywords on startup</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="about" class="tab-content">
+      <div class="content-section">
+        <div class="about-header">
+          <div class="creator-image-container">
+            <img src="../images/cl.png" alt="Creator" class="creator-image" loading="lazy" width="80" height="80">
+          </div>
+          <div class="about-title">
+            <h2>Calm the Chaos</h2>
+          </div>
+        </div>
+        <div class="about-description">
+          <p>A browser extension that filters unwanted content related to conflict, violence, and inflammatory rhetoric across
+            every website.</p>
+          <p style="margin-top: 16px">This project was built with <a href="https://github.com/cline/cline">Cline</a> and other
+            AI tools to help make the web a calmer place.</p>
+        </div>
+        <div class="about-links">
+          <div class="about-link">
+            <span class="link-label">Created by:</span>
+            <a href="https://bsky.app/profile/funbucket.dev" target="_blank" class="link-value">Chrissy LeMaire</a>
+          </div>
+          <div class="about-link">
+            <span class="link-label">GitHub:</span>
+            <a href="https://github.com/potatoqualitee/calm-the-chaos" target="_blank"
+              class="link-value">github.com/potatoqualitee/calm-the-chaos</a>
+          </div>
+        </div>
+        <div class="sponsor-section">
+          <p class="sponsor-text">Support the development of Calm the Chaos</p>
+          <a href="https://github.com/sponsors/potatoqualitee" target="_blank" class="sponsor-button">
+            <img src="../images/sponsor.svg" alt="Sponsor on GitHub">
+            <span>Become a Sponsor</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

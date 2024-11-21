@@ -1,0 +1,199 @@
+{
+    "Political Organizations": {
+        "description": "Terms related to political groups, movements, and parties that may significantly influence public discourse",
+        "keywords": {
+            "AfD": {
+                "weight": 2,
+                "description": "German far-right political party"
+            },
+            "America First movement": {
+                "weight": 1,
+                "description": "Frequent nationalist movement term"
+            },
+            "antifa movement": {
+                "weight": 1,
+                "description": "Frequent activist group term"
+            },
+            "anti-government": {
+                "weight": 1,
+                "description": "Common political stance term"
+            },
+            "Black Lives Matter": {
+                "weight": 3,
+                "description": "Highly frequent social movement term"
+            },
+            "Cajun Navy": {
+                "weight": 0,
+                "description": "Occasional volunteer group term"
+            },
+            "conservative": {
+                "weight": 1,
+                "description": "Frequent political identity term"
+            },
+            "Democrat": {
+                "weight": 3,
+                "description": "Frequent party affiliation term"
+            },
+            "Democratic": {
+                "weight": 1,
+                "description": "Frequent party descriptor term"
+            },
+            "Democratic Party": {
+                "weight": 3,
+                "description": "Frequent major party term"
+            },
+            "Democratic Socialists": {
+                "weight": 1,
+                "description": "Common political group term"
+            },
+            "Dems": {
+                "weight": 1,
+                "description": "Common party reference term"
+            },
+            "DNC": {
+                "weight": 1,
+                "description": "Common party organization term"
+            },
+            "far left": {
+                "weight": 1,
+                "description": "Frequent political label term"
+            },
+            "far right": {
+                "weight": 1,
+                "description": "Frequent political label term"
+            },
+            "far-left": {
+                "weight": 1,
+                "description": "Frequent political label term"
+            },
+            "far-right": {
+                "weight": 1,
+                "description": "Frequent political label term"
+            },
+            "Freedom Caucus": {
+                "weight": 1,
+                "description": "Common legislative group term"
+            },
+            "Green Party": {
+                "weight": 0,
+                "description": "Occasional third party term"
+            },
+            "GOP": {
+                "weight": 3,
+                "description": "Frequent party reference term"
+            },
+            "Koch network": {
+                "weight": 0,
+                "description": "Regular political network term"
+            },
+            "liberal": {
+                "weight": 1,
+                "description": "Frequent political identity term"
+            },
+            "Libertarian": {
+                "weight": 0,
+                "description": "Regular political identity term"
+            },
+            "Lincoln Project": {
+                "weight": 0,
+                "description": "Regular political group term"
+            },
+            "lobbying": {
+                "weight": 1,
+                "description": "Common political activity term"
+            },
+            "Mar-a-Lago": {
+                "weight": 3,
+                "description": "Significant political venue and organization hub"
+            },
+            "MAGA": {
+                "weight": 3,
+                "description": "Highly frequent movement term"
+            },
+            "militant": {
+                "weight": 1,
+                "description": "Common extremist term"
+            },
+            "National Guard": {
+                "weight": 1,
+                "description": "Common military organization term"
+            },
+            "neocon": {
+                "weight": 0,
+                "description": "Moderate-use ideology term"
+            },
+            "neoconservative": {
+                "weight": 0,
+                "description": "Moderate-use ideology term"
+            },
+            "neoliberal": {
+                "weight": 0,
+                "description": "Regular ideology term"
+            },
+            "Never Trump": {
+                "weight": 0,
+                "description": "Regular opposition term"
+            },
+            "PAC funding": {
+                "weight": 1,
+                "description": "Regular campaign finance term"
+            },
+            "Patriot": {
+                "weight": 1,
+                "description": "Common political identity term"
+            },
+            "populist": {
+                "weight": 1,
+                "description": "Common political movement term"
+            },
+            "Progressive Caucus": {
+                "weight": 1,
+                "description": "Regular legislative group term"
+            },
+            "protest movement": {
+                "weight": 1,
+                "description": "Common activism term"
+            },
+            "Republican": {
+                "weight": 3,
+                "description": "Frequent party affiliation term"
+            },
+            "Republican Party": {
+                "weight": 3,
+                "description": "Frequent major party term"
+            },
+            "resistance": {
+                "weight": 1,
+                "description": "Common opposition term"
+            },
+            "right-wing": {
+                "weight": 1,
+                "description": "Frequent political label term"
+            },
+            "RNC": {
+                "weight": 1,
+                "description": "Common party organization term"
+            },
+            "socialist": {
+                "weight": 1,
+                "description": "Frequent political label term"
+            },
+            "Super PAC": {
+                "weight": 0,
+                "description": "Regular campaign finance term"
+            },
+            "Tea Party": {
+                "weight": 0,
+                "description": "Moderate-use movement term"
+            },
+            "Trumpism": {
+                "weight": 1,
+                "description": "Frequent political movement term"
+            },
+            "watchdog": {
+                "weight": 0,
+                "description": "Regular oversight term"
+            }
+        }
+    }
+}

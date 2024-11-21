@@ -1,0 +1,96 @@
+/* About Section Styles */
+.about-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.creator-image-container {
+    margin-right: 20px;
+}
+
+.creator-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #4285f4;
+}
+
+.about-title h2 {
+    margin: 0;
+    color: #202124;
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.about-description {
+    margin: 20px 0;
+    line-height: 1.6;
+}
+
+.about-description p {
+    margin: 0;
+    color: #5f6368;
+    font-size: 15px;
+}
+
+.about-links {
+    margin: 16px 0;
+}
+
+.about-link {
+    margin: 8px 0;
+}
+
+.link-label {
+    color: #5f6368;
+    font-size: 14px;
+    margin-right: 8px;
+}
+
+.link-value {
+    color: #4285f4;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.link-value:hover {
+    text-decoration: underline;
+}
+
+.sponsor-section {
+    margin-top: 20px;
+        padding: 16px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.sponsor-text {
+    margin: 0 0 16px 0;
+    color: #202124;
+    font-weight: 500;
+}
+
+.sponsor-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 24px;
+    background: #4285f4;
+    color: white;
+    text-decoration: none;
+    border-radius: 24px;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+.sponsor-button:hover {
+    background: #3367d6;
+}
+
+.sponsor-button img {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+}

@@ -1,0 +1,143 @@
+{
+    "LGBTQ+": {
+        "description": "Terms related to LGBTQ rights, policies, and topics that consistently generate intense public debate",
+        "keywords": {
+            "anti-gay legislation": {
+                "weight": 2,
+                "description": "Frequent policy debate term"
+            },
+            "anti-trans": {
+                "weight": 3,
+                "description": "Highly frequent criticism term"
+            },
+            "bathroom ban": {
+                "weight": 2,
+                "description": "Frequent policy controversy term"
+            },
+            "bathroom bill": {
+                "weight": 1,
+                "description": "Common legislation term"
+            },
+            "conversion therapy": {
+                "weight": 2,
+                "description": "Frequent medical controversy term"
+            },
+            "don\u0027t say gay": {
+                "weight": 3,
+                "description": "Highly frequent policy debate term"
+            },
+            "drag ban": {
+                "weight": 3,
+                "description": "Highly frequent policy controversy term"
+            },
+            "drag controversy": {
+                "weight": 1,
+                "description": "Common cultural debate term"
+            },
+            "drag queen story hour": {
+                "weight": 1,
+                "description": "Common community event controversy"
+            },
+            "gay agenda": {
+                "weight": 1,
+                "description": "Regular criticism term"
+            },
+            "gender affirming care": {
+                "weight": 3,
+                "description": "Highly frequent medical debate term"
+            },
+            "gender ban": {
+                "weight": 2,
+                "description": "Frequent policy term"
+            },
+            "gender identity law": {
+                "weight": 1,
+                "description": "Common legal term"
+            },
+            "gender ideology": {
+                "weight": 3,
+                "description": "Highly frequent criticism term"
+            },
+            "gender transition": {
+                "weight": 1,
+                "description": "Regular medical term"
+            },
+            "gender war": {
+                "weight": 1,
+                "description": "Common cultural conflict term"
+            },
+            "LGBTQ ban": {
+                "weight": 3,
+                "description": "Highly frequent policy term"
+            },
+            "LGBTQ legislation": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "pride controversy": {
+                "weight": 1,
+                "description": "Regular cultural debate term"
+            },
+            "pronoun ban": {
+                "weight": 2,
+                "description": "Frequent policy debate term"
+            },
+            "same-sex marriage": {
+                "weight": 2,
+                "description": "Frequent rights term"
+            },
+            "targeted lgbtq": {
+                "weight": 0,
+                "description": "Frequent discrimination term"
+            },
+            "trans people": {
+                "weight": 0,
+                "description": "Basic demographic term"
+            },
+            "trans ban": {
+                "weight": 2,
+                "description": "Frequent policy term"
+            },
+            "trans military": {
+                "weight": 1,
+                "description": "Regular service policy term"
+            },
+            "trans minor": {
+                "weight": 2,
+                "description": "Frequent policy debate term"
+            },
+            "trans rights": {
+                "weight": 2,
+                "description": "Frequent civil rights term"
+            },
+            "trans sports ban": {
+                "weight": 3,
+                "description": "Highly frequent athletics policy term"
+            },
+            "trans troops": {
+                "weight": 1,
+                "description": "Regular military term"
+            },
+            "transgender": {
+                "weight": 0,
+                "description": "Basic identity term"
+            },
+            "transgender athlete": {
+                "weight": 2,
+                "description": "Frequent sports debate term"
+            },
+            "transgender ban": {
+                "weight": 2,
+                "description": "Frequent policy term"
+            },
+            "transgender law": {
+                "weight": 1,
+                "description": "Common legal term"
+            },
+            "transgender restriction": {
+                "weight": 1,
+                "description": "Common policy term"
+            }
+        }
+    }
+}

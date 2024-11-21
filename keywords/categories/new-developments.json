@@ -1,0 +1,27 @@
+{
+    "New Developments": {
+        "description": "Recently emerging political figures and developing stories",
+        "keywords": {
+            "Bird-Flu": {
+                "weight": 1,
+                "description": "Current health concern"
+            },
+            "Charles Kushner": {
+                "weight": 3,
+                "description": "Nominee"
+            },
+            "drone sightings": {
+                "weight": 1,
+                "description": "Current security concern"
+            },
+            "inauguration": {
+                "weight": 1,
+                "description": "Current political event"
+            },
+            "Linda McMahon": {
+                "weight": 3,
+                "description": "Nominee"
+            }
+        }
+    }
+}

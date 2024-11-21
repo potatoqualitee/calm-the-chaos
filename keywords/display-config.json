@@ -1,0 +1,31 @@
+{
+    "displayNames": {
+        "Climate and Environment": "Climate",
+        "Economic Policy": "Economy",
+        "Healthcare and Public Health": "Healthcare",
+        "International Coverage": "World News",
+        "LGBTQ+": "LGBTQ+",
+        "Media Personalities": "Media",
+        "Military and Defense": "Military",
+        "New Developments": "New Developments",
+        "Political Organizations": "Political Groups",
+        "Political Rhetoric": "Political Rhetoric",
+        "Political Violence and Security Threats": "Political Violence",
+        "Race Relations": "Race",
+        "Religion": "Religion",
+        "Reproductive Health": "Reproductive",
+        "Social Policy": "Social Issues",
+        "US Government Institutions": "Government",
+        "US Political Figures - Full Name": "Politicians",
+        "US Political Figures - Single Name": "Politicians",
+        "Vaccine Policy": "Vaccines",
+        "Relational Violence": "Relational Violence",
+        "World Leaders": "World Leaders"
+    },
+    "combinedCategories": {
+        "Politicians": [
+            "US Political Figures - Full Name",
+            "US Political Figures - Single Name"
+        ]
+    }
+}

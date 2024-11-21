@@ -1,0 +1,31 @@
+/* Persistent blur for CNN */
+html:not(.blur-removed)::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.5);
+    z-index: 2147483647;
+        /* Maximum z-index value */
+    pointer-events: none;
+    transition: opacity 0.2s ease-in-out;
+        will-change: opacity;
+        opacity: 1;
+        visibility: visible;
+}
+
+/* Only remove blur when explicitly allowed and content is filtered */
+html.blur-removed::before {
+    opacity: 0;
+        visibility: hidden;
+    }
+    
+    /* Ensure blur persists during tab state changes */
+    html:not(.blur-removed)[data-calm-chaos-state="loading"]::before,
+    html:not(.blur-removed)[data-calm-chaos-state="sleeping"]::before {
+        opacity: 1 !important;
+        visibility: visible !important;
+}
