@@ -1,0 +1,16 @@
+{
+  "New Developments": {
+    "weight": 10,
+    "description": "Recently emerging political figures and developing stories",
+    "keywords": {
+      "Charles Kushner": {
+        "weight": 8,
+        "description": "Nominee"
+      },
+      "Linda McMahon": {
+        "weight": 8,
+        "description": "Nominee"
+      }
+    }
+  }
+}

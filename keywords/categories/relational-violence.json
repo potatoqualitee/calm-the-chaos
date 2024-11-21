@@ -1,0 +1,172 @@
+{
+  "Relational Violence": {
+    "weight": 9,
+    "description": "Terms related to interpersonal violence, abuse, and exploitation that represent serious threats to personal safety",
+    "keywords": {
+      "abortion attack": {
+        "weight": 7,
+        "description": "Frequent clinic violence term"
+      },
+      "abortion clinic attack": {
+        "weight": 7,
+        "description": "Frequent facility violence term"
+      },
+      "abuse": {
+        "weight": 8,
+        "description": "Highly frequent harm term"
+      },
+      "abused women": {
+        "weight": 7,
+        "description": "Frequent victim term"
+      },
+      "acid attack": {
+        "weight": 6,
+        "description": "Common assault term"
+      },
+      "assault": {
+        "weight": 7,
+        "description": "Frequent violence term"
+      },
+      "assaulted women": {
+        "weight": 6,
+        "description": "Common victim term"
+      },
+      "battery": {
+        "weight": 6,
+        "description": "Common violence term"
+      },
+      "beaten woman": {
+        "weight": 6,
+        "description": "Common victim term"
+      },
+      "breast mutilation": {
+        "weight": 5,
+        "description": "Regular harm term"
+      },
+      "child marriage": {
+        "weight": 7,
+        "description": "Frequent exploitation term"
+      },
+      "choking wife": {
+        "weight": 5,
+        "description": "Regular violence term"
+      },
+      "date rape": {
+        "weight": 6,
+        "description": "Common assault term"
+      },
+      "domestic abuse": {
+        "weight": 8,
+        "description": "Highly frequent violence term"
+      },
+      "domestic violence": {
+        "weight": 8,
+        "description": "Highly frequent harm term"
+      },
+      "female genital mutilation": {
+        "weight": 7,
+        "description": "Frequent harm term"
+      },
+      "forced marriage": {
+        "weight": 6,
+        "description": "Common exploitation term"
+      },
+      "forced prostitution": {
+        "weight": 6,
+        "description": "Common exploitation term"
+      },
+      "gender-based violence": {
+        "weight": 7,
+        "description": "Frequent harm term"
+      },
+      "honor killing": {
+        "weight": 6,
+        "description": "Common violence term"
+      },
+      "human trafficking": {
+        "weight": 8,
+        "description": "Highly frequent exploitation term"
+      },
+      "intimate partner violence": {
+        "weight": 7,
+        "description": "Frequent harm term"
+      },
+      "kidnapped women": {
+        "weight": 6,
+        "description": "Common victim term"
+      },
+      "rape": {
+        "weight": 8,
+        "description": "Highly frequent assault term"
+      },
+      "rape culture": {
+        "weight": 7,
+        "description": "Frequent social term"
+      },
+      "rape victims": {
+        "weight": 6,
+        "description": "Common victim term"
+      },
+      "sex trafficking": {
+        "weight": 8,
+        "description": "Highly frequent exploitation term"
+      },
+      "sexual assault": {
+        "weight": 7,
+        "description": "Frequent violence term"
+      },
+      "sexual exploitation": {
+        "weight": 6,
+        "description": "Common harm term"
+      },
+      "sexual harassment": {
+        "weight": 6,
+        "description": "Common misconduct term"
+      },
+      "sexual violence": {
+        "weight": 7,
+        "description": "Frequent harm term"
+      },
+      "stalking": {
+        "weight": 6,
+        "description": "Common harassment term"
+      },
+      "suffocation": {
+        "weight": 5,
+        "description": "Regular violence term"
+      },
+      "trafficking women": {
+        "weight": 6,
+        "description": "Common exploitation term"
+      },
+      "interpersonal violence": {
+        "weight": 5,
+        "description": "Regular harm term"
+      },
+      "violence in relationships": {
+        "weight": 5,
+        "description": "Regular harm term"
+      },
+      "violent crime against women": {
+        "weight": 6,
+        "description": "Common violence term"
+      },
+      "wifebeating": {
+        "weight": 5,
+        "description": "Regular violence term"
+      },
+      "women in captivity": {
+        "weight": 5,
+        "description": "Regular victim term"
+      },
+      "women trafficking": {
+        "weight": 6,
+        "description": "Common exploitation term"
+      },
+      "women's rights violations": {
+        "weight": 5,
+        "description": "Regular rights term"
+      }
+    }
+  }
+}

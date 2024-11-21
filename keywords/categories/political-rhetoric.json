@@ -1,0 +1,384 @@
+{
+  "Political Rhetoric": {
+    "weight": 9,
+    "description": "Highly charged political language and attack terms that consistently generate intense reactions",
+    "keywords": {
+      "activist agenda": {
+        "weight": 4,
+        "description": "Occasional political criticism term"
+      },
+      "agent saboteur": {
+        "weight": 2,
+        "description": "Rare conspiracy-related accusation"
+      },
+      "alpha male": {
+        "weight": 5,
+        "description": "Common social media term"
+      },
+      "alternative facts": {
+        "weight": 4,
+        "description": "Occasional media criticism term"
+      },
+      "america first": {
+        "weight": 7,
+        "description": "Common nationalist slogan"
+      },
+      "american carnage": {
+        "weight": 1,
+        "description": "Rarely used political term"
+      },
+      "American Exceptionalism": {
+        "weight": 4,
+        "description": "Occasional nationalist term"
+      },
+      "american voter": {
+        "weight": 3,
+        "description": "Basic electoral term"
+      },
+      "anti police": {
+        "weight": 7,
+        "description": "Frequent law enforcement debate term"
+      },
+      "anti-american": {
+        "weight": 7,
+        "description": "Common patriotism-based criticism"
+      },
+      "anti-americanism": {
+        "weight": 5,
+        "description": "Moderate-use nationalist criticism"
+      },
+      "anti-establishment": {
+        "weight": 6,
+        "description": "Regular political term"
+      },
+      "anti-family": {
+        "weight": 6,
+        "description": "Common social values attack"
+      },
+      "anti-freedom": {
+        "weight": 6,
+        "description": "Regular liberty-based attack"
+      },
+      "anti-woke": {
+        "weight": 7,
+        "description": "Frequent cultural term"
+      },
+      "Authoritarianism": {
+        "weight": 7,
+        "description": "Common political criticism"
+      },
+      "beta male": {
+        "weight": 5,
+        "description": "Regular social media insult"
+      },
+      "big government": {
+        "weight": 6,
+        "description": "Common political criticism"
+      },
+      "big lie": {
+        "weight": 8,
+        "description": "Highly frequent election term"
+      },
+      "big tech": {
+        "weight": 6,
+        "description": "Common technology criticism"
+      },
+      "blackpilled": {
+        "weight": 4,
+        "description": "Niche ideology term"
+      },
+      "blue pilled": {
+        "weight": 3,
+        "description": "Niche ideology term"
+      },
+      "blue shift": {
+        "weight": 4,
+        "description": "Occasional electoral term"
+      },
+      "business regulation": {
+        "weight": 3,
+        "description": "Basic policy term"
+      },
+      "cancel culture": {
+        "weight": 7,
+        "description": "Frequent social media term"
+      },
+      "carjacking epidemic": {
+        "weight": 5,
+        "description": "Periodic crime narrative"
+      },
+      "censorship": {
+        "weight": 7,
+        "description": "Frequent free speech term"
+      },
+      "christian nation": {
+        "weight": 6,
+        "description": "Common political identity term"
+      },
+      "christian nationalism": {
+        "weight": 8,
+        "description": "Highly frequent political movement term"
+      },
+      "Christofascism": {
+        "weight": 7,
+        "description": "Frequent ideology criticism term"
+      },
+      "Christofascist": {
+        "weight": 7,
+        "description": "Frequent ideology criticism term"
+      },
+      "class warfare": {
+        "weight": 5,
+        "description": "Moderate-use economic term"
+      },
+      "coastal elite": {
+        "weight": 6,
+        "description": "Regular geographic criticism"
+      },
+      "communist agenda": {
+        "weight": 6,
+        "description": "Common partisan accusation"
+      },
+      "conspiracy theory": {
+        "weight": 7,
+        "description": "Frequent misinformation term"
+      },
+      "copium": {
+        "weight": 4,
+        "description": "Niche social media term"
+      },
+      "corrupt elite": {
+        "weight": 6,
+        "description": "Common anti-establishment term"
+      },
+      "coup": {
+        "weight": 8,
+        "description": "Frequent political accusation"
+      },
+      "crime spike": {
+        "weight": 6,
+        "description": "Regular safety narrative"
+      },
+      "crime surge": {
+        "weight": 6,
+        "description": "Regular safety narrative"
+      },
+      "crime wave": {
+        "weight": 6,
+        "description": "Regular safety narrative"
+      },
+      "critical race theory": {
+        "weight": 8,
+        "description": "Frequent education controversy"
+      },
+      "culture war": {
+        "weight": 7,
+        "description": "Frequent social conflict term"
+      },
+      "dark MAGA": {
+        "weight": 4,
+        "description": "Niche political movement term"
+      },
+      "deep state": {
+        "weight": 8,
+        "description": "Highly frequent conspiracy term"
+      },
+      "deep state purge": {
+        "weight": 5,
+        "description": "Occasional conspiracy term"
+      },
+      "defund": {
+        "weight": 6,
+        "description": "Common policy action term"
+      },
+      "defund police": {
+        "weight": 7,
+        "description": "Frequent policy debate term"
+      },
+      "democratic socialism": {
+        "weight": 6,
+        "description": "Regular ideology term"
+      },
+      "denialism": {
+        "weight": 5,
+        "description": "Moderate-use criticism"
+      },
+      "deplatformed": {
+        "weight": 6,
+        "description": "Common social media term"
+      },
+      "destroying america": {
+        "weight": 7,
+        "description": "Frequent nationalist term"
+      },
+      "destruction of america": {
+        "weight": 7,
+        "description": "Frequent nationalist term"
+      },
+      "dictator": {
+        "weight": 7,
+        "description": "Frequent political criticism"
+      },
+      "dictatorship": {
+        "weight": 7,
+        "description": "Frequent system criticism"
+      },
+      "doomer": {
+        "weight": 4,
+        "description": "Niche social media term"
+      },
+      "drain the swamp": {
+        "weight": 6,
+        "description": "Common political slogan"
+      },
+      "dystopia": {
+        "weight": 5,
+        "description": "Moderate-use criticism"
+      },
+      "echo chamber": {
+        "weight": 6,
+        "description": "Regular media criticism"
+      },
+      "election denier": {
+        "weight": 8,
+        "description": "Frequent political label"
+      },
+      "election integrity": {
+        "weight": 8,
+        "description": "Frequent voting term"
+      },
+      "elitism": {
+        "weight": 6,
+        "description": "Regular class criticism"
+      },
+      "end of democracy": {
+        "weight": 8,
+        "description": "Frequent political fear term"
+      },
+      "esg mandate": {
+        "weight": 5,
+        "description": "Moderate-use policy term"
+      },
+      "establishment": {
+        "weight": 6,
+        "description": "Common political term"
+      },
+      "extreme left": {
+        "weight": 7,
+        "description": "Frequent ideology attack"
+      },
+      "extreme right": {
+        "weight": 7,
+        "description": "Frequent ideology attack"
+      },
+      "extremist": {
+        "weight": 7,
+        "description": "Frequent political label"
+      },
+      "fake news": {
+        "weight": 8,
+        "description": "Highly frequent media term"
+      },
+      "false flag": {
+        "weight": 6,
+        "description": "Common conspiracy term"
+      },
+      "far-left": {
+        "weight": 7,
+        "description": "Frequent ideology attack"
+      },
+      "far-right": {
+        "weight": 7,
+        "description": "Frequent ideology attack"
+      },
+      "fascist": {
+        "weight": 7,
+        "description": "Frequent ideology attack"
+      },
+      "federal purge": {
+        "weight": 4,
+        "description": "Occasional government term"
+      },
+      "freedom hating": {
+        "weight": 6,
+        "description": "Regular liberty attack"
+      },
+      "gang violence": {
+        "weight": 6,
+        "description": "Regular crime term"
+      },
+      "globalist": {
+        "weight": 6,
+        "description": "Common conspiracy term"
+      },
+      "government overreach": {
+        "weight": 6,
+        "description": "Common political criticism"
+      },
+      "great replacement": {
+        "weight": 8,
+        "description": "Frequent conspiracy theory"
+      },
+      "grooming": {
+        "weight": 8,
+        "description": "Highly frequent accusation term"
+      },
+      "hate speech": {
+        "weight": 7,
+        "description": "Frequent social term"
+      },
+      "identity politics": {
+        "weight": 6,
+        "description": "Common political criticism"
+      },
+      "misinformation": {
+        "weight": 8,
+        "description": "Highly frequent media term"
+      },
+      "muslim ban": {
+        "weight": 8,
+        "description": "Highly frequent policy term"
+      },
+      "political correctness": {
+        "weight": 6,
+        "description": "Common cultural term"
+      },
+      "political witch hunt": {
+        "weight": 8,
+        "description": "Frequent persecution claim"
+      },
+      "radical left": {
+        "weight": 7,
+        "description": "Frequent partisan attack"
+      },
+      "radical right": {
+        "weight": 7,
+        "description": "Frequent partisan attack"
+      },
+      "stolen election": {
+        "weight": 8,
+        "description": "Highly frequent conspiracy claim"
+      },
+      "threat to democracy": {
+        "weight": 8,
+        "description": "Highly frequent political phrase"
+      },
+      "virtue signaling": {
+        "weight": 6,
+        "description": "Common criticism term"
+      },
+      "voter fraud": {
+        "weight": 8,
+        "description": "Frequent election term"
+      },
+      "voter suppression": {
+        "weight": 8,
+        "description": "Frequent election term"
+      },
+      "woke": {
+        "weight": 8,
+        "description": "Highly frequent cultural term"
+      }
+    }
+  }
+}
