@@ -1,0 +1,103 @@
+{
+    "Healthcare and Public Health": {
+        "description": "Terms related to healthcare policy, medical costs, and public health issues that generate significant public discourse",
+        "keywords": {
+            "affordable care act": {
+                "weight": 3,
+                "description": "Highly frequent policy term"
+            },
+            "ban on healthcare": {
+                "weight": 2,
+                "description": "Frequent policy restriction term"
+            },
+            "covid": {
+                "weight": 2,
+                "description": "Ongoing public health concern"
+            },
+            "drug pricing": {
+                "weight": 1,
+                "description": "Frequent cost debate term"
+            },
+            "for-profit insurance": {
+                "weight": 2,
+                "description": "Frequent healthcare system term"
+            },
+            "health care": {
+                "weight": 2,
+                "description": "Frequent system term"
+            },
+            "healthcare": {
+                "weight": 2,
+                "description": "Frequent system term"
+            },
+            "healthcare costs": {
+                "weight": 3,
+                "description": "Highly frequent economic term"
+            },
+            "healthcare reform": {
+                "weight": 1,
+                "description": "Frequent policy debate term"
+            },
+            "healthcare spending": {
+                "weight": 2,
+                "description": "Frequent economic debate term"
+            },
+            "hospital crisis": {
+                "weight": 1,
+                "description": "Common system strain term"
+            },
+            "insurance coverage": {
+                "weight": 1,
+                "description": "Common healthcare access term"
+            },
+            "medical debt": {
+                "weight": 1,
+                "description": "Frequent financial crisis term"
+            },
+            "medicare reform": {
+                "weight": 1,
+                "description": "Common policy debate term"
+            },
+            "mental health system": {
+                "weight": 1,
+                "description": "Common healthcare infrastructure term"
+            },
+            "opioid epidemic": {
+                "weight": 1,
+                "description": "Frequent public health crisis"
+            },
+            "patient rights": {
+                "weight": 0,
+                "description": "Regular medical term"
+            },
+            "polio vaccine": {
+                "weight": 1,
+                "description": "Common public health term"
+            },
+            "prescription costs": {
+                "weight": 1,
+                "description": "Frequent economic debate term"
+            },
+            "public health policy": {
+                "weight": 0,
+                "description": "Regular policy term"
+            },
+            "Texas hospitals": {
+                "weight": 0,
+                "description": "Regional healthcare term"
+            },
+            "trans minor": {
+                "weight": 2,
+                "description": "Frequent healthcare policy term"
+            },
+            "universal healthcare": {
+                "weight": 3,
+                "description": "Highly frequent policy debate term"
+            },
+            "US Healthcare": {
+                "weight": 2,
+                "description": "Frequent system debate term"
+            }
+        }
+    }
+}

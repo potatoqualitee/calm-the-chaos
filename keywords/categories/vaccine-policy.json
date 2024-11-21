@@ -1,0 +1,183 @@
+{
+    "Vaccine Policy": {
+        "description": "Terms related to vaccine policies, mandates, and public health measures that consistently generate intense public discourse",
+        "keywords": {
+            "anti-mandate": {
+                "weight": 1,
+                "description": "Common policy opposition term"
+            },
+            "anti-vax": {
+                "weight": 3,
+                "description": "Frequent controversy term"
+            },
+            "anti-vaxxer": {
+                "weight": 3,
+                "description": "Frequent controversy term"
+            },
+            "booster mandate": {
+                "weight": 1,
+                "description": "Regular policy term"
+            },
+            "booster requirement": {
+                "weight": 0,
+                "description": "Regular policy term"
+            },
+            "covid mandate": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "covid passport": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "covid policy": {
+                "weight": 0,
+                "description": "Regular policy term"
+            },
+            "covid restriction": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "experimental vaccine": {
+                "weight": 1,
+                "description": "Common controversy term"
+            },
+            "face mask": {
+                "weight": 1,
+                "description": "Regular policy term"
+            },
+            "federal mandate": {
+                "weight": 1,
+                "description": "Regular policy term"
+            },
+            "health emergency": {
+                "weight": 1,
+                "description": "Regular crisis term"
+            },
+            "health freedom": {
+                "weight": 1,
+                "description": "Common rights term"
+            },
+            "health mandate": {
+                "weight": 0,
+                "description": "Regular policy term"
+            },
+            "lockdown policy": {
+                "weight": 1,
+                "description": "Regular restriction term"
+            },
+            "mask mandate": {
+                "weight": 3,
+                "description": "Frequent policy term"
+            },
+            "mask requirement": {
+                "weight": 1,
+                "description": "Regular policy term"
+            },
+            "medical autonomy": {
+                "weight": 0,
+                "description": "Regular rights term"
+            },
+            "medical choice": {
+                "weight": 0,
+                "description": "Regular rights term"
+            },
+            "medical coercion": {
+                "weight": 1,
+                "description": "Regular criticism term"
+            },
+            "medical freedom": {
+                "weight": 1,
+                "description": "Common rights term"
+            },
+            "natural immunity": {
+                "weight": 1,
+                "description": "Common debate term"
+            },
+            "pandemic mandate": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "pandemic policy": {
+                "weight": 0,
+                "description": "Regular policy term"
+            },
+            "pandemic restriction": {
+                "weight": 1,
+                "description": "Regular policy term"
+            },
+            "public health emergency": {
+                "weight": 1,
+                "description": "Regular crisis term"
+            },
+            "public health mandate": {
+                "weight": 0,
+                "description": "Regular policy term"
+            },
+            "quarantine policy": {
+                "weight": 0,
+                "description": "Regular restriction term"
+            },
+            "required vaccination": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "school mandate": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "social distancing": {
+                "weight": 1,
+                "description": "Regular health measure term"
+            },
+            "travel restriction": {
+                "weight": 0,
+                "description": "Regular policy term"
+            },
+            "vaccine adverse": {
+                "weight": 1,
+                "description": "Common controversy term"
+            },
+            "vaccine card": {
+                "weight": 0,
+                "description": "Regular documentation term"
+            },
+            "vaccine compliance": {
+                "weight": 0,
+                "description": "Regular policy term"
+            },
+            "vaccine enforcement": {
+                "weight": 1,
+                "description": "Regular policy term"
+            },
+            "vaccine injury": {
+                "weight": 1,
+                "description": "Common controversy term"
+            },
+            "vaccine mandate": {
+                "weight": 3,
+                "description": "Frequent policy term"
+            },
+            "vaccine passport": {
+                "weight": 3,
+                "description": "Frequent policy term"
+            },
+            "vaccine requirement": {
+                "weight": 1,
+                "description": "Regular policy term"
+            },
+            "vaccine safety": {
+                "weight": 1,
+                "description": "Common debate term"
+            },
+            "vaccine status": {
+                "weight": 0,
+                "description": "Regular documentation term"
+            },
+            "workplace mandate": {
+                "weight": 1,
+                "description": "Regular policy term"
+            }
+        }
+    }
+}

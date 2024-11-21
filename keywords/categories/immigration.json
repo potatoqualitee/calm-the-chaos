@@ -1,0 +1,123 @@
+{
+    "Immigration": {
+        "description": "Terms related to immigration policy, border security, and migration that consistently generate intense public debate",
+        "keywords": {
+            "amnesty": {
+                "weight": 2,
+                "description": "Frequent policy debate term"
+            },
+            "asylum seeker": {
+                "weight": 1,
+                "description": "Common legal status term"
+            },
+            "border crisis": {
+                "weight": 3,
+                "description": "Highly frequent controversy term"
+            },
+            "border crossing": {
+                "weight": 1,
+                "description": "Common migration term"
+            },
+            "border patrol": {
+                "weight": 1,
+                "description": "Regular enforcement term"
+            },
+            "border security": {
+                "weight": 3,
+                "description": "Highly frequent policy term"
+            },
+            "border wall": {
+                "weight": 2,
+                "description": "Frequent policy debate term"
+            },
+            "citizenship status": {
+                "weight": 1,
+                "description": "Regular legal term"
+            },
+            "deportation": {
+                "weight": 2,
+                "description": "Frequent enforcement term"
+            },
+            "detention center": {
+                "weight": 1,
+                "description": "Common facility term"
+            },
+            "detention facility": {
+                "weight": 1,
+                "description": "Common facility term"
+            },
+            "dreamers": {
+                "weight": 2,
+                "description": "Frequent policy term"
+            },
+            "family separation": {
+                "weight": 3,
+                "description": "Highly frequent controversy term"
+            },
+            "illegal immigration": {
+                "weight": 3,
+                "description": "Highly frequent policy term"
+            },
+            "immigrant": {
+                "weight": 0,
+                "description": "Basic demographic term"
+            },
+            "immigration": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "immigration ban": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "immigration crisis": {
+                "weight": 2,
+                "description": "Frequent controversy term"
+            },
+            "immigration raid": {
+                "weight": 1,
+                "description": "Common enforcement term"
+            },
+            "immigration reform": {
+                "weight": 2,
+                "description": "Frequent policy term"
+            },
+            "migrant caravan": {
+                "weight": 1,
+                "description": "Common migration term"
+            },
+            "migrant crisis": {
+                "weight": 2,
+                "description": "Frequent controversy term"
+            },
+            "migrant detention": {
+                "weight": 1,
+                "description": "Common enforcement term"
+            },
+            "migrants": {
+                "weight": 2,
+                "description": "Frequent migration term"
+            },
+            "open borders": {
+                "weight": 2,
+                "description": "Frequent policy debate term"
+            },
+            "proof-of-citizenship": {
+                "weight": 1,
+                "description": "Common legal term"
+            },
+            "refugee crisis": {
+                "weight": 1,
+                "description": "Common humanitarian term"
+            },
+            "sanctuary city": {
+                "weight": 1,
+                "description": "Common policy debate term"
+            },
+            "undocumented": {
+                "weight": 1,
+                "description": "Regular status term"
+            }
+        }
+    }
+}

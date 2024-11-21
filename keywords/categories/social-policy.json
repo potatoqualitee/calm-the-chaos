@@ -1,0 +1,259 @@
+{
+    "Social Policy": {
+        "description": "Terms related to social welfare, public services, and societal issues that generate significant public discourse",
+        "keywords": {
+            "addiction crisis": {
+                "weight": 1,
+                "description": "Common public health term"
+            },
+            "affordable housing": {
+                "weight": 3,
+                "description": "Frequent policy issue term"
+            },
+            "benefit cuts": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "child care crisis": {
+                "weight": 1,
+                "description": "Frequent social issue term"
+            },
+            "child poverty": {
+                "weight": 1,
+                "description": "Frequent social issue term"
+            },
+            "civil disorder": {
+                "weight": 1,
+                "description": "Common social unrest term"
+            },
+            "cost of living": {
+                "weight": 3,
+                "description": "Highly frequent economic term"
+            },
+            "disability rights": {
+                "weight": 1,
+                "description": "Common civil rights term"
+            },
+            "drug crisis": {
+                "weight": 1,
+                "description": "Frequent public health term"
+            },
+            "drug epidemic": {
+                "weight": 1,
+                "description": "Frequent public health term"
+            },
+            "drug policy": {
+                "weight": 1,
+                "description": "Common regulation term"
+            },
+            "elder care crisis": {
+                "weight": 1,
+                "description": "Common healthcare term"
+            },
+            "Equal Rights Amendment": {
+                "weight": 2,
+                "description": "Frequent civil rights legislation"
+            },
+            "entitlement cut": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "entitlement reform": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "fluoride": {
+                "weight": 0,
+                "description": "Moderate-use health term"
+            },
+            "food assistance": {
+                "weight": 1,
+                "description": "Common welfare term"
+            },
+            "food insecurity": {
+                "weight": 1,
+                "description": "Common poverty term"
+            },
+            "food stamps": {
+                "weight": 1,
+                "description": "Common welfare term"
+            },
+            "foster care crisis": {
+                "weight": 1,
+                "description": "Common social services term"
+            },
+            "homeless camp": {
+                "weight": 1,
+                "description": "Frequent urban issue term"
+            },
+            "homeless crisis": {
+                "weight": 3,
+                "description": "Highly frequent social issue term"
+            },
+            "homeless death": {
+                "weight": 1,
+                "description": "Common mortality term"
+            },
+            "homeless encampment": {
+                "weight": 1,
+                "description": "Frequent urban issue term"
+            },
+            "homeless encampments": {
+                "weight": 1,
+                "description": "Frequent urban issue term"
+            },
+            "homeless families": {
+                "weight": 1,
+                "description": "Common social issue term"
+            },
+            "homeless man": {
+                "weight": 0,
+                "description": "Regular demographic term"
+            },
+            "homeless people": {
+                "weight": 1,
+                "description": "Common demographic term"
+            },
+            "homeless person": {
+                "weight": 0,
+                "description": "Regular demographic term"
+            },
+            "homeless population": {
+                "weight": 1,
+                "description": "Common demographic term"
+            },
+            "homeless shelter": {
+                "weight": 1,
+                "description": "Common social services term"
+            },
+            "homeless sweep": {
+                "weight": 1,
+                "description": "Common urban policy term"
+            },
+            "homeless tent": {
+                "weight": 0,
+                "description": "Regular urban term"
+            },
+            "homeless veteran": {
+                "weight": 1,
+                "description": "Common social issue term"
+            },
+            "homeless woman": {
+                "weight": 0,
+                "description": "Regular demographic term"
+            },
+            "homelessness crisis": {
+                "weight": 3,
+                "description": "Highly frequent social issue term"
+            },
+            "homelessness sweep": {
+                "weight": 1,
+                "description": "Common urban policy term"
+            },
+            "housing crisis": {
+                "weight": 3,
+                "description": "Highly frequent economic term"
+            },
+            "housing shortage": {
+                "weight": 1,
+                "description": "Frequent economic term"
+            },
+            "income inequality": {
+                "weight": 1,
+                "description": "Frequent economic term"
+            },
+            "labor protection": {
+                "weight": 0,
+                "description": "Regular worker rights term"
+            },
+            "labor rights": {
+                "weight": 1,
+                "description": "Common worker rights term"
+            },
+            "mental health crisis": {
+                "weight": 3,
+                "description": "Highly frequent healthcare term"
+            },
+            "minimum wage": {
+                "weight": 1,
+                "description": "Frequent labor policy term"
+            },
+            "opioid crisis": {
+                "weight": 3,
+                "description": "Frequent public health term"
+            },
+            "paid leave": {
+                "weight": 1,
+                "description": "Common labor policy term"
+            },
+            "pension crisis": {
+                "weight": 1,
+                "description": "Common financial term"
+            },
+            "poverty rate": {
+                "weight": 1,
+                "description": "Common economic term"
+            },
+            "program cuts": {
+                "weight": 0,
+                "description": "Regular policy term"
+            },
+            "safety net cut": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "sharia law": {
+                "weight": 1,
+                "description": "Common legal policy term"
+            },
+            "social program": {
+                "weight": 0,
+                "description": "Regular policy term"
+            },
+            "social security": {
+                "weight": 1,
+                "description": "Frequent policy term"
+            },
+            "unemployment benefit": {
+                "weight": 1,
+                "description": "Common welfare term"
+            },
+            "unhoused people": {
+                "weight": 1,
+                "description": "Common demographic term"
+            },
+            "unhoused person": {
+                "weight": 0,
+                "description": "Regular demographic term"
+            },
+            "unhoused population": {
+                "weight": 1,
+                "description": "Common demographic term"
+            },
+            "universal basic income": {
+                "weight": 1,
+                "description": "Common policy proposal term"
+            },
+            "welfare cut": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "welfare reform": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "welfare restriction": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "worker protection": {
+                "weight": 0,
+                "description": "Regular labor term"
+            },
+            "worker rights": {
+                "weight": 1,
+                "description": "Common labor term"
+            }
+        }
+    }
+}

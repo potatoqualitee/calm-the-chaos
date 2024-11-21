@@ -1,0 +1,435 @@
+{
+    "Reproductive Health": {
+        "description": "Terms related to reproductive healthcare, rights, and policies that consistently generate intense public discourse",
+        "keywords": {
+            "abortion": {
+                "weight": 3,
+                "description": "Highly frequent healthcare term"
+            },
+            "abortion access": {
+                "weight": 2,
+                "description": "Frequent healthcare policy term"
+            },
+            "abortion ban": {
+                "weight": 3,
+                "description": "Highly frequent policy term"
+            },
+            "abortion clinic": {
+                "weight": 1,
+                "description": "Common healthcare facility term"
+            },
+            "abortion crisis": {
+                "weight": 2,
+                "description": "Frequent healthcare emergency term"
+            },
+            "abortion death": {
+                "weight": 2,
+                "description": "Frequent mortality term"
+            },
+            "abortion emergency": {
+                "weight": 1,
+                "description": "Common medical crisis term"
+            },
+            "abortion law": {
+                "weight": 2,
+                "description": "Frequent policy term"
+            },
+            "abortion medical": {
+                "weight": 1,
+                "description": "Regular healthcare term"
+            },
+            "abortion pill": {
+                "weight": 2,
+                "description": "Frequent medication term"
+            },
+            "abortion restriction": {
+                "weight": 2,
+                "description": "Frequent policy term"
+            },
+            "abortion rights": {
+                "weight": 3,
+                "description": "Highly frequent policy term"
+            },
+            "birth control": {
+                "weight": 1,
+                "description": "Common healthcare term"
+            },
+            "birth crisis": {
+                "weight": 1,
+                "description": "Regular medical term"
+            },
+            "birth defect": {
+                "weight": 1,
+                "description": "Regular medical term"
+            },
+            "blocked care": {
+                "weight": 1,
+                "description": "Common healthcare access term"
+            },
+            "clinic closure": {
+                "weight": 1,
+                "description": "Common healthcare access term"
+            },
+            "complications death": {
+                "weight": 1,
+                "description": "Regular medical term"
+            },
+            "contraception access": {
+                "weight": 1,
+                "description": "Common healthcare term"
+            },
+            "contraception ban": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "crisis pregnancy": {
+                "weight": 1,
+                "description": "Common medical term"
+            },
+            "D\u0026C": {
+                "weight": 1,
+                "description": "Moderate-use medical procedure"
+            },
+            "death from abortion": {
+                "weight": 1,
+                "description": "Common mortality term"
+            },
+            "denied abortion": {
+                "weight": 2,
+                "description": "Frequent healthcare access term"
+            },
+            "denied care": {
+                "weight": 1,
+                "description": "Common healthcare access term"
+            },
+            "denied treatment": {
+                "weight": 1,
+                "description": "Common healthcare access term"
+            },
+            "dilation and curettage": {
+                "weight": 1,
+                "description": "Moderate-use medical term"
+            },
+            "ectopic pregnancy": {
+                "weight": 2,
+                "description": "Frequent medical emergency term"
+            },
+            "embryo bill": {
+                "weight": 1,
+                "description": "Regular policy term"
+            },
+            "embryo law": {
+                "weight": 1,
+                "description": "Regular policy term"
+            },
+            "embryo lawsuit": {
+                "weight": 1,
+                "description": "Regular legal term"
+            },
+            "embryo personhood": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "embryo protection": {
+                "weight": 1,
+                "description": "Regular policy term"
+            },
+            "embryo rights": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "emergency abortion": {
+                "weight": 2,
+                "description": "Frequent medical crisis term"
+            },
+            "fatal fetal": {
+                "weight": 1,
+                "description": "Common medical term"
+            },
+            "fertility ban": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "fertility clinic": {
+                "weight": 1,
+                "description": "Regular healthcare facility term"
+            },
+            "fertility law": {
+                "weight": 1,
+                "description": "Regular policy term"
+            },
+            "fertility restriction": {
+                "weight": 1,
+                "description": "Regular policy term"
+            },
+            "fertility rights": {
+                "weight": 1,
+                "description": "Common healthcare rights term"
+            },
+            "fertility treatment": {
+                "weight": 1,
+                "description": "Regular medical term"
+            },
+            "fetal abnormality": {
+                "weight": 1,
+                "description": "Regular medical term"
+            },
+            "fetal death": {
+                "weight": 1,
+                "description": "Regular medical term"
+            },
+            "fetal heartbeat": {
+                "weight": 2,
+                "description": "Frequent policy term"
+            },
+            "fetal personhood": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "forced birth": {
+                "weight": 2,
+                "description": "Frequent criticism term"
+            },
+            "frozen embryo": {
+                "weight": 1,
+                "description": "Regular medical term"
+            },
+            "hospital refusal": {
+                "weight": 1,
+                "description": "Common healthcare access term"
+            },
+            "IUD ban": {
+                "weight": 1,
+                "description": "Regular policy term"
+            },
+            "IVF access": {
+                "weight": 1,
+                "description": "Common healthcare term"
+            },
+            "IVF ban": {
+                "weight": 2,
+                "description": "Frequent policy term"
+            },
+            "IVF clinic": {
+                "weight": 1,
+                "description": "Regular healthcare facility term"
+            },
+            "IVF law": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "IVF restriction": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "IVF rights": {
+                "weight": 1,
+                "description": "Common healthcare rights term"
+            },
+            "IVF treatment": {
+                "weight": 1,
+                "description": "Regular medical term"
+            },
+            "maternal crisis": {
+                "weight": 1,
+                "description": "Common healthcare emergency term"
+            },
+            "maternal death": {
+                "weight": 2,
+                "description": "Frequent mortality term"
+            },
+            "maternal mortality": {
+                "weight": 2,
+                "description": "Frequent healthcare statistic term"
+            },
+            "medical abortion": {
+                "weight": 1,
+                "description": "Common healthcare term"
+            },
+            "medical emergency": {
+                "weight": 1,
+                "description": "Common crisis term"
+            },
+            "medical neglect": {
+                "weight": 1,
+                "description": "Common healthcare criticism"
+            },
+            "medication abortion": {
+                "weight": 2,
+                "description": "Frequent healthcare term"
+            },
+            "miscarriage care": {
+                "weight": 1,
+                "description": "Common healthcare term"
+            },
+            "miscarriage death": {
+                "weight": 1,
+                "description": "Common mortality term"
+            },
+            "miscarriage denial": {
+                "weight": 1,
+                "description": "Common healthcare access term"
+            },
+            "miscarriage emergency": {
+                "weight": 1,
+                "description": "Common medical crisis term"
+            },
+            "miscarriage investigation": {
+                "weight": 1,
+                "description": "Common legal term"
+            },
+            "miscarriage law": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "miscarriage prosecution": {
+                "weight": 2,
+                "description": "Frequent legal term"
+            },
+            "miscarriage treatment": {
+                "weight": 1,
+                "description": "Regular medical term"
+            },
+            "non viable pregnancy": {
+                "weight": 1,
+                "description": "Common medical term"
+            },
+            "obstetric emergency": {
+                "weight": 1,
+                "description": "Common medical crisis term"
+            },
+            "personhood amendment": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "personhood law": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "Plan B": {
+                "weight": 1,
+                "description": "Common medication term"
+            },
+            "planned parenthood": {
+                "weight": 3,
+                "description": "Highly frequent healthcare organization"
+            },
+            "pregnant women": {
+                "weight": 1,
+                "description": "Regular demographic term"
+            },
+            "pregnancy complication": {
+                "weight": 1,
+                "description": "Common medical term"
+            },
+            "pregnancy criminalization": {
+                "weight": 2,
+                "description": "Frequent legal term"
+            },
+            "pregnancy crisis": {
+                "weight": 1,
+                "description": "Common medical emergency term"
+            },
+            "pregnancy death": {
+                "weight": 1,
+                "description": "Common mortality term"
+            },
+            "pregnancy emergency": {
+                "weight": 1,
+                "description": "Common medical crisis term"
+            },
+            "pregnancy investigation": {
+                "weight": 1,
+                "description": "Common legal term"
+            },
+            "pregnancy law": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "pregnancy prosecution": {
+                "weight": 2,
+                "description": "Frequent legal term"
+            },
+            "pregnancy restriction": {
+                "weight": 1,
+                "description": "Common policy term"
+            },
+            "pregnancy surveillance": {
+                "weight": 1,
+                "description": "Common legal term"
+            },
+            "pregnancy termination": {
+                "weight": 1,
+                "description": "Common medical term"
+            },
+            "pro-choice": {
+                "weight": 3,
+                "description": "Highly frequent political term"
+            },
+            "pro-life": {
+                "weight": 3,
+                "description": "Highly frequent political term"
+            },
+            "reproductive care": {
+                "weight": 2,
+                "description": "Frequent healthcare term"
+            },
+            "reproductive crisis": {
+                "weight": 1,
+                "description": "Common healthcare emergency term"
+            },
+            "reproductive emergency": {
+                "weight": 1,
+                "description": "Common medical crisis term"
+            },
+            "reproductive freedom": {
+                "weight": 2,
+                "description": "Frequent rights term"
+            },
+            "reproductive rights": {
+                "weight": 3,
+                "description": "Highly frequent policy term"
+            },
+            "roe v wade": {
+                "weight": 3,
+                "description": "Highly frequent legal term"
+            },
+            "roe vs wade": {
+                "weight": 3,
+                "description": "Highly frequent legal term"
+            },
+            "sepsis death": {
+                "weight": 1,
+                "description": "Regular medical term"
+            },
+            "six week ban": {
+                "weight": 2,
+                "description": "Frequent policy term"
+            },
+            "teen pregnancy": {
+                "weight": 1,
+                "description": "Regular social term"
+            },
+            "trigger law": {
+                "weight": 2,
+                "description": "Frequent policy term"
+            },
+            "uterine infection": {
+                "weight": 1,
+                "description": "Moderate-use medical term"
+            },
+            "women\u0027s health": {
+                "weight": 1,
+                "description": "Common healthcare term"
+            },
+            "women\u0027s healthcare": {
+                "weight": 1,
+                "description": "Common healthcare term"
+            },
+            "women\u0027s rights": {
+                "weight": 2,
+                "description": "Frequent civil rights term"
+            }
+        }
+    }
+}

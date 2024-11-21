@@ -1,0 +1,81 @@
+{
+    "political-conflict": {
+        "title": "Political Discord",
+        "description": "Political debates and partisan conflicts",
+        "categories": [
+            "Political Rhetoric",
+            "Political Organizations",
+            "Political Violence and Security Threats",
+            "US Political Figures - Full Name",
+            "US Political Figures - Single Name",
+            "Media Personalities",
+            "US Government Institutions"
+        ]
+    },
+    "violence": {
+        "title": "Violence & Security",
+        "description": "Violence, weapons, and security threats",
+        "categories": [
+            "Relational Violence",
+            "Gun Policy",
+            "Political Violence and Security Threats"
+        ]
+    },
+    "social-issues": {
+        "title": "Social Issues",
+        "description": "Social debates and cultural conflicts",
+        "categories": [
+            "Social Policy",
+            "Education",
+            "Race Relations",
+            "LGBTQ+",
+            "Immigration"
+        ]
+    },
+    "world-events": {
+        "title": "Global Affairs",
+        "description": "International disputes and conflicts",
+        "categories": [
+            "International Coverage",
+            "World Leaders",
+            "Military and Defense"
+        ]
+    },
+    "health-policy": {
+        "title": "Healthcare",
+        "description": "Healthcare and health policy debates",
+        "categories": [
+            "Healthcare and Public Health",
+            "Vaccine Policy",
+            "Reproductive Health"
+        ]
+    },
+    "economic": {
+        "title": "Economy",
+        "description": "Economic and financial issues",
+        "categories": [
+            "Economic Policy"
+        ]
+    },
+    "environment": {
+        "title": "Environment",
+        "description": "Climate and environmental issues",
+        "categories": [
+            "Climate and Environment"
+        ]
+    },
+    "belief-systems": {
+        "title": "Religion",
+        "description": "Religious conflicts and persecution",
+        "categories": [
+            "Religion"
+        ]
+    },
+    "new-developments": {
+        "title": "New Developments",
+        "description": "Recent events and emerging stories",
+        "categories": [
+            "New Developments"
+        ]
+    }
+}

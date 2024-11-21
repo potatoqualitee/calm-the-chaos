@@ -1,0 +1,167 @@
+{
+    "World Leaders": {
+        "description": "Current and recent international heads of state and government leaders",
+        "keywords": {
+            "Abdel Fattah El-Sisi": {
+                "weight": 0,
+                "description": "Egyptian head of state"
+            },
+            "Aleksandr Lukashenko": {
+                "weight": 0,
+                "description": "Belarusian head of state"
+            },
+            "Ali Khamenei": {
+                "weight": 0,
+                "description": "Iranian supreme leader"
+            },
+            "Andrzej Duda": {
+                "weight": 0,
+                "description": "Polish head of state"
+            },
+            "Anthony Albanese": {
+                "weight": 0,
+                "description": "Australian head of government"
+            },
+            "Benjamin Netanyahu": {
+                "weight": 0,
+                "description": "Israeli head of government"
+            },
+            "Cyril Ramaphosa": {
+                "weight": 0,
+                "description": "South African head of state"
+            },
+            "Daniel Ortega": {
+                "weight": 0,
+                "description": "Nicaraguan head of state"
+            },
+            "Ebrahim Raisi": {
+                "weight": 0,
+                "description": "Iranian head of government"
+            },
+            "Emmanuel Macron": {
+                "weight": 0,
+                "description": "French head of state"
+            },
+            "Ferdinand Marcos Jr": {
+                "weight": 0,
+                "description": "Philippine head of state"
+            },
+            "Fumio Kishida": {
+                "weight": 0,
+                "description": "Japanese head of government"
+            },
+            "Gabriel Boric": {
+                "weight": 0,
+                "description": "Chilean head of state"
+            },
+            "Giorgia Meloni": {
+                "weight": 0,
+                "description": "Italian head of government"
+            },
+            "Isaac Herzog": {
+                "weight": 0,
+                "description": "Israeli head of state"
+            },
+            "Justin Trudeau": {
+                "weight": 0,
+                "description": "Canadian head of government"
+            },
+            "Kassym-Jomart Tokayev": {
+                "weight": 0,
+                "description": "Kazakh head of state"
+            },
+            "Kim Jong-un": {
+                "weight": 0,
+                "description": "North Korean head of state"
+            },
+            "Lai Ching-te": {
+                "weight": 0,
+                "description": "Taiwanese president-elect"
+            },
+            "Luis Inácio Lula da Silva": {
+                "weight": 0,
+                "description": "Brazilian head of state"
+            },
+            "Miguel Diaz-Canel": {
+                "weight": 0,
+                "description": "Cuban head of state"
+            },
+            "Mohammed bin Salman": {
+                "weight": 0,
+                "description": "Saudi Arabian head of government"
+            },
+            "Narendra Modi": {
+                "weight": 0,
+                "description": "Indian head of government"
+            },
+            "Nicolas Maduro": {
+                "weight": 0,
+                "description": "Venezuelan head of state"
+            },
+            "Olaf Scholz": {
+                "weight": 0,
+                "description": "German head of government"
+            },
+            "Pedro Sanchez": {
+                "weight": 0,
+                "description": "Spanish head of government"
+            },
+            "Petr Pavel": {
+                "weight": 0,
+                "description": "Czech head of state"
+            },
+            "Putin": {
+                "weight": 0,
+                "description": "Russian head of state"
+            },
+            "Recep Tayyip Erdogan": {
+                "weight": 0,
+                "description": "Turkish head of state"
+            },
+            "Rishi Sunak": {
+                "weight": 0,
+                "description": "British head of government"
+            },
+            "Sergey Lavrov": {
+                "weight": 0,
+                "description": "Russian foreign minister"
+            },
+            "Sheikh Hasina": {
+                "weight": 0,
+                "description": "Bangladeshi head of government"
+            },
+            "Tsai Ing-wen": {
+                "weight": 0,
+                "description": "Taiwanese head of state"
+            },
+            "Ursula von der Leyen": {
+                "weight": 0,
+                "description": "European Commission president"
+            },
+            "Viktor Orban": {
+                "weight": 0,
+                "description": "Hungarian head of government"
+            },
+            "Vladimir Putin": {
+                "weight": 0,
+                "description": "Russian head of state"
+            },
+            "Volodymyr Zelenskyy": {
+                "weight": 0,
+                "description": "Ukrainian head of state"
+            },
+            "Yoon Suk-yeol": {
+                "weight": 0,
+                "description": "South Korean head of state"
+            },
+            "Zelensky": {
+                "weight": 0,
+                "description": "Ukrainian head of state"
+            },
+            "Xi Jinping": {
+                "weight": 0,
+                "description": "Chinese head of state"
+            }
+        }
+    }
+}
