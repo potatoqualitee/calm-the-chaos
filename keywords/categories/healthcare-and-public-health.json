@@ -1,68 +1,67 @@
 {
-  "Healthcare and Public Health": {
-    "weight": 8,
-    "description": "Terms related to healthcare policy, medical costs, and public health issues that generate significant public discourse",
-    "keywords": {
-      "affordable care act": {
-        "weight": 8,
-        "description": "Highly frequent policy term"
-      },
-      "drug pricing": {
-        "weight": 7,
-        "description": "Frequent cost debate term"
-      },
-      "healthcare costs": {
-        "weight": 8,
-        "description": "Highly frequent economic term"
-      },
-      "healthcare reform": {
-        "weight": 7,
-        "description": "Frequent policy debate term"
-      },
-      "hospital crisis": {
-        "weight": 6,
-        "description": "Common system strain term"
-      },
-      "insurance coverage": {
-        "weight": 6,
-        "description": "Common healthcare access term"
-      },
-      "medical debt": {
-        "weight": 7,
-        "description": "Frequent financial crisis term"
-      },
-      "medicare reform": {
-        "weight": 6,
-        "description": "Common policy debate term"
-      },
-      "mental health system": {
-        "weight": 6,
-        "description": "Common healthcare infrastructure term"
-      },
-      "opioid epidemic": {
-        "weight": 7,
-        "description": "Frequent public health crisis"
-      },
-      "patient rights": {
-        "weight": 5,
-        "description": "Regular medical term"
-      },
-      "prescription costs": {
-        "weight": 7,
-        "description": "Frequent economic debate term"
-      },
-      "public health policy": {
-        "weight": 5,
-        "description": "Regular policy term"
-      },
-      "Texas hospitals": {
-        "weight": 4,
-        "description": "Regional healthcare term"
-      },
-      "universal healthcare": {
-        "weight": 8,
-        "description": "Highly frequent policy debate term"
-      }
+    "Healthcare and Public Health": {
+        "description": "Terms related to healthcare policy, medical costs, and public health issues that generate significant public discourse",
+        "keywords": {
+            "affordable care act": {
+                "weight": 3,
+                "description": "Highly frequent policy term"
+            },
+            "drug pricing": {
+                "weight": 1,
+                "description": "Frequent cost debate term"
+            },
+            "healthcare costs": {
+                "weight": 3,
+                "description": "Highly frequent economic term"
+            },
+            "healthcare reform": {
+                "weight": 1,
+                "description": "Frequent policy debate term"
+            },
+            "hospital crisis": {
+                "weight": 1,
+                "description": "Common system strain term"
+            },
+            "insurance coverage": {
+                "weight": 1,
+                "description": "Common healthcare access term"
+            },
+            "medical debt": {
+                "weight": 1,
+                "description": "Frequent financial crisis term"
+            },
+            "medicare reform": {
+                "weight": 1,
+                "description": "Common policy debate term"
+            },
+            "mental health system": {
+                "weight": 1,
+                "description": "Common healthcare infrastructure term"
+            },
+            "opioid epidemic": {
+                "weight": 1,
+                "description": "Frequent public health crisis"
+            },
+            "patient rights": {
+                "weight": 0,
+                "description": "Regular medical term"
+            },
+            "prescription costs": {
+                "weight": 1,
+                "description": "Frequent economic debate term"
+            },
+            "public health policy": {
+                "weight": 0,
+                "description": "Regular policy term"
+            },
+            "Texas hospitals": {
+                "weight": 0,
+                "description": "Regional healthcare term"
+            },
+            "universal healthcare": {
+                "weight": 3,
+                "description": "Highly frequent policy debate term"
+            }
+        }
     }
-  }
 }
