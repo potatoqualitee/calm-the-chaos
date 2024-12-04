@@ -143,10 +143,6 @@
         "weight": 6,
         "description": "Common violence term"
       },
-      "hate speech": {
-        "weight": 7,
-        "description": "Frequent social term"
-      },
       "inclusion ban": {
         "weight": 6,
         "description": "Common policy term"

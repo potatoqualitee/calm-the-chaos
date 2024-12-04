@@ -167,10 +167,6 @@
         "weight": 6,
         "description": "Regular safety narrative"
       },
-      "critical race theory": {
-        "weight": 8,
-        "description": "Frequent education controversy"
-      },
       "culture war": {
         "weight": 7,
         "description": "Frequent social conflict term"
@@ -314,10 +310,6 @@
       "government overreach": {
         "weight": 6,
         "description": "Common political criticism"
-      },
-      "great replacement": {
-        "weight": 8,
-        "description": "Frequent conspiracy theory"
       },
       "grooming": {
         "weight": 8,
