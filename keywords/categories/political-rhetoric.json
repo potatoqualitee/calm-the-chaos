@@ -279,14 +279,6 @@
         "weight": 6,
         "description": "Common conspiracy term"
       },
-      "far-left": {
-        "weight": 7,
-        "description": "Frequent ideology attack"
-      },
-      "far-right": {
-        "weight": 7,
-        "description": "Frequent ideology attack"
-      },
       "fascist": {
         "weight": 7,
         "description": "Frequent ideology attack"
