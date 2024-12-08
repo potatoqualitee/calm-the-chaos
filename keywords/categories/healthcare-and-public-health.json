@@ -1,66 +1,66 @@
 {
   "Healthcare and Public Health": {
-    "weight": 2,
+    "weight": 8,
     "description": "Terms related to healthcare policy, medical costs, and public health issues that generate significant public discourse",
     "keywords": {
       "affordable care act": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent policy term"
       },
       "drug pricing": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent cost debate term"
       },
       "healthcare costs": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent economic term"
       },
       "healthcare reform": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent policy debate term"
       },
       "hospital crisis": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common system strain term"
       },
       "insurance coverage": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common healthcare access term"
       },
       "medical debt": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent financial crisis term"
       },
       "medicare reform": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common policy debate term"
       },
       "mental health system": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common healthcare infrastructure term"
       },
       "opioid epidemic": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent public health crisis"
       },
       "patient rights": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular medical term"
       },
       "prescription costs": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent economic debate term"
       },
       "public health policy": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular policy term"
       },
       "Texas hospitals": {
-        "weight": 1,
+        "weight": 4,
         "description": "Regional healthcare term"
       },
       "universal healthcare": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent policy debate term"
       }
     }

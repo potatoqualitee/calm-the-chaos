@@ -1,194 +1,194 @@
 {
   "Media Personalities": {
-    "weight": 2,
+    "weight": 8,
     "description": "High-profile media figures and commentators who shape public discourse",
     "keywords": {
       "Alex Jones": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent controversial media figure"
       },
       "Ana Kasparian": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular progressive commentator"
       },
       "Anderson Cooper": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common mainstream news anchor"
       },
       "Andrew Tate": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent viral influencer"
       },
       "Andy Ngo": {
-        "weight": 2,
+        "weight": 6,
         "description": "Regular conservative journalist"
       },
       "Ann Coulter": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular conservative commentator"
       },
       "Ben Shapiro": {
-        "weight": 3,
+        "weight": 7,
         "description": "Common conservative commentator"
       },
       "Bill Maher": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common political commentator"
       },
       "Bill O'Reilly": {
-        "weight": 1,
+        "weight": 4,
         "description": "Occasional media figure"
       },
       "Brian Stelter": {
-        "weight": 1,
+        "weight": 4,
         "description": "Occasional media critic"
       },
       "Buck Sexton": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular conservative host"
       },
       "Candace Owens": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent conservative commentator"
       },
       "Charlie Kirk": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent conservative activist"
       },
       "Chris Cuomo": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular news anchor"
       },
       "Clay Travis": {
-        "weight": 2,
+        "weight": 6,
         "description": "Regular conservative commentator"
       },
       "Dan Bongino": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common conservative host"
       },
       "Don Lemon": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common news personality"
       },
       "Glenn Greenwald": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common independent journalist"
       },
       "Jack Posobiec": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common conservative commentator"
       },
       "Jake Tapper": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common mainstream anchor"
       },
       "Jesse Watters": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common conservative host"
       },
       "Jimmy Dore": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular progressive commentator"
       },
       "Joe Rogan": {
-        "weight": 3,
+        "weight": 9,
         "description": "Highly frequent podcast host"
       },
       "Jordan Peterson": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent conservative intellectual"
       },
       "Joy Reid": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common progressive host"
       },
       "Keith Olbermann": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular progressive commentator"
       },
       "Kyle Rittenhouse": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular media figure"
       },
       "Laura Ingraham": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent conservative host"
       },
       "Lawrence O'Donnell": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular progressive host"
       },
       "Libs of TikTok": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent social media account"
       },
       "Mark Levin": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common conservative host"
       },
       "Matt Taibbi": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common independent journalist"
       },
       "Megyn Kelly": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common conservative host"
       },
       "Michael Knowles": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common conservative commentator"
       },
       "Mike Cernovich": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular social media figure"
       },
       "Nick Fuentes": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common controversial figure"
       },
       "Piers Morgan": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common media personality"
       },
       "Project Veritas": {
-        "weight": 3,
+        "weight": 7,
         "description": "Common activist organization"
       },
       "Rachel Maddow": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent progressive host"
       },
       "Russell Brand": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent controversial commentator"
       },
       "Sean Hannity": {
-        "weight": 3,
+        "weight": 7,
         "description": "Common conservative host"
       },
       "Steven Crowder": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent conservative commentator"
       },
       "Tim Cast": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common independent commentator"
       },
       "Tim Pool": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common independent host"
       },
       "Tomi Lahren": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common conservative commentator"
       },
       "Tucker Carlson": {
-        "weight": 3,
+        "weight": 9,
         "description": "Highly frequent media figure"
       },
       "Yashar Ali": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular journalist"
       }
     }

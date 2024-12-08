@@ -1,314 +1,314 @@
 {
   "Political Violence and Security Threats": {
-    "weight": 3,
+    "weight": 10,
     "description": "Terms related to political violence, security challenges, and extremist activities with potential to impact public safety",
     "keywords": {
       "armed militia": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent armed group term"
       },
       "armed protest": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent demonstration term"
       },
       "armed uprising": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common rebellion term"
       },
       "armed vigilante": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common civilian force term"
       },
       "armed youth": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular security concern term"
       },
       "assassination attempt": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent violence term"
       },
       "blm protest shooting": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent protest violence term"
       },
       "bomb threat": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent security term"
       },
       "capitol attack": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent insurrection term"
       },
       "capitol breach": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent security term"
       },
       "capitol insurrection": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent political violence term"
       },
       "capitol police": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common security force term"
       },
       "capitol riot": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent unrest term"
       },
       "capitol security": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common protection term"
       },
       "capitol siege": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent attack term"
       },
       "capitol storm": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common assault term"
       },
       "capitol threat": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common security term"
       },
       "capitol violence": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent unrest term"
       },
       "car bombing": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent attack term"
       },
       "civil unrest": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent disorder term"
       },
       "civil war": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent conflict term"
       },
       "constitutional militia": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular armed group term"
       },
       "death threat": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent intimidation term"
       },
       "domestic extremism": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent threat term"
       },
       "domestic terrorism": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent violence term"
       },
       "election violence": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent political unrest term"
       },
       "extremist group": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent radical term"
       },
       "Hamas": {
-        "weight": 3,
+        "weight": 9,
         "description": "Highly frequent violence term"
       },
       "hate crime": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent bias violence term"
       },
       "hate group": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common extremist term"
       },
       "homegrown terrorist": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common threat term"
       },
       "hostage situation": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent crisis term"
       },
       "insurrection": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent rebellion term"
       },
       "insurrectionist": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent rebel term"
       },
       "J6": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common event reference"
       },
       "January 6": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent event term"
       },
       "January 6th": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common event reference"
       },
       "January sixth": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular event reference"
       },
       "kenosha shooting": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common violence term"
       },
       "killing spree": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent violence term"
       },
       "militant group": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common extremist term"
       },
       "militia movement": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common armed group term"
       },
       "oath keeper": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent extremist term"
       },
       "patriot movement": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular political term"
       },
       "pipe bomb": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent weapon term"
       },
       "political terrorism": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent violence term"
       },
       "political violence": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent unrest term"
       },
       "prison": {
-        "weight": 1,
+        "weight": 4,
         "description": "Basic institution term"
       },
       "protest shooter": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common violence term"
       },
       "protest shooting": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common violence term"
       },
       "protest violence": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent unrest term"
       },
       "proud boy": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent extremist term"
       },
       "QAnon": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common conspiracy term"
       },
       "radicalization": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common extremism term"
       },
       "riot control": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular security term"
       },
       "rittenhouse": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular incident term"
       },
       "security breach": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common threat term"
       },
       "security threat": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common danger term"
       },
       "sedition": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent rebellion term"
       },
       "seditious": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common rebellion term"
       },
       "seditious conspiracy": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent plot term"
       },
       "spree killing": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent violence term"
       },
       "stop the steal": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent protest term"
       },
       "street justice": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular vigilante term"
       },
       "terrorist attack": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent violence term"
       },
       "terrorist cell": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common threat term"
       },
       "terrorist plot": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent threat term"
       },
       "three percenter": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common militia term"
       },
       "treason": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent betrayal term"
       },
       "treasonous": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common betrayal term"
       },
       "vigilante justice": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common civilian force term"
       },
       "vigilante shooting": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common violence term"
       },
       "vigilante violence": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common force term"
       },
       "vigilantism": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular civilian force term"
       },
       "violent extremism": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent threat term"
       },
       "violent protest": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent unrest term"
       },
       "violent threat": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent danger term"
       }
     }

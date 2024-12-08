@@ -1,254 +1,254 @@
 {
   "Social Policy": {
-    "weight": 2,
+    "weight": 8,
     "description": "Terms related to social welfare, public services, and societal issues that generate significant public discourse",
     "keywords": {
       "addiction crisis": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common public health term"
       },
       "affordable housing": {
-        "weight": 3,
+        "weight": 8,
         "description": "Frequent policy issue term"
       },
       "benefit cuts": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common policy term"
       },
       "child care crisis": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent social issue term"
       },
       "child poverty": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent social issue term"
       },
       "civil disorder": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common social unrest term"
       },
       "cost of living": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent economic term"
       },
       "disability rights": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common civil rights term"
       },
       "drug crisis": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent public health term"
       },
       "drug epidemic": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent public health term"
       },
       "drug policy": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common regulation term"
       },
       "elder care crisis": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common healthcare term"
       },
       "entitlement cut": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common policy term"
       },
       "entitlement reform": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common policy term"
       },
       "fluoride": {
-        "weight": 2,
+        "weight": 5,
         "description": "Moderate-use health term"
       },
       "food assistance": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common welfare term"
       },
       "food insecurity": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common poverty term"
       },
       "food stamps": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common welfare term"
       },
       "foster care crisis": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common social services term"
       },
       "homeless camp": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent urban issue term"
       },
       "homeless crisis": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent social issue term"
       },
       "homeless death": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common mortality term"
       },
       "homeless encampment": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent urban issue term"
       },
       "homeless encampments": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent urban issue term"
       },
       "homeless families": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common social issue term"
       },
       "homeless man": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular demographic term"
       },
       "homeless people": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common demographic term"
       },
       "homeless person": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular demographic term"
       },
       "homeless population": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common demographic term"
       },
       "homeless shelter": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common social services term"
       },
       "homeless sweep": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common urban policy term"
       },
       "homeless tent": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular urban term"
       },
       "homeless veteran": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common social issue term"
       },
       "homeless woman": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular demographic term"
       },
       "homelessness crisis": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent social issue term"
       },
       "homelessness sweep": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common urban policy term"
       },
       "housing crisis": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent economic term"
       },
       "housing shortage": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent economic term"
       },
       "income inequality": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent economic term"
       },
       "labor protection": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular worker rights term"
       },
       "labor rights": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common worker rights term"
       },
       "mental health crisis": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent healthcare term"
       },
       "minimum wage": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent labor policy term"
       },
       "opioid crisis": {
-        "weight": 3,
+        "weight": 8,
         "description": "Frequent public health term"
       },
       "paid leave": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common labor policy term"
       },
       "pension crisis": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common financial term"
       },
       "poverty rate": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common economic term"
       },
       "program cuts": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular policy term"
       },
       "safety net cut": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common policy term"
       },
       "sharia law": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common legal policy term"
       },
       "social program": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular policy term"
       },
       "social security": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent policy term"
       },
       "unemployment benefit": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common welfare term"
       },
       "unhoused people": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common demographic term"
       },
       "unhoused person": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular demographic term"
       },
       "unhoused population": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common demographic term"
       },
       "universal basic income": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common policy proposal term"
       },
       "welfare cut": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common policy term"
       },
       "welfare reform": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common policy term"
       },
       "welfare restriction": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common policy term"
       },
       "worker protection": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular labor term"
       },
       "worker rights": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common labor term"
       }
     }

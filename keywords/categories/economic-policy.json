@@ -1,290 +1,290 @@
 {
   "Economic Policy": {
-    "weight": 3,
+    "weight": 9,
     "description": "Terms related to economic policy, financial markets, labor issues, and taxation that consistently generate significant public discourse",
     "keywords": {
       "anti union": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common labor conflict term"
       },
       "antiwork": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common labor movement term"
       },
       "austerity measures": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular policy term"
       },
       "bailout": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common financial intervention term"
       },
       "banking crisis": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent financial term"
       },
       "capital gains": {
-        "weight": 1,
+        "weight": 4,
         "description": "Technical tax term"
       },
       "CEO pay": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent inequality term"
       },
       "collective bargaining": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular labor rights term"
       },
       "corporate bailout": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent controversy term"
       },
       "corporate greed": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent criticism term"
       },
       "corporate tax": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common policy term"
       },
       "corporate welfare": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common criticism term"
       },
       "cost of living crisis": {
-        "weight": 3,
+        "weight": 9,
         "description": "Highly frequent economic term"
       },
       "credit default": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular financial term"
       },
       "debt ceiling": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent policy crisis"
       },
       "debt crisis": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent economic term"
       },
       "economic collapse": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent crisis term"
       },
       "economic crisis": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent financial term"
       },
       "economic decline": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent trend term"
       },
       "economic inequality": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent social issue term"
       },
       "Fed rate": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common financial term"
       },
       "Federal Reserve": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common institution term"
       },
       "financial collapse": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent crisis term"
       },
       "financial crisis": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent economic term"
       },
       "financial meltdown": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent crisis term"
       },
       "foreclosure": {
-        "weight": 2,
+        "weight": 5,
         "description": "Common housing term"
       },
       "hedge fund": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular financial term"
       },
       "higher taxes": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common policy term"
       },
       "income tax": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular policy term"
       },
       "interest rates": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent financial term"
       },
       "labor dispute": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular workplace term"
       },
       "labor exploitation": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common workplace criticism"
       },
       "labor organization": {
-        "weight": 2,
+        "weight": 5,
         "description": "Moderate-use union term"
       },
       "labor rights violation": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common workplace term"
       },
       "market crash": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent crisis term"
       },
       "market manipulation": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent controversy term"
       },
       "mortgage crisis": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common housing term"
       },
       "offshoring": {
-        "weight": 2,
+        "weight": 5,
         "description": "Common labor term"
       },
       "predatory lending": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common financial criticism"
       },
       "price gouging": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent economic criticism"
       },
       "private equity": {
-        "weight": 2,
+        "weight": 5,
         "description": "Moderate-use financial term"
       },
       "recession": {
-        "weight": 3,
+        "weight": 9,
         "description": "Highly frequent economic term"
       },
       "right to work": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common labor policy term"
       },
       "sales tax": {
-        "weight": 1,
+        "weight": 4,
         "description": "Basic policy term"
       },
       "scab labor": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular labor conflict term"
       },
       "strategic reserve": {
-        "weight": 1,
+        "weight": 4,
         "description": "Technical resource term"
       },
       "stock market crash": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent crisis term"
       },
       "strike breaking": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular labor conflict term"
       },
       "tax cut": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common policy term"
       },
       "tax haven": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular criticism term"
       },
       "tax loophole": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common criticism term"
       },
       "tax the rich": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent policy slogan"
       },
       "trade deficit": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular economic term"
       },
       "trade war": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent international term"
       },
       "unemployment": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent economic indicator"
       },
       "union busting": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common labor conflict term"
       },
       "union organizing": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular labor term"
       },
       "union strike": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common labor action term"
       },
       "vulture capitalism": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common criticism term"
       },
       "wage gap": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent inequality term"
       },
       "wage stagnation": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent economic term"
       },
       "wage theft": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common workplace term"
       },
       "Wall Street": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent financial term"
       },
       "wealth gap": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent inequality term"
       },
       "wealth tax": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent policy proposal"
       },
       "worker exploitation": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common labor criticism"
       },
       "worker retaliation": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular workplace term"
       },
       "worker rights violation": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common workplace term"
       },
       "working class": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent demographic term"
       },
       "workplace abuse": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common labor term"
       },
       "workplace retaliation": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular labor term"
       }
     }

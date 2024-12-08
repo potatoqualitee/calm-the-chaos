@@ -1,154 +1,154 @@
 {
   "Religion": {
-    "weight": 3,
+    "weight": 9,
     "description": "Terms related to religious beliefs, conflicts, and discrimination that consistently generate intense public discourse. Ranked by frequency.",
     "keywords": {
       "anti-christian": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common discrimination term"
       },
       "anti-jewish": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common discrimination term"
       },
       "anti-muslim": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common discrimination term"
       },
       "anti-religion": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular ideological term"
       },
       "antisemitic": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent discrimination term"
       },
       "anti-semitic": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent discrimination term"
       },
       "antisemitic attack": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common hate crime term"
       },
       "antisemitic hate": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common discrimination term"
       },
       "antisemitic threat": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common hate incident term"
       },
       "antisemitic violence": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common hate crime term"
       },
       "antisemitism": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent discrimination term"
       },
       "anti-semitism": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent discrimination term"
       },
       "christian persecution": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common discrimination term"
       },
       "church attack": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent violence term"
       },
       "church shooting": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent violence term"
       },
       "church violence": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common hate crime term"
       },
       "extremism": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common violence term"
       },
       "hebrew school attack": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common hate crime term"
       },
       "holocaust": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent historical term"
       },
       "holocaust denial": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent antisemitic term"
       },
       "holocaust revisionism": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common antisemitic term"
       },
       "islamophobia": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent discrimination term"
       },
       "mosque attack": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent hate crime term"
       },
       "muslim discrimination": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common bias term"
       },
       "muslim persecution": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common discrimination term"
       },
       "muslim segregation": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common discrimination term"
       },
       "muslim targeting": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common discrimination term"
       },
       "ramadan attack": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common hate crime term"
       },
       "religious extremism": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent violence term"
       },
       "religious hate speech": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common discrimination term"
       },
       "religious intolerance": {
-        "weight": 2,
+        "weight": 6,
         "description": "Common discrimination term"
       },
       "religious persecution": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent discrimination term"
       },
       "religious targeting": {
-        "weight": 2,
+        "weight": 5,
         "description": "Regular discrimination term"
       },
       "religious terrorism": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent violence term"
       },
       "religious violence": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent conflict term"
       },
       "synagogue attack": {
-        "weight": 3,
+        "weight": 8,
         "description": "Highly frequent hate crime term"
       },
       "violence against muslims": {
-        "weight": 3,
+        "weight": 7,
         "description": "Frequent hate crime term"
       }
     }
