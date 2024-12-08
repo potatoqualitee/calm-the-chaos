@@ -1,210 +1,210 @@
 {
   "Gun Policy": {
-    "weight": 9,
+    "weight": 3,
     "description": "Terms related to firearms, gun violence, and gun policy debates that consistently generate intense reactions",
     "keywords": {
       "active shooter": {
-        "weight": 8,
+        "weight": 3,
         "description": "Highly frequent emergency situation term"
       },
       "ammunition ban": {
-        "weight": 6,
+        "weight": 2,
         "description": "Regular policy proposal term"
       },
       "armed attack": {
-        "weight": 6,
+        "weight": 2,
         "description": "Common violence incident term"
       },
       "armed shooter": {
-        "weight": 7,
+        "weight": 3,
         "description": "Frequent emergency situation term"
       },
       "assault weapon": {
-        "weight": 7,
+        "weight": 3,
         "description": "Frequent firearms debate term"
       },
       "background check": {
-        "weight": 7,
+        "weight": 3,
         "description": "Frequent policy debate term"
       },
       "ballistic vest": {
-        "weight": 4,
+        "weight": 1,
         "description": "Technical protective equipment term"
       },
       "body armor": {
-        "weight": 5,
+        "weight": 2,
         "description": "Moderate-use protective equipment term"
       },
       "bullet proof vest": {
-        "weight": 5,
+        "weight": 2,
         "description": "Common protective equipment term"
       },
       "carry permit": {
-        "weight": 6,
+        "weight": 2,
         "description": "Regular licensing term"
       },
       "concealed carry": {
-        "weight": 6,
+        "weight": 2,
         "description": "Common firearms policy term"
       },
       "firearm ban": {
-        "weight": 7,
+        "weight": 3,
         "description": "Frequent policy proposal term"
       },
       "firearm control": {
-        "weight": 6,
+        "weight": 2,
         "description": "Common policy debate term"
       },
       "firearm death": {
-        "weight": 7,
+        "weight": 3,
         "description": "Frequent mortality statistic term"
       },
       "firearm legislation": {
-        "weight": 6,
+        "weight": 2,
         "description": "Common policy term"
       },
       "firearm murder": {
-        "weight": 7,
+        "weight": 3,
         "description": "Frequent crime statistic term"
       },
       "firearm restriction": {
-        "weight": 6,
+        "weight": 2,
         "description": "Common regulation term"
       },
       "firearm violence": {
-        "weight": 7,
+        "weight": 3,
         "description": "Frequent public safety term"
       },
       "ghost gun": {
-        "weight": 7,
+        "weight": 3,
         "description": "Frequent controversy term"
       },
       "gun ban": {
-        "weight": 8,
+        "weight": 3,
         "description": "Highly frequent policy debate term"
       },
       "gun control": {
-        "weight": 8,
+        "weight": 3,
         "description": "Highly frequent policy debate term"
       },
       "gun death": {
-        "weight": 7,
+        "weight": 3,
         "description": "Frequent mortality statistic term"
       },
       "gun legislation": {
-        "weight": 6,
+        "weight": 2,
         "description": "Common policy term"
       },
       "gun lobby": {
-        "weight": 7,
+        "weight": 3,
         "description": "Frequent political influence term"
       },
       "gun murder": {
-        "weight": 7,
+        "weight": 3,
         "description": "Frequent crime statistic term"
       },
       "gun restriction": {
-        "weight": 6,
+        "weight": 2,
         "description": "Common regulation term"
       },
       "gun rights": {
-        "weight": 8,
+        "weight": 3,
         "description": "Highly frequent constitutional term"
       },
       "gun safety": {
-        "weight": 6,
+        "weight": 2,
         "description": "Common public health term"
       },
       "gun violence": {
-        "weight": 8,
+        "weight": 3,
         "description": "Highly frequent public safety term"
       },
       "magazine ban": {
-        "weight": 6,
+        "weight": 2,
         "description": "Regular policy proposal term"
       },
       "magazine capacity": {
-        "weight": 5,
+        "weight": 2,
         "description": "Moderate-use technical term"
       },
       "mass casualty": {
-        "weight": 7,
+        "weight": 3,
         "description": "Frequent emergency incident term"
       },
       "mass shooting": {
-        "weight": 9,
+        "weight": 3,
         "description": "Highly frequent violence incident term"
       },
       "multiple shooting": {
-        "weight": 6,
+        "weight": 2,
         "description": "Common violence incident term"
       },
       "open carry": {
-        "weight": 6,
+        "weight": 2,
         "description": "Common firearms policy term"
       },
       "red flag law": {
-        "weight": 7,
+        "weight": 3,
         "description": "Frequent policy debate term"
       },
       "rifle ban": {
-        "weight": 6,
+        "weight": 2,
         "description": "Common policy proposal term"
       },
       "school shooter": {
-        "weight": 8,
+        "weight": 3,
         "description": "Highly frequent violence term"
       },
       "school shooting": {
-        "weight": 9,
+        "weight": 3,
         "description": "Highly frequent violence incident term"
       },
       "Second Amendment": {
-        "weight": 8,
+        "weight": 3,
         "description": "Highly frequent constitutional term"
       },
       "self defense shooting": {
-        "weight": 6,
+        "weight": 2,
         "description": "Common incident term"
       },
       "shooting death": {
-        "weight": 6,
+        "weight": 2,
         "description": "Common mortality term"
       },
       "shooting incident": {
-        "weight": 6,
+        "weight": 2,
         "description": "Common violence term"
       },
       "shooting rampage": {
-        "weight": 7,
+        "weight": 3,
         "description": "Frequent violence incident term"
       },
       "shooting spree": {
-        "weight": 7,
+        "weight": 3,
         "description": "Frequent violence incident term"
       },
       "spree killer": {
-        "weight": 6,
+        "weight": 2,
         "description": "Common violence term"
       },
       "spree shooting": {
-        "weight": 6,
+        "weight": 2,
         "description": "Common violence incident term"
       },
       "stand your ground": {
-        "weight": 7,
+        "weight": 3,
         "description": "Frequent legal policy term"
       },
       "weapon ban": {
-        "weight": 7,
+        "weight": 3,
         "description": "Frequent policy proposal term"
       },
       "weapon restriction": {
-        "weight": 6,
+        "weight": 2,
         "description": "Common regulation term"
       },
       "weapons legislation": {
-        "weight": 6,
+        "weight": 2,
         "description": "Common policy term"
       }
     }

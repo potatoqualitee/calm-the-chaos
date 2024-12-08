@@ -1,6 +1,6 @@
 {
   "International Coverage": {
-    "weight": 8,
+    "weight": 2,
     "description": "Terms related to international relations",
     "keywords": {
       "Afghanistan": {
@@ -20,23 +20,23 @@
         "description": "Organization name"
       },
       "conflict zone": {
-        "weight": 6,
+        "weight": 2,
         "description": "Common military term"
       },
       "diplomatic crisis": {
-        "weight": 7,
+        "weight": 3,
         "description": "Common international term"
       },
       "diplomatic tension": {
-        "weight": 6,
+        "weight": 2,
         "description": "Common relations term"
       },
       "disputed territory": {
-        "weight": 5,
+        "weight": 2,
         "description": "Regular conflict term"
       },
       "embassy closure": {
-        "weight": 5,
+        "weight": 2,
         "description": "Regular diplomatic term"
       },
       "EU": {
@@ -48,11 +48,11 @@
         "description": "Organization name"
       },
       "foreign interference": {
-        "weight": 8,
+        "weight": 3,
         "description": "Frequent international concern"
       },
       "foreign relations": {
-        "weight": 6,
+        "weight": 2,
         "description": "Regular diplomatic term"
       },
       "Gaza": {
@@ -60,7 +60,7 @@
         "description": "Region name"
       },
       "global conflict": {
-        "weight": 8,
+        "weight": 3,
         "description": "Frequent international term"
       },
       "IDF": {
@@ -68,7 +68,7 @@
         "description": "Military organization name"
       },
       "international dispute": {
-        "weight": 7,
+        "weight": 3,
         "description": "Common diplomatic term"
       },
       "Iran": {
@@ -100,7 +100,7 @@
         "description": "Region name"
       },
       "missile strike": {
-        "weight": 7,
+        "weight": 3,
         "description": "Frequent military term"
       },
       "NATO": {
@@ -112,7 +112,7 @@
         "description": "Country name"
       },
       "nuclear talks": {
-        "weight": 8,
+        "weight": 3,
         "description": "Frequent diplomatic term"
       },
       "Palestine": {
@@ -120,15 +120,15 @@
         "description": "Region name"
       },
       "peace negotiation": {
-        "weight": 7,
+        "weight": 3,
         "description": "Common diplomatic term"
       },
       "peace talks": {
-        "weight": 7,
+        "weight": 3,
         "description": "Common diplomatic term"
       },
       "political asylum": {
-        "weight": 5,
+        "weight": 2,
         "description": "Regular international term"
       },
       "Russia": {
@@ -136,7 +136,7 @@
         "description": "Country name"
       },
       "sanctions": {
-        "weight": 7,
+        "weight": 3,
         "description": "Frequent diplomatic term"
       },
       "Saudi Arabia": {
@@ -160,15 +160,15 @@
         "description": "Region name"
       },
       "territorial dispute": {
-        "weight": 6,
+        "weight": 2,
         "description": "Regular conflict term"
       },
       "trade dispute": {
-        "weight": 6,
+        "weight": 2,
         "description": "Common economic term"
       },
       "treaty violation": {
-        "weight": 7,
+        "weight": 3,
         "description": "Common diplomatic term"
       },
       "UAE": {
@@ -180,7 +180,7 @@
         "description": "Country name"
       },
       "UN resolution": {
-        "weight": 5,
+        "weight": 2,
         "description": "Regular diplomatic term"
       },
       "West Bank": {
