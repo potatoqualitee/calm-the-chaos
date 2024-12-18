@@ -50,6 +50,10 @@
                 "weight": 1,
                 "description": "Common healthcare term"
             },
+            "Equal Rights Amendment": {
+                "weight": 2,
+                "description": "Frequent civil rights legislation"
+            },
             "entitlement cut": {
                 "weight": 1,
                 "description": "Common policy term"

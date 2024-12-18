@@ -38,6 +38,10 @@
                 "weight": 3,
                 "description": "Frequent Senate figure"
             },
+            "Brian Thompson": {
+                "weight": 3,
+                "description": "Frequent political figure"
+            },
             "Bill Barr": {
                 "weight": 1,
                 "description": "Regular former official"
@@ -269,6 +273,10 @@
             "Lloyd Austin": {
                 "weight": 1,
                 "description": "Regular cabinet official"
+            },
+            "Luigi Mangione": {
+                "weight": 3,
+                "description": "Highly frequent political figure"
             },
             "Marjorie Taylor Greene": {
                 "weight": 3,

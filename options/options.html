@@ -3,7 +3,8 @@
 <head>
   <title>Content Filter Settings</title>
   <link rel="stylesheet" href="options.css">
-  <script src="optionsErrorHandling.js"></script>
+  <script src="optionsErrorHandling.js" type="module"></script>
+  <script src="options.js" type="module"></script>
 </head>
 <body>
   <div class="container">
@@ -136,6 +137,7 @@
           </label>
           <span class="mode-text">Filter Reddit Comments</span>
         </div>
+      </div>
       <div class="content-section">
         <h3>Element Groups</h3>
         <div class="info">
@@ -258,19 +260,41 @@
 
     <div id="about" class="tab-content">
       <div class="content-section">
-        <h3>About Calm the Chaos</h3>
-        <div class="info">
-          Calm the Chaos is a browser extension that helps you filter out unwanted content from your web browsing experience. It provides powerful keyword-based filtering across various platforms and content types.
+        <div class="about-header">
+          <div class="creator-image-container">
+            <img src="../images/cl.png" alt="Creator" class="creator-image" loading="lazy" width="80" height="80">
+          </div>
+          <div class="about-title">
+            <h2>Calm the Chaos</h2>
+          </div>
         </div>
-        <div class="info">
-          This extension is open source and maintained by Chrissy LeMaire. Visit the GitHub repository to contribute, report issues, or learn more about the project:
-          <br><br>
-          <a href="https://github.com/potatoqualitee/calm-the-chaos" target="_blank" style="color: #4285f4; text-decoration: none;">github.com/potatoqualitee/calm-the-chaos</a>
+        <div class="about-description">
+          <p>A browser extension that filters unwanted content related to conflict, violence, and inflammatory rhetoric across
+            every website.</p>
+          <p style="margin-top: 16px">This project was built with <a href="https://github.com/cline/cline">Cline</a> and other
+            AI tools to help make the web a calmer place.</p>
+        </div>
+        <div class="about-links">
+          <div class="about-link">
+            <span class="link-label">Created by:</span>
+            <a href="https://bsky.app/profile/funbucket.dev" target="_blank" class="link-value">Chrissy LeMaire</a>
+          </div>
+          <div class="about-link">
+            <span class="link-label">GitHub:</span>
+            <a href="https://github.com/potatoqualitee/calm-the-chaos" target="_blank"
+              class="link-value">github.com/potatoqualitee/calm-the-chaos</a>
+          </div>
+        </div>
+<div class="sponsor-section">
+  <p class="sponsor-text">Support the development of Calm the Chaos</p>
+  <a href="https://github.com/sponsors/potatoqualitee" target="_blank" class="sponsor-button">
+    <img src="../images/sponsor.svg" alt="Sponsor on GitHub">
+    <span>Become a Sponsor</span>
+  </a>
         </div>
       </div>
     </div>
   </div>
 
-  <script src="options.js" onerror="handleScriptError(event)"></script>
 </body>
 </html>

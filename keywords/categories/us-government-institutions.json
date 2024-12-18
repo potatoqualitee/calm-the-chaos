@@ -314,6 +314,10 @@
                 "weight": 0,
                 "description": "Regular position title"
             },
+            "FTC": {
+                "weight": 2,
+                "description": "Common regulatory agency"
+            },
             "Federal agency": {
                 "weight": 0,
                 "description": "Regular structure term"

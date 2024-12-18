@@ -26,6 +26,10 @@
                 "weight": 0,
                 "description": "Technical tax term"
             },
+            "CEO": {
+                "weight": 3,
+                "description": "Highly frequent corporate term"
+            },
             "CEO pay": {
                 "weight": 2,
                 "description": "Frequent inequality term"

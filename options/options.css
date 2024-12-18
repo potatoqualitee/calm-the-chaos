@@ -83,6 +83,102 @@ body {
     padding-bottom: 0;
 }
 
+/* About Section Styles */
+.about-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.creator-image-container {
+    margin-right: 20px;
+}
+
+.creator-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #4285f4;
+}
+
+.about-title h2 {
+    margin: 0;
+    color: #202124;
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.about-description {
+    margin: 20px 0;
+    line-height: 1.6;
+}
+
+.about-description p {
+    margin: 0;
+    color: #5f6368;
+    font-size: 15px;
+}
+
+.about-links {
+    margin: 24px 0;
+}
+
+.about-link {
+    margin: 12px 0;
+}
+
+.link-label {
+    color: #5f6368;
+    font-size: 14px;
+    margin-right: 8px;
+}
+
+.link-value {
+    color: #4285f4;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.link-value:hover {
+    text-decoration: underline;
+}
+
+.sponsor-section {
+    margin-top: 32px;
+    padding: 24px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.sponsor-text {
+    margin: 0 0 16px 0;
+    color: #202124;
+    font-weight: 500;
+}
+
+.sponsor-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 24px;
+    background: #4285f4;
+    color: white;
+    text-decoration: none;
+    border-radius: 24px;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+.sponsor-button:hover {
+    background: #3367d6;
+}
+
+.sponsor-button img {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+}
 h3 {
     color: #202124;
     font-size: 16px;
@@ -255,16 +351,21 @@ h4 {
 }
 
 input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+        height: 16px;
     cursor: pointer;
-    border: 2px solid #5f6368;
+    border: 1.5px solid #5f6368;
     border-radius: 3px;
     appearance: none;
     -webkit-appearance: none;
     position: relative;
     background: white;
     transition: all 0.2s ease;
+    margin: 0;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
 }
 
 input[type="checkbox"]:checked {
@@ -274,14 +375,12 @@ input[type="checkbox"]:checked {
 
 input[type="checkbox"]:checked::after {
     content: '';
-    position: absolute;
-    left: 5px;
-    top: 2px;
-    width: 5px;
-    height: 10px;
+    display: block;
+        width: 4px;
+        height: 8px;
     border: solid white;
     border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
+    transform: rotate(45deg) translate(-1px, -1px);
 }
 
 .custom-keywords {

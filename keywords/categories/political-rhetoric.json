@@ -270,6 +270,10 @@
                 "weight": 2,
                 "description": "Frequent political label"
             },
+            "fascism": {
+                "weight": 3,
+                "description": "Highly frequent ideology term"
+            },
             "fake news": {
                 "weight": 3,
                 "description": "Highly frequent media term"
@@ -322,6 +326,14 @@
                 "weight": 3,
                 "description": "Highly frequent policy term"
             },
+            "oligarchy": {
+                "weight": 2,
+                "description": "Frequent system criticism"
+            },
+            "polarization": {
+                "weight": 2,
+                "description": "Frequent social division term"
+            },
             "political correctness": {
                 "weight": 1,
                 "description": "Common cultural term"
@@ -345,6 +357,10 @@
             "threat to democracy": {
                 "weight": 3,
                 "description": "Highly frequent political phrase"
+            },
+            "thoughts and prayers": {
+                "weight": 1,
+                "description": "Common political response phrase"
             },
             "virtue signaling": {
                 "weight": 1,

@@ -130,6 +130,10 @@
                 "weight": 2,
                 "description": "Common Senate figure"
             },
+            "Mangione": {
+                "weight": 3,
+                "description": "Frequent political figure"
+            },
             "McConnell": {
                 "weight": 3,
                 "description": "Frequent Senate leader"

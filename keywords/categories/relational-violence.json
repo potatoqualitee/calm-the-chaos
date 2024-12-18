@@ -110,6 +110,10 @@
                 "weight": 3,
                 "description": "Highly frequent exploitation term"
             },
+            "sex crime": {
+                "weight": 3,
+                "description": "Highly frequent criminal term"
+            },
             "sexual assault": {
                 "weight": 2,
                 "description": "Frequent violence term"
@@ -141,6 +145,10 @@
             "interpersonal violence": {
                 "weight": 1,
                 "description": "Regular harm term"
+            },
+            "killing": {
+                "weight": 2,
+                "description": "Frequent violence term"
             },
             "violence in relationships": {
                 "weight": 1,
