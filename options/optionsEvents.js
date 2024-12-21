@@ -281,6 +281,17 @@ export async function importFromAllUrls() {
 export function setupEventListeners() {
   console.log('Setting up event listeners...');
 
+  // Listen for storage changes
+  chrome.storage.onChanged.addListener((changes, namespace) => {
+    if (namespace === 'local' && changes.allTimeKeywordStats) {
+      console.log('Keyword stats updated:', changes.allTimeKeywordStats);
+      const statsTab = document.querySelector('.tab-button[data-tab="stats"]');
+      if (statsTab?.classList.contains('active')) {
+        updateStats();
+      }
+    }
+  });
+
   // Domain events
   const addDomainButton = document.getElementById('addDomain');
   const newDomainInput = document.getElementById('newDomain');

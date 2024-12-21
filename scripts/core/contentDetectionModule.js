@@ -3,6 +3,7 @@
 import { getBlockedRegex } from './managers/regexManager.js';
 import { chromeStorageGet } from '../utils/chromeApi.js';
 import { LINKEDIN_EXCEPTIONS } from './config/keywords.js';
+import { storageManager } from './managers/storageManager.js';
 
 class ContentDetector {
     constructor() {
@@ -118,6 +119,50 @@ class ContentDetector {
     }
 
     /**
+     * Update stats for matched keywords
+     * @param {string[]} matches - Array of matched keywords
+     * @private
+     */
+    updateStats(matches) {
+        if (matches.length > 0) {
+            chrome.storage.local.get('allTimeKeywordStats', (storage) => {
+                const stats = storage.allTimeKeywordStats || {};
+                const normalizedStats = {};
+
+                // First, normalize existing stats
+                Object.entries(stats).forEach(([key, count]) => {
+                    const normalized = storageManager.normalizeKeyword(key);
+                    if (normalized) { // Skip empty strings
+                        normalizedStats[normalized] = (normalizedStats[normalized] || 0) + count;
+                    }
+                });
+
+                // Add new matches
+                matches.forEach(match => {
+                    const normalized = storageManager.normalizeKeyword(match);
+                    if (normalized) { // Skip empty strings
+                        normalizedStats[normalized] = (normalizedStats[normalized] || 0) + 1;
+                    }
+                });
+
+                // Convert back to title case for display
+                const finalStats = {};
+                Object.entries(normalizedStats).forEach(([key, count]) => {
+                    // Convert to title case
+                    const displayKey = key.length <= 3 ?
+                        key.toUpperCase() : // Keep short words (like CIA) uppercase
+                        key.split(' ').map(word =>
+                            word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+                        ).join(' ');
+                    finalStats[displayKey] = count;
+                });
+
+                chrome.storage.local.set({ allTimeKeywordStats: finalStats });
+            });
+        }
+    }
+
+    /**
      * Check if text contains blocked content
      * @param {string} text - Text to check
      * @returns {string[]} - Array of matched blocked content
@@ -145,24 +190,27 @@ class ContentDetector {
             const regex = this.initializeRegex();
             if (!regex) return [];
 
-            const matches = new Set();
+            const matches = [];
             let match;
 
             // Reset regex lastIndex to ensure consistent matching
             regex.lastIndex = 0;
 
-            // Store original matches to maintain case
+            // Store all matches to maintain count
             while ((match = regex.exec(text)) !== null) {
                 const matchedText = match[0].toLowerCase();
                 // If on LinkedIn (but not profile), check if the match is in the exceptions list
                 if (!this.isLinkedIn || !LINKEDIN_EXCEPTIONS.some(exception =>
                     matchedText.includes(exception.toLowerCase())
                 )) {
-                    matches.add(match[0]); // Keep original case
+                    matches.push(match[0]); // Keep original case and count duplicates
                 }
             }
 
-            const result = Array.from(matches);
+            const result = matches; // Keep all matches including duplicates
+
+            // Update stats asynchronously
+            this.updateStats(result);
 
             // Cache the result and mark content as processed
             this.matchCache.set(normalizedText, result);
@@ -268,9 +316,9 @@ class ContentDetector {
     /**
      * Check if element contains blocked content in its text or attributes
      * @param {Element} element - Element to check
-     * @returns {Promise<boolean>} - Whether element contains blocked content
+     * @returns {boolean} - Whether element contains blocked content
      */
-    async elementContainsBlockedContent(element) {
+    elementContainsBlockedContent(element) {
         try {
             // Skip filtering for LinkedIn profile pages and SpeedReader
             if (this.isLinkedInProfile || this.isSpeedReader) {
@@ -281,7 +329,15 @@ class ContentDetector {
             // Quick check if no regex pattern is available
             if (!this.initializeRegex()) return false;
 
-            const settings = await this.getImageSettings();
+            const settings = this.imageSettings || {
+                enabled: true,
+                context: {
+                    altText: true,
+                    captions: true,
+                    nearbyText: true,
+                    srcUrl: true
+                }
+            };
 
             // Handle image elements based on settings
             if (element.tagName === 'IMG' || element.tagName === 'PICTURE' || element.tagName === 'SVG') {
@@ -313,9 +369,10 @@ class ContentDetector {
                 }
 
                 // Check each unique piece of content
-                return Array.from(contentToCheck).some(content =>
-                    this.containsBlockedContent(content).length > 0
-                );
+                return Array.from(contentToCheck).some(content => {
+                    const matches = this.containsBlockedContent(content);
+                    return matches.length > 0;
+                });
             }
 
             // For non-image elements, check if it's an image container
@@ -336,7 +393,8 @@ class ContentDetector {
             // For regular elements, check text content
             const textContent = element.textContent ? element.textContent.trim() : '';
             if (textContent) {
-                return this.containsBlockedContent(textContent).length > 0;
+                const matches = this.containsBlockedContent(textContent);
+                return matches.length > 0;
             }
 
             return false;

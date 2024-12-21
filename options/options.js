@@ -32,7 +32,8 @@ export async function initializeSettings() {
       'imageContext',
       'imageContainerStyle',
       'filterRedditCommentThreads',
-      'showBlurMessage'
+      'showBlurMessage',
+      'allTimeKeywordStats'
     ]);
 
     console.log('Initial storage data:', result);
@@ -101,6 +102,9 @@ export async function initializeSettings() {
     let checkForUpdates = result.checkForUpdates !== undefined ? result.checkForUpdates : true;
     let collapseStyle = result.collapseStyle || 'hideCompletely';
 
+    // Initialize allTimeKeywordStats if not present
+    const allTimeKeywordStats = result.allTimeKeywordStats || {};
+
     // Sort custom items alphabetically
     customKeywords.sort();
     customDomains.sort();
@@ -124,7 +128,8 @@ export async function initializeSettings() {
       imageContext,
       imageContainerStyle,
       filterRedditCommentThreads,
-      showBlurMessage
+      showBlurMessage,
+      allTimeKeywordStats
     });
 
     console.log('Updating UI...');
@@ -140,6 +145,7 @@ export async function initializeSettings() {
     ui.updateElementGroups(elementGroups, disabledElementGroups, disabledElements);
     ui.updateFilteringModeText(filteringEnabled);
     ui.updateConfigUrls(configUrls);
+    ui.updateStats();
 
     // Update form elements
     const matchingOptionInput = document.querySelector(`input[name="matchingOptions"][value="${matchingOption}"]`);

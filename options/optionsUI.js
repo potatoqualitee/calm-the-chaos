@@ -4,38 +4,32 @@ import * as storage from './optionsStorage.js';
 
 // New function to update stats table
 export async function updateStats() {
+  console.log('Updating stats...');
   const statsContainer = document.getElementById('keywordStats');
-  if (!statsContainer) return;
+  if (!statsContainer) {
+    console.error('Stats container not found');
+    return;
+  }
 
-  // Get all storage keys to find blocked keyword data
-  const allStorage = await chrome.storage.local.get(null);
-  const keywordStats = new Map();
-
-  // Aggregate stats from all tabs
-  Object.entries(allStorage).forEach(([key, value]) => {
-    if (key.startsWith('blockedKeywords_')) {
-      value.forEach(item => {
-        if (item.blockedKeywords && Array.isArray(item.blockedKeywords)) {
-          // Use blockedKeywords which are now normalized from contentDetectionModule
-          item.blockedKeywords.forEach(keyword => {
-            const count = keywordStats.get(keyword) || 0;
-            keywordStats.set(keyword, count + (item.count || 1));
-          });
-        }
-      });
-    }
-  });
+  // Get all-time keyword stats
+  const allStorage = await chrome.storage.local.get('allTimeKeywordStats');
+  console.log('Retrieved stats from storage:', allStorage);
+  const keywordStats = allStorage.allTimeKeywordStats || {};
+  console.log('Keyword stats:', keywordStats);
 
   // Convert to array and sort by count
-  const sortedStats = [...keywordStats.entries()]
+  const sortedStats = Object.entries(keywordStats)
     .sort((a, b) => b[1] - a[1]);
+  console.log('Sorted stats:', sortedStats);
 
+  console.log('Creating stats grid...');
   // Create grid container
   const grid = document.createElement('div');
   grid.className = 'stats-table';
 
   // Add stat items
   sortedStats.forEach(([keyword, count]) => {
+    console.log(`Adding stat item: ${keyword} (${count})`);
     const statItem = document.createElement('div');
     statItem.className = 'stat-item';
 
@@ -54,10 +48,12 @@ export async function updateStats() {
 
   // If no stats, show message
   if (sortedStats.length === 0) {
+    console.log('No stats available, showing empty state');
     // The empty state message will be handled by CSS :empty pseudo-class
     statsContainer.innerHTML = '';
     statsContainer.appendChild(document.createElement('div'));
   } else {
+    console.log(`Displaying ${sortedStats.length} stat items`);
     statsContainer.innerHTML = '';
     statsContainer.appendChild(grid);
   }
