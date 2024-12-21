@@ -76,6 +76,7 @@ export const DEFAULT_IGNORED_URLS = {
   ],
   'Collaboration Tools': [
     '.gotomeeting.com',
+    'mutesky.app',
     '.ringcentral.com',
     '.webex.com'
   ],
