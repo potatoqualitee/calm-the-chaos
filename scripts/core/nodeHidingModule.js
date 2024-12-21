@@ -76,11 +76,12 @@ const nodeHider = new class NodeHider {
 
             // Update badge and stats with total occurrences
             if (this.currentTabId) {
+                // Avoid layout thrashing by not counting all elements
                 chrome.runtime.sendMessage({
                     type: 'updateBlockCount',
                     tabId: this.currentTabId,
                     count: this.totalOccurrences,
-                    total: document.body.getElementsByTagName('*').length
+                    total: 0 // Remove expensive DOM query
                 });
             }
         }
@@ -169,24 +170,59 @@ const nodeHider = new class NodeHider {
      * @param {string} collapseStyle - The style to use when hiding elements
      */
     handleParentContainers(container, collapseStyle) {
+        // Cache computed styles to avoid layout thrashing
+        const computedStyles = new Map();
+        const getComputedStyleCached = (element) => {
+            if (!computedStyles.has(element)) {
+                computedStyles.set(element, window.getComputedStyle(element));
+            }
+            return computedStyles.get(element);
+        };
+
+        // Batch style reads and writes
+        const styleUpdates = [];
         let parent = container.parentElement;
+
+        // First pass: gather all style reads
         while (parent && parent !== document.body) {
             if (parent.tagName === 'SHREDDIT-POST') break;
 
-            const style = window.getComputedStyle(parent);
-            if (style.display.includes('grid') || style.display.includes('flex')) {
-                parent.style.gap = '0.5rem';
+            const style = getComputedStyleCached(parent);
+            const isFlexOrGrid = style.display.includes('grid') || style.display.includes('flex');
+
+            if (collapseStyle === 'hideCompletely') {
+                const hasVisibleContent = Array.from(parent.children).some(child => {
+                    const childStyle = getComputedStyleCached(child);
+                    return childStyle.display !== 'none';
+                });
+
+                styleUpdates.push({
+                    element: parent,
+                    updates: {
+                        gap: isFlexOrGrid ? '0.5rem' : null,
+                        display: !hasVisibleContent ? 'none' : null
+                    }
+                });
+            } else if (isFlexOrGrid) {
+                styleUpdates.push({
+                    element: parent,
+                    updates: { gap: '0.5rem' }
+                });
             }
 
-            const hasVisibleContent = Array.from(parent.children).some(child =>
-                window.getComputedStyle(child).display !== 'none'
-            );
-
-            if (!hasVisibleContent && collapseStyle === 'hideCompletely') {
-                parent.style.display = 'none';
-            }
             parent = parent.parentElement;
         }
+
+        // Second pass: batch all style writes
+        requestAnimationFrame(() => {
+            styleUpdates.forEach(({ element, updates }) => {
+                Object.entries(updates).forEach(([prop, value]) => {
+                    if (value !== null) {
+                        element.style[prop] = value;
+                    }
+                });
+            });
+        });
     }
 
     /**

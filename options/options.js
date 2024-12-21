@@ -32,6 +32,7 @@ export async function initializeSettings() {
       'imageContext',
       'imageContainerStyle',
       'filterRedditCommentThreads',
+      'filterFacebookCommentThreads',
       'showBlurMessage',
       'allTimeKeywordStats'
     ]);
@@ -71,6 +72,12 @@ export async function initializeSettings() {
       result.filterRedditCommentThreads :
       DEFAULT_ELEMENT_SETTINGS.filterRedditCommentThreads;
     await storage.setStorageData({ filterRedditCommentThreads });
+
+    // Initialize Facebook settings
+    let filterFacebookCommentThreads = result.filterFacebookCommentThreads !== undefined ?
+      result.filterFacebookCommentThreads :
+      DEFAULT_ELEMENT_SETTINGS.filterFacebookCommentThreads;
+    await storage.setStorageData({ filterFacebookCommentThreads });
 
     // Initialize blur message settings
     let showBlurMessage = result.showBlurMessage !== undefined ?
@@ -162,6 +169,9 @@ export async function initializeSettings() {
 
     const filterRedditInput = document.getElementById('filterRedditCommentThreads');
     if (filterRedditInput) filterRedditInput.checked = filterRedditCommentThreads;
+
+    const filterFacebookInput = document.getElementById('filterFacebookCommentThreads');
+    if (filterFacebookInput) filterFacebookInput.checked = filterFacebookCommentThreads;
 
     const showBlurMessageInput = document.getElementById('showBlurMessage');
     if (showBlurMessageInput) showBlurMessageInput.checked = showBlurMessage;

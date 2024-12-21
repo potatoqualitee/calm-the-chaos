@@ -375,3 +375,7 @@ export async function setCollapseStyle(style) {
 export async function setFilterRedditCommentThreads(enabled) {
   await setStorageData({ filterRedditCommentThreads: enabled });
 }
+
+export async function setFilterFacebookCommentThreads(enabled) {
+  await setStorageData({ filterFacebookCommentThreads: enabled });
+}

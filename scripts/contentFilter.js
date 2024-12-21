@@ -28,10 +28,14 @@ async function handleGenericSites(nodesToHide) {
             {
                 acceptNode: function(node) {
                     try {
-                        if (containsBlockedContent(node.textContent).length > 0) {
-                            return NodeFilter.FILTER_ACCEPT;
+                        // Skip text nodes in editable content
+                        if (node.parentElement?.isContentEditable) {
+                            return NodeFilter.FILTER_REJECT;
                         }
-                        return NodeFilter.FILTER_REJECT;
+
+                        return containsBlockedContent(node.textContent).length > 0
+                            ? NodeFilter.FILTER_ACCEPT
+                            : NodeFilter.FILTER_REJECT;
                     } catch (error) {
                         console.debug('Error in walker acceptNode:', error);
                         return NodeFilter.FILTER_REJECT;

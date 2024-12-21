@@ -472,6 +472,15 @@ export function setupEventListeners() {
     }
   });
 
+  // Facebook comment thread filtering toggle
+  const filterFacebookInput = document.getElementById('filterFacebookCommentThreads');
+  filterFacebookInput?.addEventListener('change', async (e) => {
+    if (e.target instanceof HTMLInputElement) {
+      await storage.setFilterFacebookCommentThreads(e.target.checked);
+      initializeSettings();
+    }
+  });
+
   // Blur message toggle
   const showBlurMessageInput = document.getElementById('showBlurMessage');
   showBlurMessageInput?.addEventListener('change', async (e) => {

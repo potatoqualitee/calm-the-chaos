@@ -57,5 +57,6 @@ export const DEFAULT_ELEMENT_GROUPS = {
 
 export const DEFAULT_ELEMENT_SETTINGS = {
   filterRedditCommentThreads: true,
+  filterFacebookCommentThreads: true,
   showBlurMessage: true
 };

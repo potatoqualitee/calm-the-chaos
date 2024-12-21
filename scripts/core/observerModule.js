@@ -23,18 +23,29 @@ class ContentObserver {
             characterData: false
         };
 
-        // Optimized constants for heavy sites like CNN
-        this.DEBOUNCE_DELAY = 50; // Faster initial response
-        this.BATCH_SIZE = 50; // Larger batches for better throughput
+        // Optimized constants for heavy sites
+        this.DEBOUNCE_DELAY = 100; // Increased delay for better performance
+        this.BATCH_SIZE = 100; // Larger default batch size
         this.MAX_QUEUE_SIZE = 2000; // Larger queue for heavy sites
-        this.HEAVY_MUTATION_THRESHOLD = 100; // Higher threshold for disconnect
+        this.HEAVY_MUTATION_THRESHOLD = 200; // Higher threshold for disconnect
+        this.reconnectDelay = 2000; // Longer reconnect delay to reduce thrashing
 
         // Site-specific optimizations
-        this.isCNN = window.location.hostname.includes('cnn.com');
-        if (this.isCNN) {
-            // CNN-specific settings
-            this.BATCH_SIZE = 100; // Even larger batches for CNN
+        const hostname = window.location.hostname;
+        this.isCNN = hostname.includes('cnn.com');
+        this.isFacebook = hostname.includes('facebook.com');
+
+        if (this.isCNN || this.isFacebook) {
+            // Settings for heavy social/news sites
+            this.BATCH_SIZE = 200;
+            this.DEBOUNCE_DELAY = 150;
             this.observerConfig.attributeFilter = ['class', 'style']; // Only watch relevant attributes
+
+            if (this.isFacebook) {
+                // Facebook-specific optimizations
+                this.HEAVY_MUTATION_THRESHOLD = 300; // Higher threshold for Facebook's frequent updates
+                this.reconnectDelay = 3000; // Longer delay for Facebook
+            }
         }
 
         // Bind methods to maintain context
@@ -255,21 +266,69 @@ class ContentObserver {
      * Handle heavy mutation loads with temporary disconnect
      */
     handleHeavyMutations() {
-        if (this.observer) {
-            this.observer.disconnect();
+        if (!this.observer) return;
 
-            if (this.disconnectTimeout) {
-                clearTimeout(this.disconnectTimeout);
-            }
+        // Temporarily pause observation
+        this.observer.disconnect();
 
-            this.disconnectTimeout = setTimeout(() => {
-                if (this.observer) {
-                    this.observer.observe(document.body, this.observerConfig);
-                }
-            }, this.reconnectDelay);
+        if (this.disconnectTimeout) {
+            clearTimeout(this.disconnectTimeout);
         }
 
-        this.debouncedProcessQueue();
+        // Process mutations in chunks to avoid blocking
+        const processChunk = async () => {
+            const nodesToProcess = new Set();
+            let processedCount = 0;
+            const chunkSize = this.isFacebook ? 50 : 100;
+
+            // Get a chunk of mutations
+            for (const [parent, nodes] of this.mutationQueue) {
+                if (processedCount >= chunkSize) break;
+
+                const nodeArray = Array.from(nodes);
+                const chunk = nodeArray.slice(0, chunkSize - processedCount);
+                chunk.forEach(node => {
+                    nodesToProcess.add(node);
+                    nodes.delete(node);
+                });
+
+                if (nodes.size === 0) {
+                    this.mutationQueue.delete(parent);
+                }
+
+                processedCount += chunk.length;
+            }
+
+            if (nodesToProcess.size > 0) {
+                // Process this chunk
+                await filterContent(Array.from(nodesToProcess));
+
+                // Schedule next chunk if there are more mutations
+                if (this.mutationQueue.size > 0) {
+                    setTimeout(processChunk, 16); // ~1 frame delay
+                } else {
+                    // Resume observation after all chunks are processed
+                    this.reconnectObserver();
+                }
+            } else {
+                this.reconnectObserver();
+            }
+        };
+
+        // Start processing chunks
+        requestAnimationFrame(() => processChunk());
+    }
+
+    reconnectObserver() {
+        if (this.disconnectTimeout) {
+            clearTimeout(this.disconnectTimeout);
+        }
+
+        this.disconnectTimeout = setTimeout(() => {
+            if (this.observer && document.body) {
+                this.observer.observe(document.body, this.observerConfig);
+            }
+        }, this.reconnectDelay);
     }
 
     /**
