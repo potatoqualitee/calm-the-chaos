@@ -106,6 +106,10 @@
                 "weight": 1,
                 "description": "Moderate-use House figure"
             },
+            "Hochul": {
+                "weight": 0,
+                "description": "Regular governor"
+            },
             "Ilhan": {
                 "weight": 2,
                 "description": "Common House figure"

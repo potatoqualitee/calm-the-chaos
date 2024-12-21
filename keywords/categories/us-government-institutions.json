@@ -74,6 +74,10 @@
                 "weight": 1,
                 "description": "Common position title"
             },
+            "child care bills": {
+                "weight": 0,
+                "description": "Common legislation term"
+            },
             "CIA": {
                 "weight": 1,
                 "description": "Frequent agency name"
@@ -250,6 +254,10 @@
                 "weight": 1,
                 "description": "Common position title"
             },
+            "disaster relief": {
+                "weight": 0,
+                "description": "Common funding term"
+            },
             "DNI": {
                 "weight": 0,
                 "description": "Regular acronym"
@@ -301,6 +309,10 @@
             "Executive Order": {
                 "weight": 1,
                 "description": "Frequent policy term"
+            },
+            "federal authority": {
+                "weight": 0,
+                "description": "Common governance term"
             },
             "executive session": {
                 "weight": 0,
@@ -398,6 +410,10 @@
                 "weight": 0,
                 "description": "Basic agency name"
             },
+            "government funded": {
+                "weight": 0,
+                "description": "Common budget term"
+            },
             "Government agency": {
                 "weight": 0,
                 "description": "Basic structure term"
@@ -450,6 +466,10 @@
                 "weight": 1,
                 "description": "Common institution name"
             },
+            "House passes": {
+                "weight": 0,
+                "description": "Common legislative action term"
+            },
             "House parliamentarian": {
                 "weight": 0,
                 "description": "Basic position title"
@@ -481,6 +501,10 @@
             "Intelligence community": {
                 "weight": 1,
                 "description": "Common structure term"
+            },
+            "intel officials": {
+                "weight": 0,
+                "description": "Common government personnel term"
             },
             "Internal Revenue Service": {
                 "weight": 1,
@@ -646,6 +670,10 @@
                 "weight": 1,
                 "description": "Frequent position acronym"
             },
+            "political power struggle": {
+                "weight": 0,
+                "description": "Common political conflict term"
+            },
             "Press Secretary": {
                 "weight": 1,
                 "description": "Common position title"
@@ -657,6 +685,10 @@
             "Project 2025": {
                 "weight": 1,
                 "description": "Common initiative name"
+            },
+            "proof of citizenship": {
+                "weight": 0,
+                "description": "Common documentation term"
             },
             "quorum call": {
                 "weight": 0,
@@ -702,6 +734,10 @@
                 "weight": 0,
                 "description": "Regular position title"
             },
+            "secession": {
+                "weight": 0,
+                "description": "Common political conflict term"
+            },
             "Secretary of Health and Human Services": {
                 "weight": 1,
                 "description": "Common position title"
@@ -741,6 +777,10 @@
             "shutdown threat": {
                 "weight": 3,
                 "description": "Highly frequent crisis term"
+            },
+            "shutdown looms": {
+                "weight": 0,
+                "description": "Common crisis term"
             },
             "Senate": {
                 "weight": 1,
@@ -798,6 +838,10 @@
                 "weight": 1,
                 "description": "Frequent position title"
             },
+            "spending bill": {
+                "weight": 0,
+                "description": "Common legislation term"
+            },
             "Speakership": {
                 "weight": 2,
                 "description": "Frequent leadership term"
@@ -846,6 +890,10 @@
                 "weight": 0,
                 "description": "Regular position title"
             },
+            "top court": {
+                "weight": 0,
+                "description": "Common judicial term"
+            },
             "Transportation Security Administration": {
                 "weight": 0,
                 "description": "Regular agency name"
@@ -882,9 +930,21 @@
                 "weight": 0,
                 "description": "Basic agency acronym"
             },
+            "US House": {
+                "weight": 0,
+                "description": "Common legislative body term"
+            },
+            "US restrictions": {
+                "weight": 0,
+                "description": "Common policy term"
+            },
             "Veterans Affairs Committee": {
                 "weight": 0,
                 "description": "Regular committee name"
+            },
+            "veto": {
+                "weight": 0,
+                "description": "Common executive action term"
             },
             "Vice President": {
                 "weight": 1,

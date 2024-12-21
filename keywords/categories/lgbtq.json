@@ -82,6 +82,10 @@
                 "weight": 2,
                 "description": "Frequent rights term"
             },
+            "targeted lgbtq": {
+                "weight": 0,
+                "description": "Frequent discrimination term"
+            },
             "trans people": {
                 "weight": 0,
                 "description": "Basic demographic term"

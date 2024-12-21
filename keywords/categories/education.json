@@ -90,6 +90,10 @@
                 "weight": 1,
                 "description": "Common religious debate term"
             },
+            "sex-ed curriculum": {
+                "weight": 0,
+                "description": "Frequent education controversy term"
+            },
             "sex education": {
                 "weight": 2,
                 "description": "Frequent curriculum debate term"

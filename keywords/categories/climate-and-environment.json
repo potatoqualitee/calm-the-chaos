@@ -54,9 +54,17 @@
                 "weight": 1,
                 "description": "Common research term"
             },
+            "climate shock": {
+                "weight": 0,
+                "description": "Common climate impact term"
+            },
             "climate summit": {
                 "weight": 1,
                 "description": "Regular diplomatic term"
+            },
+            "climate-warming": {
+                "weight": 0,
+                "description": "Common climate change term"
             },
             "coal plant": {
                 "weight": 0,

@@ -2,6 +2,10 @@
     "Political Violence and Security Threats": {
         "description": "Terms related to political violence, security challenges, and extremist activities with potential to impact public safety",
         "keywords": {
+            "alarming development": {
+                "weight": 0,
+                "description": "Common security concern term"
+            },
             "armed militia": {
                 "weight": 2,
                 "description": "Frequent armed group term"
@@ -25,6 +29,10 @@
             "assassination attempt": {
                 "weight": 3,
                 "description": "Highly frequent violence term"
+            },
+            "attack suspect": {
+                "weight": 0,
+                "description": "Common security term"
             },
             "blm protest shooting": {
                 "weight": 2,
