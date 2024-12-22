@@ -72,38 +72,39 @@ async function filterContent(nodes = null) {
         return;
     }
 
+    // Get all required settings first
+    const result = await new Promise(resolve => {
+        chromeStorageGet([
+            'ignoredDomains',
+            'disabledDomainGroups',
+            'filteringEnabled',
+            'enabledDomains',
+            'filterAllSites'
+        ], resolve);
+    });
+
+    const {
+        ignoredDomains = {},
+        disabledDomainGroups = [],
+        filteringEnabled = true,
+        enabledDomains = [],
+        filterAllSites = false
+    } = result;
+
+    // Check if extension is enabled for this URL before doing ANY processing
+    if (!isExtensionEnabledOnUrl(
+        currentUrl,
+        ignoredDomains,
+        disabledDomainGroups,
+        filteringEnabled,
+        enabledDomains,
+        filterAllSites
+    )) {
+        console.log('Content filtering is disabled for this URL:', currentUrl);
+        return;
+    }
+
     try {
-        const result = await new Promise(resolve => {
-            chromeStorageGet([
-                'ignoredDomains',
-                'disabledDomainGroups',
-                'filteringEnabled',
-                'enabledDomains',
-                'filterAllSites'
-            ], resolve);
-        });
-
-        const {
-            ignoredDomains = {},
-            disabledDomainGroups = [],
-            filteringEnabled = true,
-            enabledDomains = [],
-            filterAllSites = false
-        } = result;
-
-        // Check if extension is enabled for this URL before doing any setup work
-        if (!isExtensionEnabledOnUrl(
-            currentUrl,
-            ignoredDomains,
-            disabledDomainGroups,
-            filteringEnabled,
-            enabledDomains,
-            filterAllSites
-        )) {
-            console.log('Content filtering is disabled for this URL:', currentUrl);
-            return;
-        }
-
         // Only get regex patterns if extension is enabled for this URL
         const BLOCKED_REGEX = getBlockedRegex();
 
