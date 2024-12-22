@@ -2,15 +2,29 @@
 import { initializeEventHandlers } from './eventHandlers.js';
 import { PRECONFIGURED_DOMAINS } from '../core/config/preconfiguredDomains.js';
 
-// Function to inject content scripts
-async function injectContentScripts(tabId) {
+import { needsImmediateBlur } from '../core/config/immediateBlur.js';
+
+// Function to inject content scripts and CSS
+async function injectContentScripts(tabId, url) {
     try {
+        // First check if this site needs immediate blur
+        const shouldBlur = needsImmediateBlur(url);
+
+        // Only inject blur CSS for sites that need immediate blur
+        if (shouldBlur) {
+            await chrome.scripting.insertCSS({
+                target: { tabId },
+                files: ['styles/immediate-site-blur.css']
+            });
+        }
+
+// Then inject the content script
         await chrome.scripting.executeScript({
             target: { tabId },
             files: ['content.js']
         });
     } catch (err) {
-        console.error('Failed to inject content script:', err);
+        console.error('Failed to inject scripts:', err);
     }
 }
 
@@ -54,7 +68,8 @@ async function hasAllSitesPermission() {
 
 // Handle tab updates
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
-    if (changeInfo.status === 'complete' && tab.url) {
+    // Handle document_start for blur CSS
+    if (changeInfo.status === 'loading' && tab.url) {
         // Check if this is a supported URL (http/https)
         if (!tab.url.match(/^https?:\/\//)) return;
 
@@ -71,7 +86,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
             }
 
             if (hasPermission || isDefaultSite(tab.url)) {
-                await injectContentScripts(tabId);
+                await injectContentScripts(tabId, tab.url);
             }
         } catch (err) {
             console.error('Error in tab update handler:', err);
@@ -91,7 +106,7 @@ chrome.action.onClicked.addListener(async (tab) => {
 
             const granted = await chrome.permissions.request(permission);
             if (granted) {
-                await injectContentScripts(tab.id);
+                await injectContentScripts(tabId, tab.url);
             }
         }
     } catch (err) {

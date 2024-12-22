@@ -27,11 +27,11 @@ import * as storage from '../../../options/optionsStorage.js';
 
 // Create and show blur overlay
 export async function showImmediateBlur() {
-    // Remove any existing overlay first
-    removeImmediateBlur();
-
-    // Remove initial blur by adding a class
-    document.documentElement.classList.add('blur-removed');
+    // Remove any existing overlay first (but don't remove initial blur yet)
+    const existingOverlay = document.getElementById('calm-chaos-blur-overlay');
+    if (existingOverlay && existingOverlay.parentNode) {
+        existingOverlay.parentNode.removeChild(existingOverlay);
+    }
 
     const overlay = document.createElement('div');
     overlay.id = 'calm-chaos-blur-overlay';
@@ -111,6 +111,11 @@ export async function showImmediateBlur() {
         overlay.appendChild(messageContainer);
     }
     document.documentElement.appendChild(overlay);
+
+    // Only remove the initial blur after the new overlay is in place
+    // This ensures continuous coverage without any gaps
+    document.documentElement.classList.add('blur-removed');
+
     return overlay;
 }
 

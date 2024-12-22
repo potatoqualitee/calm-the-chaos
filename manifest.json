@@ -160,15 +160,5 @@
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
   },
-  "content_scripts": [
-    {
-      "matches": [
-        "*://*.cnn.com/*"
-      ],
-      "css": [
-        "styles/immediate-site-blur.css"
-      ],
-      "run_at": "document_start"
-    }
-  ]
+  "content_scripts": []
 }
