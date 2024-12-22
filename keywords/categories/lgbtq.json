@@ -6,6 +6,10 @@
                 "weight": 2,
                 "description": "Frequent policy debate term"
             },
+            "anti-trans": {
+                "weight": 3,
+                "description": "Highly frequent criticism term"
+            },
             "bathroom ban": {
                 "weight": 2,
                 "description": "Frequent policy controversy term"
