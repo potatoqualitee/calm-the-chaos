@@ -85,12 +85,8 @@ function initializeExtension() {
                                 pendingMutations.set(node, mutation);
                             }
                         });
-                    } else if (mutation.type === 'characterData') {
-                        const content = mutation.target.textContent;
-                        // Only process text changes that actually contain blocked content
-                        if (content && containsBlockedContent(content).length > 0) {
-                            pendingMutations.set(mutation.target, mutation);
-                        }
+                    } else if (mutation.type === 'characterData' && mutation.target.textContent) {
+                        pendingMutations.set(mutation.target, mutation);
                     }
                 } catch (error) {
                     console.debug('Error processing mutation:', error);
@@ -100,15 +96,15 @@ function initializeExtension() {
             timeoutId = setTimeout(() => {
                 try {
                     if (pendingMutations.size > 0) {
-                        requestAnimationFrame(() => {
-                            // Process unique mutations
-                            const uniqueMutations = new Set(pendingMutations.values());
-                            if (uniqueMutations.size > 0) {
+                        const mutations = Array.from(pendingMutations.values());
+                        pendingMutations.clear();
+
+                        if (mutations.length > 0) {
+                            requestAnimationFrame(() => {
                                 startNewDetectionCycle();
-                                filterContent(Array.from(uniqueMutations));
-                            }
-                            pendingMutations.clear();
-                        });
+                                filterContent(mutations);
+                            });
+                        }
                     }
                 } catch (error) {
                     console.debug('Error in observer timeout callback:', error);
