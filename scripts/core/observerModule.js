@@ -34,17 +34,18 @@ class ContentObserver {
         const hostname = window.location.hostname;
         this.isCNN = hostname.includes('cnn.com');
         this.isFacebook = hostname.includes('facebook.com');
+        this.isInstagram = hostname.includes('instagram.com');
 
-        if (this.isCNN || this.isFacebook) {
+        if (this.isCNN || this.isFacebook || this.isInstagram) {
             // Settings for heavy social/news sites
             this.BATCH_SIZE = 200;
             this.DEBOUNCE_DELAY = 150;
             this.observerConfig.attributeFilter = ['class', 'style']; // Only watch relevant attributes
 
-            if (this.isFacebook) {
-                // Facebook-specific optimizations
-                this.HEAVY_MUTATION_THRESHOLD = 300; // Higher threshold for Facebook's frequent updates
-                this.reconnectDelay = 3000; // Longer delay for Facebook
+            if (this.isFacebook || this.isInstagram) {
+                // Social media specific optimizations
+                this.HEAVY_MUTATION_THRESHOLD = 300; // Higher threshold for frequent updates
+                this.reconnectDelay = 3000; // Longer delay for heavy social sites
             }
         }
 

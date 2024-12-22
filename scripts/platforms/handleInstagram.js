@@ -6,72 +6,41 @@ class InstagramHandler extends BaseHandler {
     constructor() {
         super();
         this.selectors = {
-            // Target both types of posts
-            posts: [
-                'article[role="presentation"]',
-                '[data-testid="post-container"]',
-                'div[role="button"] span[dir="auto"]'
-            ].join(', '),
+            // Optimized post selectors - target containers directly
+            posts: 'article[role="presentation"], [data-testid="post-container"]',
 
-            // Target post content including images
-            postContent: [
-                'div._aagv', // Image container
-                'img.x5yr21d', // Image element
-                'video.x5yr21d' // Video element
-            ].join(', '),
+            // Optimized media selectors
+            postContent: 'div._aagv, img.x5yr21d, video.x5yr21d, div._aabd',
 
-            // Target comments in both structures
-            comments: [
-                // List-based comments
-                'ul > div[role="button"]',
-                // Div-based comments
-                'div[role="button"] span[dir="auto"][style*="line-height"]',
-                // Additional comment text containers
-                'span._ap3a._aaco',
-                'div._a9zr'
-            ].join(', '),
+            // Optimized comment selectors - reduced nesting
+            comments: 'div._a9zr, ul._a9zj, div[role="button"]',
 
-            // Target specific text content
-            commentText: [
-                // Main comment text
-                'span[dir="auto"][style*="line-height"]',
-                // Additional text patterns
-                'span._ap3a._aaco',
-                'span[class*="_aad7"]',
-                'div._a9zs'
-            ].join(', ')
+            // Optimized text content selector - more specific
+            commentText: 'span._ap3a._aaco, div._a9zs, span[dir="auto"]'
         };
     }
 
     handlePreconfigured() {
-        // Handle Instagram posts
-        this.processSelectors([this.selectors.posts], (post) => {
-            // First check the post container itself
-            this.checkAndHideElement(post);
+        // Process posts and their content in a single pass
+        const posts = document.querySelectorAll(this.selectors.posts);
+        posts.forEach(post => {
+            // Check post container first
+            if (this.checkAndHideElement(post)) return;
 
-            // Then check post content (images, videos) and hide the entire article if matched
-            const contentElements = post.querySelectorAll(this.selectors.postContent);
-            this.processElements(contentElements, (element) => {
-                // Use the closest article as the hide target
-                const article = element.closest('article[role="presentation"]');
-                if (article) {
-                    this.checkAndHideElement(element, article);
-                }
-            }, 'Instagram post content');
-        }, 'Instagram post');
+            // Check media content
+            const media = post.querySelector(this.selectors.postContent);
+            if (media && this.checkAndHideElement(media, post)) return;
 
-        // Handle Instagram comments
-        this.processSelectors([this.selectors.comments], (comment) => {
-            // Check the comment container
-            this.checkAndHideElement(comment);
+            // Check comments efficiently
+            const comments = post.querySelectorAll(this.selectors.comments);
+            comments.forEach(comment => {
+                if (this.checkAndHideElement(comment)) return;
 
-            // Also check the specific text content
-            const textElements = comment.querySelectorAll(this.selectors.commentText);
-            this.processElements(textElements, (textElement) => {
-                // Use the parent comment container as the hide target
-                this.checkAndHideElement(textElement, comment);
-            }, 'Instagram comment text');
-        }, 'Instagram comment');
+                // Quick text content check
+                const text = comment.querySelector(this.selectors.commentText);
+                if (text) this.checkAndHideElement(text, comment);
+            });
+        });
     }
 }
 
