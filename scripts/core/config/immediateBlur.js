@@ -115,15 +115,20 @@ export async function showImmediateBlur() {
 }
 
 // Remove blur overlay
-export function removeImmediateBlur() {
+export function removeImmediateBlur(force = false) {
     const overlay = document.getElementById('calm-chaos-blur-overlay');
     if (overlay && overlay.parentNode) {
         overlay.parentNode.removeChild(overlay);
     }
 
-    // Only remove blur if we're not in a loading or sleeping state
-    const state = document.documentElement.getAttribute('data-calm-chaos-state');
-    if (state !== 'loading' && state !== 'sleeping') {
+    // Force removal or check state
+    if (force) {
         document.documentElement.classList.add('blur-removed');
+    } else {
+        // Only remove blur if we're not in a loading or sleeping state
+        const state = document.documentElement.getAttribute('data-calm-chaos-state');
+        if (state !== 'loading' && state !== 'sleeping') {
+            document.documentElement.classList.add('blur-removed');
+        }
     }
 }

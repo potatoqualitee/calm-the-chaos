@@ -144,6 +144,9 @@ async function checkAndInitialize() {
         // Check if extension is enabled for this URL
         if (!isExtensionEnabledOnUrl(currentUrl, ignoredDomains, disabledDomainGroups, filteringEnabled, enabledDomains)) {
             console.log('Extension disabled for this URL, skipping initialization');
+            // Force remove any blur since filtering is disabled
+            const { removeImmediateBlur } = await import('./core/config/immediateBlur.js');
+            removeImmediateBlur(true);
             cleanup(); // Ensure everything is cleaned up
             return;
         }
