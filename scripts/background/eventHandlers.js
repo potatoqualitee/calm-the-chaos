@@ -58,8 +58,9 @@ export function setupStartupHandler() {
   });
 }
 
-// Handle tab updates
+// Handle tab updates and wake-ups
 export function setupTabUpdateHandler() {
+  // Handle regular tab updates
   chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (changeInfo.status === 'loading') {
       resetPageStats(tabId);
@@ -67,6 +68,24 @@ export function setupTabUpdateHandler() {
       const url = tab.url || '';
       updateBadge(0, url);
       updateIcon(url);
+    }
+
+    // Handle tab wake-up from discarded state
+    if (changeInfo.discarded === false) {
+      console.log('Tab woken up:', tabId);
+      // Send message to re-initialize content filtering
+      chrome.tabs.sendMessage(tabId, {
+        type: 'extensionReloaded',
+        reason: 'tab_wake_up'
+      }).catch(error => {
+        // If content script isn't ready yet, retry after a short delay
+        setTimeout(() => {
+          chrome.tabs.sendMessage(tabId, {
+            type: 'extensionReloaded',
+            reason: 'tab_wake_up_retry'
+          }).catch(console.debug);
+        }, 1000);
+      });
     }
   });
 }

@@ -23,8 +23,11 @@ function cleanup() {
     nodeHider.reset();
     history.clear();
 
-    // Remove initial blur if it exists
-    document.documentElement.classList.add('blur-removed');
+    // Only remove blur if we're not in a loading or sleeping state
+    const state = document.documentElement.getAttribute('data-calm-chaos-state');
+    if (state !== 'loading' && state !== 'sleeping') {
+        document.documentElement.classList.add('blur-removed');
+    }
 }
 
 // Function to initialize extension features
@@ -173,19 +176,54 @@ async function checkAndInitialize() {
     }
 }
 
+// Set initial state
+document.documentElement.setAttribute('data-calm-chaos-state', 'loading');
+
+// Handle visibility changes
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+        // Remove any existing blur-removed class when tab becomes visible
+        document.documentElement.classList.remove('blur-removed');
+        document.documentElement.setAttribute('data-calm-chaos-state', 'loading');
+        // Re-run initialization
+        cleanup();
+        checkAndInitialize();
+    } else {
+        // When tab becomes hidden, prepare for potential sleep
+        document.documentElement.setAttribute('data-calm-chaos-state', 'sleeping');
+    }
+});
+
 // Initial check and setup
 checkAndInitialize();
 
-// Add message listener for extension reload and settings updates
+// Add message listener for extension reload, settings updates, and tab wake-up
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.type === 'extensionReloaded' || message.type === 'updateKeywords') {
-        // If SpeedReader is detected, ensure everything is cleaned up
+        console.log('Reinitializing due to:', message.reason || message.type);
+
+        // Clean up existing state
+        cleanup();
+
+        // If SpeedReader is detected, skip reinitialization
         if (isSpeedReader()) {
-            console.log('SpeedReader detected - cleaning up extension');
-            cleanup();
+            console.log('SpeedReader detected - skipping reinitialization');
             return;
         }
-        // Otherwise re-check if extension should be enabled and reinitialize if needed
-        checkAndInitialize();
+
+        // Force immediate reinitialization for tab wake-up
+        if (message.reason?.includes('tab_wake_up')) {
+            // Ensure the page is fully loaded before reinitializing
+            if (document.readyState === 'complete') {
+                checkAndInitialize();
+            } else {
+                window.addEventListener('load', () => {
+                    checkAndInitialize();
+                }, { once: true });
+            }
+        } else {
+            // Normal reinitialization for other cases
+            checkAndInitialize();
+        }
     }
 });
