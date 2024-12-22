@@ -121,6 +121,9 @@ export function removeImmediateBlur() {
         overlay.parentNode.removeChild(overlay);
     }
 
-    // Remove initial blur if it exists
-    document.documentElement.classList.add('blur-removed');
+    // Only remove blur if we're not in a loading or sleeping state
+    const state = document.documentElement.getAttribute('data-calm-chaos-state');
+    if (state !== 'loading' && state !== 'sleeping') {
+        document.documentElement.classList.add('blur-removed');
+    }
 }

@@ -23,11 +23,7 @@ function cleanup() {
     nodeHider.reset();
     history.clear();
 
-    // Only remove blur if we're not in a loading or sleeping state
-    const state = document.documentElement.getAttribute('data-calm-chaos-state');
-    if (state !== 'loading' && state !== 'sleeping') {
-        document.documentElement.classList.add('blur-removed');
-    }
+    // Do not remove blur during cleanup - let initialization handle it
 }
 
 // Function to initialize extension features
@@ -207,19 +203,21 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             return;
         }
 
-        // Force immediate reinitialization for tab wake-up
+        // For tab wake-up, apply immediate blur first if needed
         if (message.reason?.includes('tab_wake_up')) {
-            // Ensure the page is fully loaded before reinitializing
-            if (document.readyState === 'complete') {
-                checkAndInitialize();
-            } else {
-                window.addEventListener('load', () => {
-                    checkAndInitialize();
-                }, { once: true });
+            const hostname = window.location.hostname.replace(/^www\./, '');
+            if (needsImmediateBlur(hostname)) {
+                showImmediateBlur();
             }
-        } else {
-            // Normal reinitialization for other cases
+        }
+
+        // Then proceed with initialization
+        if (document.readyState === 'complete') {
             checkAndInitialize();
+        } else {
+            window.addEventListener('load', () => {
+                checkAndInitialize();
+            }, { once: true });
         }
     }
 });
