@@ -98,6 +98,10 @@
                 "weight": 0,
                 "description": "City name"
             },
+            "Kremlin": {
+                "weight": 3,
+                "description": "Russian government center/metonym"
+            },
             "Lebanon": {
                 "weight": 0,
                 "description": "Country name"

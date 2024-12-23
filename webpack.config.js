@@ -6,7 +6,8 @@ module.exports = {
     content: './scripts/content.js',
     background: './scripts/background/background.js',
     popup: './popup/popup.js',
-    'options/options': './options/options.js'
+    'options/options': './options/options.js',
+    'early-blur': './scripts/early-blur.js'
   },
   output: {
     filename: '[name].js',
@@ -85,7 +86,11 @@ module.exports = {
     }),
   ],
   resolve: {
-    extensions: ['.js']
+    extensions: ['.js'],
+    modules: [
+      path.resolve(__dirname, 'scripts'),
+      'node_modules'
+    ]
   },
   mode: 'development',
   devtool: 'inline-source-map', // Changed to inline-source-map for better debugging

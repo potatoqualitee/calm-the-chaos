@@ -1,6 +1,7 @@
 // handleBBC.js
 
 import { BaseHandler } from '../core/handlers/baseHandler.js';
+import { removeImmediateBlur } from '../core/config/immediateBlur.js';
 
 class BBCHandler extends BaseHandler {
     constructor() {
@@ -33,4 +34,9 @@ class BBCHandler extends BaseHandler {
 }
 
 const handler = new BBCHandler();
-export const handleBBC = (nodesToHide) => handler.handle(nodesToHide);
+export const handleBBC = async (nodesToHide) => {
+    await handler.handle(nodesToHide);
+    // Mark content as filtered and remove blur
+    document.documentElement.setAttribute('data-calm-chaos-state', 'filtered');
+    removeImmediateBlur();
+};

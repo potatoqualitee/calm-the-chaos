@@ -6,7 +6,8 @@
   "permissions": [
     "storage",
     "activeTab",
-    "scripting"
+    "scripting",
+    "tabs"
   ],
   "host_permissions": [
     "https://*.abcnews.go.com/*",
@@ -160,5 +161,23 @@
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
   },
-  "content_scripts": []
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.bbc.com/*",
+        "https://bbc.com/*",
+        "https://*.bbc.co.uk/*",
+        "https://bbc.co.uk/*",
+        "https://*.bbc.in/*",
+        "https://bbc.in/*"
+      ],
+      "css": [
+        "styles/immediate-site-blur.css"
+      ],
+      "js": [
+        "early-blur.js"
+      ],
+      "run_at": "document_start"
+    }
+  ]
 }

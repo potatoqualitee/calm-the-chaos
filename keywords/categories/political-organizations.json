@@ -2,6 +2,10 @@
     "Political Organizations": {
         "description": "Terms related to political groups, movements, and parties that may significantly influence public discourse",
         "keywords": {
+            "AfD": {
+                "weight": 2,
+                "description": "German far-right political party"
+            },
             "America First movement": {
                 "weight": 1,
                 "description": "Frequent nationalist movement term"
@@ -49,6 +53,14 @@
             "DNC": {
                 "weight": 1,
                 "description": "Common party organization term"
+            },
+            "far left": {
+                "weight": 1,
+                "description": "Frequent political label term"
+            },
+            "far right": {
+                "weight": 1,
+                "description": "Frequent political label term"
             },
             "far-left": {
                 "weight": 1,

@@ -19,7 +19,7 @@ class HandlerRegistry {
             ['reddit.com', handleReddit],
             ['news.google.com', handleGoogleNews],
             ['cnn.com', handleCNN],
-            ['msn.com', handleMSN],
+            //['msn.com', handleMSN], // doesn't work yet
             ['bbc.', handleBBC],
             ['facebook.com', handleFacebook],
             ['instagram.com', handleInstagram],

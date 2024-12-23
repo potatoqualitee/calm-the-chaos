@@ -80,4 +80,7 @@ class SpeedReaderDetector {
     }
 }
 
+const detector = new SpeedReaderDetector();
+
+export const isSpeedReader = () => detector.getStatus();
 export default SpeedReaderDetector;

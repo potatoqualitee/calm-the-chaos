@@ -102,6 +102,14 @@
                 "weight": 1,
                 "description": "Regular armed group term"
             },
+            "death penalty": {
+                "weight": 2,
+                "description": "Frequent legal punishment term"
+            },
+            "death sentence": {
+                "weight": 2,
+                "description": "Frequent capital punishment term"
+            },
             "death threat": {
                 "weight": 2,
                 "description": "Frequent intimidation term"
@@ -121,6 +129,10 @@
             "extremist group": {
                 "weight": 2,
                 "description": "Frequent radical term"
+            },
+            "federal charges": {
+                "weight": 2,
+                "description": "Frequent legal prosecution term"
             },
             "Hamas": {
                 "weight": 3,

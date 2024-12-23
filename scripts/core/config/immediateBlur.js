@@ -2,9 +2,10 @@
 // This allows easy opt-in for other sites in the future
 export const IMMEDIATE_BLUR_SITES = {
     'cnn.com': {
-        enabled: true,
-        // Can add site-specific blur settings here if needed
-        // e.g. blur intensity, background color, etc.
+        enabled: true
+    },
+    'bbc': {  // This will match bbc.com, bbc.co.uk, etc.
+        enabled: true
     }
 };
 

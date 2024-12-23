@@ -1,27 +1,17 @@
 import { initializeRegex } from './core/managers/regexManager.js';
-import { filterContent } from './contentFilter.js';
 import { containsBlockedContent, startNewDetectionCycle, isSpeedReader } from './core/contentDetectionModule.js';
-import { history } from './core/observerModule.js';
+import { setupFilteringObserver, cleanupFilteringObserver, filteringHistory } from './core/observer/mutations/FilteringMutationObserver.js';
+import { FilterProcessor } from './core/observer/mutations/FilterProcessor.js';
 import { nodeHider } from './core/nodeHidingModule.js';
 import { isExtensionEnabledOnUrl } from './core/urlModule.js';
 import { chromeStorageGet } from './utils/chromeApi.js';
 import { needsImmediateBlur, showImmediateBlur } from './core/config/immediateBlur.js';
 
-let observer = null;
-let memoryManagementInterval = null;
-
-// Function to clean up all observers and intervals
+// Function to clean up all observers
 function cleanup() {
-    if (observer) {
-        observer.disconnect();
-        observer = null;
-    }
-    if (memoryManagementInterval) {
-        clearInterval(memoryManagementInterval);
-        memoryManagementInterval = null;
-    }
+    cleanupFilteringObserver();
     nodeHider.reset();
-    history.clear();
+    filteringHistory.clear();
 
     // Do not remove blur during cleanup - let initialization handle it
 }
@@ -32,96 +22,15 @@ function initializeExtension() {
     initializeRegex(() => {
         // Initial filtering
         try {
-            filterContent();
+            const processor = new FilterProcessor(filteringHistory);
+            processor.processContent();
         } catch (error) {
             console.debug('Error in initial filtering:', error);
         }
     });
 
-    // Memory management - clear history less frequently and more selectively
-    memoryManagementInterval = setInterval(() => {
-        try {
-            if (history.size > 50000) { // Increased threshold
-                // Only clear history entries older than 1 hour
-                const oneHourAgo = Date.now() - (60 * 60 * 1000);
-                const oldEntries = Array.from(history).filter(entry => {
-                    return entry.timestamp && entry.timestamp < oneHourAgo;
-                });
-
-                oldEntries.forEach(entry => history.delete(entry));
-
-                // Only reset nodeHider if absolutely necessary
-                if (history.size > 50000) {
-                    history.clear();
-                    nodeHider.reset();
-                }
-            }
-        } catch (error) {
-            console.debug('Error in memory management:', error);
-        }
-    }, 600000); // Increased interval to 10 minutes
-
-    // Debounce and batch DOM updates with improved deduplication
-    let timeoutId = null;
-    let pendingMutations = new Map(); // Use Map to track unique mutations by node
-
-    observer = new MutationObserver((mutations) => {
-        try {
-            if (timeoutId) {
-                clearTimeout(timeoutId);
-            }
-
-            // Process and deduplicate mutations
-            mutations.forEach(mutation => {
-                try {
-                    if (mutation.addedNodes.length > 0) {
-                        // Store only the most recent mutation for each added node
-                        mutation.addedNodes.forEach(node => {
-                            if (node.nodeType === Node.ELEMENT_NODE) {
-                                pendingMutations.set(node, mutation);
-                            }
-                        });
-                    } else if (mutation.type === 'characterData' && mutation.target.textContent) {
-                        pendingMutations.set(mutation.target, mutation);
-                    }
-                } catch (error) {
-                    console.debug('Error processing mutation:', error);
-                }
-            });
-
-            timeoutId = setTimeout(() => {
-                try {
-                    if (pendingMutations.size > 0) {
-                        const mutations = Array.from(pendingMutations.values());
-                        pendingMutations.clear();
-
-                        if (mutations.length > 0) {
-                            requestAnimationFrame(() => {
-                                startNewDetectionCycle();
-                                filterContent(mutations);
-                            });
-                        }
-                    }
-                } catch (error) {
-                    console.debug('Error in observer timeout callback:', error);
-                }
-            }, 500); // Increased debounce timeout for better batching
-        } catch (error) {
-            console.debug('Error in observer callback:', error);
-        }
-    });
-
-    // Start observing with optimized configuration
-    try {
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true,
-            characterData: true,
-            characterDataOldValue: false // Disable old value tracking to reduce memory usage
-        });
-    } catch (error) {
-        console.debug('Error starting observer:', error);
-    }
+    // Initialize the filtering observer
+    setupFilteringObserver();
 }
 
 // Check if extension should be enabled before initializing
@@ -174,18 +83,27 @@ async function checkAndInitialize() {
 // Set initial state
 document.documentElement.setAttribute('data-calm-chaos-state', 'loading');
 
+// If SpeedReader is detected immediately, prevent blur
+if (isSpeedReader()) {
+    document.documentElement.classList.add('blur-removed');
+}
+
 // Handle visibility changes
 document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') {
-        // Remove any existing blur-removed class when tab becomes visible
-        document.documentElement.classList.remove('blur-removed');
-        document.documentElement.setAttribute('data-calm-chaos-state', 'loading');
-        // Re-run initialization
-        cleanup();
-        checkAndInitialize();
+        // Only remove blur-removed class if SpeedReader is not active and content isn't filtered
+        if (!isSpeedReader() && document.documentElement.getAttribute('data-calm-chaos-state') !== 'filtered') {
+            document.documentElement.classList.remove('blur-removed');
+            document.documentElement.setAttribute('data-calm-chaos-state', 'loading');
+            // Re-run initialization
+            cleanup();
+            checkAndInitialize();
+        }
     } else {
-        // When tab becomes hidden, prepare for potential sleep
-        document.documentElement.setAttribute('data-calm-chaos-state', 'sleeping');
+        // When tab becomes hidden, only set sleeping state if not already filtered
+        if (document.documentElement.getAttribute('data-calm-chaos-state') !== 'filtered') {
+            document.documentElement.setAttribute('data-calm-chaos-state', 'sleeping');
+        }
     }
 });
 
