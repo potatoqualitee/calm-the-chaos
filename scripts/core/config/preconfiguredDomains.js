@@ -8,6 +8,7 @@ export const PRECONFIGURED_DOMAINS = [
   'instagram.com',
   'linkedin.com',
   'msn.com',
+  'people.com',
   'reddit.com',
   'stackoverflow.com',
   'yahoo.com',
