@@ -34,6 +34,10 @@
                 "weight": 0,
                 "description": "Common security term"
             },
+            "behead": {
+                "weight": 3,
+                "description": "Highly frequent extreme violence term"
+            },
             "blm protest shooting": {
                 "weight": 2,
                 "description": "Frequent protest violence term"
