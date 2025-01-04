@@ -2,7 +2,7 @@
 
 ## Overview
 
-A browser extension that filters unwanted content related to conflict, violence, and inflammatory rhetoric across every website.
+A [browser extension](https://chromewebstore.google.com/detail/calm-the-chaos/cholkigafekgccbkfgcmcigihipbnjoe) that filters unwanted content related to conflict, violence, and inflammatory rhetoric across every website. This extension, while only in the [Chrome Store](https://chromewebstore.google.com/detail/calm-the-chaos/cholkigafekgccbkfgcmcigihipbnjoe) also works on my favorite browser, [Brave](https://brave.com), Edge and others.
 
 > ⚠️ **Official Preview Release**: This is a preview version (v0.1.0-preview) of Calm the Chaos. Features may be incomplete or subject to change.
 >
