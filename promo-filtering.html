@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Calm the Chaos - Filtering</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-hover: #60a5fa;
+            --background: #1e1e1e;
+            --text: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border: #2e2e2e;
+            --card-bg: #2a2a2a;
+            --level-0: #22c55e;
+            --level-1: #3b82f6;
+            --level-2: #f59e0b;
+            --level-3: #ef4444;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .promo-container {
+            width: 900px;
+            height: 600px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at top right, #1e293b 0%, #0f172a 100%);
+        }
+
+        .background-glow {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.2;
+            }
+
+            50% {
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 0.3;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.2;
+            }
+        }
+
+        .content {
+            text-align: center;
+            padding: 40px;
+            max-width: 800px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            border-radius: 24px;
+            padding: 16px;
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.3s ease;
+            margin: 0 auto 32px;
+            font-size: 48px;
+        }
+
+        .logo:hover {
+            transform: translateY(-8px);
+            box-shadow:
+                0 16px 48px rgba(0, 0, 0, 0.4),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 800;
+            margin: 0 0 32px;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-levels {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .filter-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 32px;
+            border-radius: 24px;
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+            text-align: left;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .filter-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--level-color);
+            box-shadow: 0 0 20px var(--level-color);
+        }
+
+        .filter-card.level-0 {
+            --level-color: var(--level-0);
+        }
+
+        .filter-card.level-1 {
+            --level-color: var(--level-1);
+        }
+
+        .filter-card.level-2 {
+            --level-color: var(--level-2);
+        }
+
+        .filter-card.level-3 {
+            --level-color: var(--level-3);
+        }
+
+        .filter-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow:
+                0 16px 48px rgba(0, 0, 0, 0.4),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+        }
+
+        .filter-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .filter-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            background: var(--level-color);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .filter-card:hover .filter-icon {
+            transform: scale(1.1);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .filter-icon .material-icons {
+            font-size: 28px;
+        }
+
+        .filter-title {
+            flex-grow: 1;
+        }
+
+        .filter-title h3 {
+            font-size: 24px;
+            margin: 0 0 4px;
+            color: #f8fafc;
+            font-weight: 600;
+        }
+
+        .filter-title span {
+            font-size: 14px;
+            color: var(--level-color);
+            font-weight: 500;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .filter-content {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #94a3b8;
+            margin-bottom: 24px;
+        }
+
+        .filter-stats {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .filter-stat {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px 24px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .filter-card:hover .filter-stat {
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+        }
+
+        .filter-stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--level-color);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .filter-stat-label {
+            font-size: 12px;
+            color: #94a3b8;
+            font-weight: 500;
+            margin-top: 4px;
+        }
+
+        .stats {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 16px 32px;
+            border-radius: 16px;
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #60a5fa;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #94a3b8;
+            font-weight: 500;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="promo-container">
+        <div class="background-glow"></div>
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value">24+</div>
+                <div class="stat-label">Categories</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">3,130+</div>
+                <div class="stat-label">Keywords</div>
+            </div>
+        </div>
+        <div class="content">
+            <div class="logo">😌</div>
+            <h1>Customizable Filtering</h1>
+            <div class="filter-levels">
+                <div class="filter-card level-0">
+                    <div class="filter-header">
+                        <div class="filter-icon">
+                            <span class="material-icons">shield</span>
+                        </div>
+                        <div class="filter-title">
+                            <h3>Minimal</h3>
+                            <span>Level 0</span>
+                        </div>
+                    </div>
+                    <div class="filter-content">
+                        Most restrictive filtering for essential content only. Perfect for maintaining a focused,
+                        distraction-free environment.
+                    </div>
+                    <div class="filter-stats">
+                        <div class="filter-stat">
+                            <div class="filter-stat-value">Max</div>
+                            <div class="filter-stat-label">Protection</div>
+                        </div>
+                        <div class="filter-stat">
+                            <div class="filter-stat-value">24/7</div>
+                            <div class="filter-stat-label">Active</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-card level-1">
+                    <div class="filter-header">
+                        <div class="filter-icon">
+                            <span class="material-icons">security</span>
+                        </div>
+                        <div class="filter-title">
+                            <h3>Moderate</h3>
+                            <span>Level 1</span>
+                        </div>
+                    </div>
+                    <div class="filter-content">
+                        Balanced filtering that removes most unwanted content while maintaining good information flow.
+                    </div>
+                    <div class="filter-stats">
+                        <div class="filter-stat">
+                            <div class="filter-stat-value">High</div>
+                            <div class="filter-stat-label">Balance</div>
+                        </div>
+                        <div class="filter-stat">
+                            <div class="filter-stat-value">Smart</div>
+                            <div class="filter-stat-label">Context</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-card level-2">
+                    <div class="filter-header">
+                        <div class="filter-icon">
+                            <span class="material-icons">tune</span>
+                        </div>
+                        <div class="filter-title">
+                            <h3>Flexible</h3>
+                            <span>Level 2</span>
+                        </div>
+                    </div>
+                    <div class="filter-content">
+                        Broader inclusion with fine-tuned controls. Ideal for staying informed while avoiding extreme
+                        content.
+                    </div>
+                    <div class="filter-stats">
+                        <div class="filter-stat">
+                            <div class="filter-stat-value">Custom</div>
+                            <div class="filter-stat-label">Rules</div>
+                        </div>
+                        <div class="filter-stat">
+                            <div class="filter-stat-value">Fine</div>
+                            <div class="filter-stat-label">Control</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-card level-3">
+                    <div class="filter-header">
+                        <div class="filter-icon">
+                            <span class="material-icons">all_inclusive</span>
+                        </div>
+                        <div class="filter-title">
+                            <h3>Complete</h3>
+                            <span>Level 3</span>
+                        </div>
+                    </div>
+                    <div class="filter-content">
+                        Most inclusive filtering with maximum control. For users who want comprehensive content
+                        management.
+                    </div>
+                    <div class="filter-stats">
+                        <div class="filter-stat">
+                            <div class="filter-stat-value">Full</div>
+                            <div class="filter-stat-label">Access</div>
+                        </div>
+                        <div class="filter-stat">
+                            <div class="filter-stat-value">Total</div>
+                            <div class="filter-stat-label">Control</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
