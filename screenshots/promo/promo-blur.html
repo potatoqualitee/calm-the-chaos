@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Calm the Chaos - Smart Filtering</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-hover: #60a5fa;
+            --background: #1e293b;
+            --text: #f8fafc;
+            --text-secondary: #94a3b8;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .promo-container {
+            width: 1280px;
+            height: 800px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            overflow: hidden;
+        }
+
+        .content {
+            display: flex;
+            width: 100%;
+            padding: 80px;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .text-content {
+            flex: 1;
+        }
+
+        .visual-content {
+            flex: 1;
+            position: relative;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 32px;
+            font-size: 40px;
+        }
+
+        h1 {
+            font-size: 64px;
+            font-weight: 800;
+            margin: 0 0 24px;
+            line-height: 1.1;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tagline {
+            font-size: 24px;
+            line-height: 1.5;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            font-weight: 500;
+        }
+
+        .browser-mockup {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 32px 64px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .browser-header {
+            background: #f1f5f9;
+            padding: 16px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: relative;
+            z-index: 3;
+        }
+
+        .browser-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .browser-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #e2e8f0;
+        }
+
+        .browser-address {
+            flex: 1;
+            background: #fff;
+            border-radius: 8px;
+            padding: 8px 16px;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .news-content {
+            height: 600px;
+            position: relative;
+            background: #fff;
+            overflow: hidden;
+            padding: 24px;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-auto-rows: minmax(80px, auto);
+            gap: 24px;
+        }
+
+        .news-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 2;
+        }
+
+        .news-block {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #f8fafc;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            min-height: 200px;
+        }
+
+        .news-block.featured {
+            grid-column: span 8;
+            grid-row: span 2;
+            min-height: 400px;
+        }
+
+        .news-block.medium {
+            grid-column: span 4;
+            grid-row: span 2;
+            min-height: 300px;
+        }
+
+        .news-block.small {
+            grid-column: span 4;
+            grid-row: span 1;
+        }
+
+        .news-block-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 65%;
+            background: linear-gradient(45deg, #cbd5e1, #94a3b8);
+        }
+
+        .news-block.featured .news-block-image {
+            background: linear-gradient(45deg, #60a5fa, #3b82f6);
+            height: 70%;
+        }
+
+        .news-block.medium .news-block-image {
+            background: linear-gradient(45deg, #818cf8, #6366f1);
+        }
+
+        .news-block-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 24px;
+            background: white;
+            height: 35%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .news-block.featured .news-block-content {
+            height: 30%;
+        }
+
+        .text-line {
+            height: 12px;
+            background: #e2e8f0;
+            border-radius: 6px;
+        }
+
+        .text-line.title {
+            width: 85%;
+        }
+
+        .text-line.subtitle {
+            width: 60%;
+        }
+
+        .news-block.text-only {
+            background: white;
+            padding: 24px;
+        }
+
+        .news-block.text-only .text-line {
+            margin-bottom: 12px;
+        }
+
+        .news-block.text-only .text-line.title {
+            width: 100%;
+        }
+
+        .news-block.text-only .text-line.subtitle {
+            width: 75%;
+        }
+
+        .news-content::before {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(8px);
+        }
+
+        .mindful-pause {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px 32px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            z-index: 3;
+            width: 320px;
+        }
+
+        .emoji-row {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            font-size: 20px;
+        }
+
+        .pause-message {
+            color: #334155;
+            font-size: 16px;
+            font-weight: 500;
+            margin: 0;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="promo-container">
+        <div class="content">
+            <div class="text-content">
+                <div class="logo">😌</div>
+                <h1>Smart Content Filter</h1>
+                <p class="tagline">Automatic content blur for high-intensity news sites</p>
+            </div>
+            <div class="visual-content">
+                <div class="browser-mockup">
+                    <div class="browser-header">
+                        <div class="browser-actions">
+                            <div class="browser-dot"></div>
+                            <div class="browser-dot"></div>
+                            <div class="browser-dot"></div>
+                        </div>
+                        <div class="browser-address">cnn.com</div>
+                    </div>
+                    <div class="news-content">
+                        <div class="news-block featured">
+                            <div class="news-block-image"></div>
+                            <div class="news-block-content">
+                                <div class="text-line title"></div>
+                                <div class="text-line subtitle"></div>
+                            </div>
+                        </div>
+                        <div class="news-block medium">
+                            <div class="news-block-image"></div>
+                            <div class="news-block-content">
+                                <div class="text-line title"></div>
+                                <div class="text-line subtitle"></div>
+                            </div>
+                        </div>
+                        <div class="news-block small text-only">
+                            <div class="text-line title"></div>
+                            <div class="text-line subtitle"></div>
+                        </div>
+                        <div class="news-block small">
+                            <div class="news-block-image"></div>
+                            <div class="news-block-content">
+                                <div class="text-line title"></div>
+                                <div class="text-line subtitle"></div>
+                            </div>
+                        </div>
+                        <div class="news-block medium">
+                            <div class="news-block-image"></div>
+                            <div class="news-block-content">
+                                <div class="text-line title"></div>
+                                <div class="text-line subtitle"></div>
+                            </div>
+                        </div>
+                        <div class="news-block small">
+                            <div class="news-block-image"></div>
+                            <div class="news-block-content">
+                                <div class="text-line title"></div>
+                                <div class="text-line subtitle"></div>
+                            </div>
+                        </div>
+                        <div class="news-block small text-only">
+                            <div class="text-line title"></div>
+                            <div class="text-line subtitle"></div>
+                        </div>
+                        <div class="news-block medium">
+                            <div class="news-block-image"></div>
+                            <div class="news-block-content">
+                                <div class="text-line title"></div>
+                                <div class="text-line subtitle"></div>
+                            </div>
+                        </div>
+                        <div class="mindful-pause">
+                            <div class="emoji-row">
+                                ☁️ ☕️ 😌 🌿
+                            </div>
+                            <p class="pause-message">Taking a mindful pause to filter content...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
