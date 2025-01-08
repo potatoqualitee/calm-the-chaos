@@ -3,75 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <title>Calm the Chaos - Screenshot</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-hover: #60a5fa;
+            --background: #1e293b;
+            --text: #f8fafc;
+            --text-secondary: #94a3b8;
+        }
+
         body {
             margin: 0;
-            padding: 40px;
+            padding: 0;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: #1e293b;
-            color: #f8fafc;
+            background: var(--background);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .promo-container {
             width: 1280px;
             height: 800px;
+            position: relative;
             display: flex;
             align-items: center;
-            justify-content: center;
-            box-sizing: border-box;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            overflow: hidden;
         }
 
-        .popup {
-            width: 330px;
-            background: #1e1e1e;
-            border-radius: 12px;
-            padding: 16px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-        }
-
-        .header {
+        .content {
             display: flex;
+            width: 100%;
+            padding: 80px;
+            gap: 80px;
             align-items: center;
-            gap: 8px;
-            margin-bottom: 16px;
+        }
+
+        .text-content {
+            flex: 1;
+        }
+
+        .visual-content {
+            flex: 1;
         }
 
         .logo {
-            font-size: 24px;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 32px;
+            font-size: 40px;
         }
 
-        .title {
+        h1 {
+            font-size: 64px;
+            font-weight: 800;
+            margin: 0 0 24px;
+            line-height: 1.1;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tagline {
+            font-size: 24px;
+            line-height: 1.5;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            font-weight: 500;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 24px;
+            border-radius: 16px;
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #60a5fa;
+        }
+
+        .feature-text {
             font-size: 18px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .popup {
+            width: 440px;
+            background: #1e1e1e;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 32px 64px rgba(0, 0, 0, 0.2);
+        }
+
+        .popup-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .popup-logo {
+            font-size: 32px;
+        }
+
+        .popup-title {
+            font-size: 24px;
             font-weight: 600;
             color: #f8fafc;
         }
 
         .controls {
             display: flex;
-            gap: 12px;
-            margin-bottom: 16px;
+            gap: 16px;
+            margin-bottom: 24px;
         }
 
         .button {
-            padding: 8px 16px;
+            padding: 12px 24px;
             background: #27272a;
-            border-radius: 6px;
-            font-size: 14px;
+            border-radius: 8px;
+            font-size: 16px;
             color: #94a3b8;
             cursor: pointer;
         }
 
         .toggle {
-            width: 44px;
-            height: 24px;
+            width: 56px;
+            height: 32px;
             background: #3b82f6;
-            border-radius: 12px;
+            border-radius: 16px;
             position: relative;
         }
 
         .toggle::after {
             content: '';
             position: absolute;
-            width: 20px;
-            height: 20px;
+            width: 28px;
+            height: 28px;
             background: white;
             border-radius: 50%;
             top: 2px;
@@ -80,10 +172,10 @@
 
         .domain {
             background: #27272a;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 16px;
-            font-size: 14px;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            font-size: 16px;
             color: #94a3b8;
         }
 
@@ -91,116 +183,149 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 16px;
+            margin-bottom: 24px;
         }
 
         .stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 16px;
+            gap: 16px;
+            margin-bottom: 24px;
         }
 
         .stat-box {
             background: #27272a;
-            padding: 12px;
-            border-radius: 8px;
+            padding: 16px;
+            border-radius: 12px;
             text-align: center;
         }
 
         .stat-number {
-            font-size: 24px;
+            font-size: 32px;
             font-weight: 600;
             color: #3b82f6;
-            margin-bottom: 4px;
+            margin-bottom: 8px;
         }
 
         .stat-label {
-            font-size: 12px;
+            font-size: 14px;
             color: #94a3b8;
         }
 
         .keywords-section {
-            margin-top: 16px;
+            margin-top: 24px;
         }
 
         .keywords-title {
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 600;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
         }
 
         .keywords {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 12px;
         }
 
         .keyword {
             background: #27272a;
-            padding: 6px 10px;
-            border-radius: 6px;
-            font-size: 13px;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 15px;
             color: #94a3b8;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
         .keyword-count {
             background: #3b82f6;
             color: white;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 13px;
         }
     </style>
 </head>
 <body>
-    <div class="popup">
-        <div class="header">
-            <div class="logo">😌</div>
-            <div class="title">Calm the Chaos</div>
-        </div>
-
-        <div class="controls">
-            <div class="button">Settings</div>
-            <div style="flex: 1"></div>
-            <div style="display: flex; align-items: center; gap: 8px; color: #94a3b8; font-size: 14px;">
-                Filter all sites
-                <div class="toggle"></div>
+    <div class="promo-container">
+        <div class="content">
+            <div class="text-content">
+                <div class="logo">😌</div>
+                <h1>Smart Content Filtering</h1>
+                <p class="tagline">Take control of your online experience with intelligent keyword filtering across major
+                    platforms</p>
+                <div class="features">
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <span class="material-icons">category</span>
+                        </div>
+                        <div class="feature-text">24+ curated categories covering politics, health, social issues & more
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <span class="material-icons">public</span>
+                        </div>
+                        <div class="feature-text">Works on Reddit, LinkedIn, YouTube, CNN & more</div>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <span class="material-icons">tune</span>
+                        </div>
+                        <div class="feature-text">Customizable filtering with domain-specific controls</div>
+                    </div>
+                </div>
             </div>
-        </div>
+            <div class="visual-content">
+                <div class="popup">
+                    <div class="popup-header">
+                        <div class="popup-logo">😌</div>
+                        <div class="popup-title">Calm the Chaos</div>
+                    </div>
 
-        <div class="domain">Current Domain: www.reddit.com</div>
+                    <div class="controls">
+                        <div class="button">Settings</div>
+                        <div style="flex: 1"></div>
+                        <div style="display: flex; align-items: center; gap: 12px; color: #94a3b8; font-size: 16px;">
+                            Filter all sites
+                            <div class="toggle"></div>
+                        </div>
+                        </div>
 
-        <div class="domain-toggle">
-            <div style="color: #94a3b8; font-size: 14px;">Enable on this domain</div>
-            <div class="toggle"></div>
-        </div>
+                    <div class="domain">Current Domain: www.reddit.com</div>
 
-        <div class="stats">
-            <div class="stat-box">
-                <div class="stat-number">330</div>
-                <div class="stat-label">Blocked on this page</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">3130</div>
-                <div class="stat-label">Blocked since install</div>
-            </div>
-        </div>
+                    <div class="domain-toggle">
+                        <div style="color: #94a3b8; font-size: 16px;">Enable on this domain</div>
+                        <div class="toggle"></div>
+                        </div>
 
-        <div class="keywords-section">
-            <div class="keywords-title">Blocked Keywords</div>
-            <div class="keywords">
-                <div class="keyword">Alex Jones <span class="keyword-count">5</span></div>
-                <div class="keyword">AOC <span class="keyword-count">1</span></div>
-                <div class="keyword">Biden <span class="keyword-count">15</span></div>
-                <div class="keyword">Boebert <span class="keyword-count">1</span></div>
-                <div class="keyword">Capitol <span class="keyword-count">3</span></div>
-                <div class="keyword">Congress <span class="keyword-count">11</span></div>
-                <div class="keyword">Conspiracy <span class="keyword-count">3</span></div>
-                <div class="keyword">Democrat <span class="keyword-count">4</span></div>
+                    <div class="stats">
+                        <div class="stat-box">
+                            <div class="stat-number">330</div>
+                            <div class="stat-label">Blocked on this page</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">3130</div>
+                            <div class="stat-label">Blocked since install</div>
+                        </div>
+                    </div>
+
+                    <div class="keywords-section">
+                        <div class="keywords-title">Blocked Keywords</div>
+                        <div class="keywords">
+                            <div class="keyword">Alex Jones <span class="keyword-count">5</span></div>
+                            <div class="keyword">AOC <span class="keyword-count">1</span></div>
+                            <div class="keyword">Biden <span class="keyword-count">15</span></div>
+                            <div class="keyword">Boebert <span class="keyword-count">1</span></div>
+                            <div class="keyword">Capitol <span class="keyword-count">3</span></div>
+                            <div class="keyword">Congress <span class="keyword-count">11</span></div>
+                            <div class="keyword">Conspiracy <span class="keyword-count">3</span></div>
+                            <div class="keyword">Democrat <span class="keyword-count">4</span></div>
+                        </div>
+                        </div>
+                        </div>
             </div>
         </div>
     </div>
