@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="UTF-8">
     <title>Calm the Chaos - Smart Filtering</title>
@@ -96,6 +95,8 @@
             display: flex;
             align-items: center;
             gap: 16px;
+            position: relative;
+            z-index: 3;
         }
 
         .browser-actions {
@@ -120,10 +121,15 @@
         }
 
         .news-content {
-            padding: 24px;
+            height: 600px;
             position: relative;
-            height: 500px;
             background: #fff;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            gap: 1px;
+            padding: 1px;
         }
 
         .news-content::before {
@@ -133,138 +139,24 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            z-index: 1;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            z-index: 2;
         }
 
-        .news-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 24px;
-            position: relative;
+        .news-block {
+            background: #e2e8f0;
+            opacity: 0.5;
         }
 
-        .news-logo {
-            width: 48px;
-            height: 24px;
-            background: #cc0000;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 14px;
+        .news-block:nth-child(2n) {
+            background: #f1f5f9;
+            opacity: 0.5;
         }
 
-        .news-nav {
-            display: flex;
-            gap: 24px;
-            color: #334155;
-            font-weight: 500;
-        }
-
-        .news-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 24px;
-            position: relative;
-        }
-
-        .news-main {
-            background: #f8fafc;
-            border-radius: 12px;
-            padding: 24px;
-        }
-
-        .news-image {
-            width: 100%;
-            height: 240px;
-            background: linear-gradient(45deg, #e2e8f0, #f1f5f9);
-            border-radius: 8px;
-            margin-bottom: 16px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .news-image::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            animation: loading 2s infinite;
-        }
-
-        @keyframes loading {
-            100% {
-                left: 100%;
-            }
-        }
-
-        .news-headline {
-            font-size: 24px;
-            font-weight: 600;
-            color: #334155;
-            margin-bottom: 16px;
-            opacity: 0.7;
-        }
-
-        .news-text {
-            font-size: 16px;
-            color: #64748b;
-            line-height: 1.6;
-            opacity: 0.7;
-        }
-
-        .news-sidebar {
-            display: grid;
-            gap: 16px;
-        }
-
-        .news-card {
-            background: #f8fafc;
-            border-radius: 12px;
-            padding: 16px;
-        }
-
-        .card-image {
-            width: 100%;
-            height: 120px;
-            background: linear-gradient(45deg, #e2e8f0, #f1f5f9);
-            border-radius: 8px;
-            margin-bottom: 12px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card-image::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            animation: loading 2s infinite;
-        }
-
-        .card-headline {
-            font-size: 16px;
-            font-weight: 500;
-            color: #334155;
-            margin-bottom: 8px;
-            opacity: 0.7;
-        }
-
-        .card-text {
-            font-size: 14px;
-            color: #64748b;
-            opacity: 0.7;
+        .news-block:nth-child(3n) {
+            background: #cbd5e1;
+            opacity: 0.5;
         }
 
         .mindful-pause {
@@ -273,39 +165,38 @@
             left: 50%;
             transform: translate(-50%, -50%);
             background: white;
-            padding: 32px;
-            border-radius: 20px;
-            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.15);
+            padding: 20px 32px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
             text-align: center;
-            z-index: 2;
-            width: 360px;
+            z-index: 3;
+            width: 320px;
         }
 
         .emoji-row {
             display: flex;
             justify-content: center;
-            gap: 16px;
-            margin-bottom: 20px;
-            font-size: 28px;
+            gap: 8px;
+            margin-bottom: 12px;
+            font-size: 20px;
         }
 
         .pause-message {
             color: #334155;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 500;
             margin: 0;
             line-height: 1.5;
         }
     </style>
 </head>
-
 <body>
     <div class="promo-container">
         <div class="content">
             <div class="text-content">
                 <div class="logo">😌</div>
                 <h1>Smart Content Filter</h1>
-                <p class="tagline">Browse with peace of mind using intelligent content filtering</p>
+                <p class="tagline">Automatic content blur for high-intensity news sites</p>
             </div>
             <div class="visual-content">
                 <div class="browser-mockup">
@@ -318,42 +209,25 @@
                         <div class="browser-address">cnn.com</div>
                     </div>
                     <div class="news-content">
-                        <div class="news-header">
-                            <div class="news-logo">CNN</div>
-                            <div class="news-nav">
-                                <div>World</div>
-                                <div>Politics</div>
-                                <div>Business</div>
-                                <div>Health</div>
-                            </div>
-                        </div>
-                        <div class="news-grid">
-                            <div class="news-main">
-                                <div class="news-image"></div>
-                                <div class="news-headline">Senate Debates Major Infrastructure Bill</div>
-                                <div class="news-text">
-                                    Key lawmakers discuss the implications of a comprehensive infrastructure package
-                                    aimed at modernizing transportation and digital networks across the nation...
-                                </div>
-                            </div>
-                            <div class="news-sidebar">
-                                <div class="news-card">
-                                    <div class="card-image"></div>
-                                    <div class="card-headline">Tech Leaders Address AI Regulation</div>
-                                    <div class="card-text">Industry experts propose new framework for responsible AI
-                                        development...</div>
-                                </div>
-                                <div class="news-card">
-                                    <div class="card-image"></div>
-                                    <div class="card-headline">Climate Summit Reaches Agreement</div>
-                                    <div class="card-text">Global leaders commit to new environmental initiatives...
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <div class="news-block"></div>
+                        <div class="news-block"></div>
+                        <div class="news-block"></div>
+                        <div class="news-block"></div>
+                        <div class="news-block"></div>
+                        <div class="news-block"></div>
+                        <div class="news-block"></div>
+                        <div class="news-block"></div>
+                        <div class="news-block"></div>
+                        <div class="news-block"></div>
+                        <div class="news-block"></div>
+                        <div class="news-block"></div>
+                        <div class="news-block"></div>
+                        <div class="news-block"></div>
+                        <div class="news-block"></div>
+                        <div class="news-block"></div>
                         <div class="mindful-pause">
                             <div class="emoji-row">
-                                ☁️ ☕️ 😊 🌿
+                                ☁️ ☕️ 😌 🌿
                             </div>
                             <p class="pause-message">Taking a mindful pause to filter content...</p>
                         </div>
@@ -363,5 +237,4 @@
         </div>
     </div>
 </body>
-
 </html>
