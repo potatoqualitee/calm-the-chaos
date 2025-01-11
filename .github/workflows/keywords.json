@@ -1,0 +1,21 @@
+{
+    "name": "news_keywords",
+    "strict": true,
+    "schema": {
+        "type": "object",
+        "properties": {
+            "keywords": {
+                "type": "array",
+                "description": "Genuinely inflammatory or distressing content in trending news headlines.",
+                "items": {
+                    "type": "string",
+                    "description": "A single keyword or phrase relevant to the requirements"
+                }
+            }
+        },
+        "required": [
+            "keywords"
+        ],
+        "additionalProperties": false
+    }
+}

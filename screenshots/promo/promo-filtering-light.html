@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Calm the Chaos - Filtering</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066ff;
+            --primary-hover: #0052cc;
+            --background: #f8fafc;
+            --text: #1e293b;
+            --text-secondary: #64748b;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .promo-container {
+            width: 1280px;
+            height: 800px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            overflow: hidden;
+        }
+
+        .content {
+            display: flex;
+            width: 100%;
+            padding: 80px;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .text-content {
+            flex: 1;
+        }
+
+        .visual-content {
+            flex: 1;
+            position: relative;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #0066ff 0%, #0052cc 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 32px;
+            font-size: 40px;
+        }
+
+        h1 {
+            font-size: 64px;
+            font-weight: 800;
+            margin: 0 0 24px;
+            line-height: 1.1;
+            background: linear-gradient(135deg, #0066ff 0%, #0052cc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tagline {
+            font-size: 24px;
+            line-height: 1.5;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            font-weight: 500;
+        }
+
+        .feed-container {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow:
+                0 8px 16px rgba(0, 0, 0, 0.05),
+                0 4px 8px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transform: perspective(1000px) rotateY(-5deg);
+        }
+
+        .feed-header {
+            background: linear-gradient(135deg, #0066ff 0%, #3b82f6 100%);
+            padding: 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 2px 8px rgba(0, 102, 255, 0.15);
+        }
+
+        .feed-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0066ff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .feed-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: white;
+            margin: 0;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .feed-content {
+            padding: 28px;
+            background: #fff;
+        }
+
+        .post {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+
+        .post.filtered {
+            background: #f1f5f9;
+            border: 2px solid #e2e8f0;
+            position: relative;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 24px;
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .post-meta h3 {
+            font-size: 18px;
+            margin: 0;
+            color: #1e293b;
+        }
+
+        .post-meta span {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .post-content {
+            font-size: 16px;
+            line-height: 1.5;
+            color: #334155;
+        }
+
+        .filter-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: #0066ff;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 4px rgba(0, 102, 255, 0.2);
+        }
+
+        .filter-badge .material-icons {
+            font-size: 16px;
+        }
+
+        .filtered .post-content {
+            color: #94a3b8;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="promo-container">
+        <div class="content">
+            <div class="text-content">
+                <div class="logo">😌</div>
+                <h1>Stay Focused</h1>
+                <p class="tagline">Smart filtering that helps you engage with content mindfully</p>
+            </div>
+            <div class="visual-content">
+                <div class="feed-container">
+                    <div class="feed-header">
+                        <div class="feed-icon">
+                            <span class="material-icons" style="font-size: 22px;">public</span>
+                        </div>
+                        <h3 class="feed-title">Social Feed</h3>
+                    </div>
+                    <div class="feed-content">
+                        <div class="post">
+                            <div class="post-header">
+                                <div class="avatar"
+                                    style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 100 100&quot;><rect width=&quot;100&quot; height=&quot;100&quot; fill=&quot;%23E2E8F0&quot;/><circle cx=&quot;50&quot; cy=&quot;35&quot; r=&quot;20&quot; fill=&quot;%23CBD5E1&quot;/><path d=&quot;M50 60 Q20 60 15 85 L85 85 Q80 60 50 60&quot; fill=&quot;%23CBD5E1&quot;/></svg>')">
+                                </div>
+                                <div class="post-meta">
+                                    <h3>Sarah Chen</h3>
+                                    <span>2h ago</span>
+                                </div>
+                            </div>
+                            <div class="post-content">
+                                Just finished a great book on mindfulness and productivity! 📚✨
+                            </div>
+                        </div>
+                        <div class="post filtered">
+                            <div class="filter-badge">
+                                <span class="material-icons">shield</span>
+                                Filtered
+                            </div>
+                            <div class="post-header">
+                                <div class="avatar"
+                                    style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 100 100&quot;><rect width=&quot;100&quot; height=&quot;100&quot; fill=&quot;%23BFDBFE&quot;/><circle cx=&quot;50&quot; cy=&quot;35&quot; r=&quot;20&quot; fill=&quot;%2393C5FD&quot;/><path d=&quot;M50 60 Q20 60 15 85 L85 85 Q80 60 50 60&quot; fill=&quot;%2393C5FD&quot;/></svg>')">
+                                </div>
+                                <div class="post-meta">
+                                    <h3>News Feed</h3>
+                                    <span>4h ago</span>
+                                </div>
+                            </div>
+                            <div class="post-content">
+                                Content filtered for peace of mind
+                            </div>
+                        </div>
+                        <div class="post">
+                            <div class="post-header">
+                                <div class="avatar"
+                                    style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 100 100&quot;><rect width=&quot;100&quot; height=&quot;100&quot; fill=&quot;%23F1F5F9&quot;/><circle cx=&quot;50&quot; cy=&quot;35&quot; r=&quot;20&quot; fill=&quot;%23E2E8F0&quot;/><path d=&quot;M50 60 Q20 60 15 85 L85 85 Q80 60 50 60&quot; fill=&quot;%23E2E8F0&quot;/></svg>')">
+                                </div>
+                                <div class="post-meta">
+                                    <h3>Tech Updates</h3>
+                                    <span>5h ago</span>
+                                </div>
+                            </div>
+                            <div class="post-content">
+                                Exciting new features coming to your favorite apps! 🚀
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -491,5 +491,22 @@ export function setupEventListeners() {
     }
   });
 
+  // Auto-update new developments toggle
+  const autoUpdateInput = document.getElementById('autoUpdateNewDevelopments');
+  autoUpdateInput?.addEventListener('change', async (e) => {
+    if (e.target instanceof HTMLInputElement) {
+      await storage.setAutoUpdateNewDevelopments(e.target.checked);
+      // Create or clear alarm based on setting
+      if (e.target.checked) {
+        chrome.alarms.create('updateNewDevelopments', {
+          periodInMinutes: 30,
+          delayInMinutes: 1
+        });
+      } else {
+        chrome.alarms.clear('updateNewDevelopments');
+      }
+    }
+  });
+
   console.log('Event listeners setup complete');
 }

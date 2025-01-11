@@ -379,3 +379,7 @@ export async function setFilterRedditCommentThreads(enabled) {
 export async function setFilterFacebookCommentThreads(enabled) {
   await setStorageData({ filterFacebookCommentThreads: enabled });
 }
+
+export async function setAutoUpdateNewDevelopments(enabled) {
+  await setStorageData({ autoUpdateNewDevelopments: enabled });
+}
