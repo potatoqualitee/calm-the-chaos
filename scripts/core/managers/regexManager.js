@@ -1,6 +1,6 @@
 // regexManager.js
 import { generateBlockedRegex } from '../../utils/regex.js';
-import { getStorageData } from '../../../options/optionsStorage.js';
+import { getStorageData } from '../../utils/chromeStorage.js';
 
 let BLOCKED_REGEX;
 

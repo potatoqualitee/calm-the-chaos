@@ -24,7 +24,8 @@ export async function exportSettings() {
     'imageContext',
     'imageContainerStyle',
     'filterRedditCommentThreads',
-    'showBlurMessage'
+    'showBlurMessage',
+    'autoUpdateNewDevelopments'
   ]);
 
   const blob = new Blob([JSON.stringify(settings, null, 2)], { type: 'application/json' });
@@ -83,14 +84,15 @@ export async function importSettings(fileOrData) {
       'imageContext',
       'imageContainerStyle',
       'filterRedditCommentThreads',
-      'showBlurMessage'
+      'showBlurMessage',
+      'autoUpdateNewDevelopments'
     ]);
 
     // Validate data types and merge settings
     const validSettings = {};
 
     // Handle boolean settings
-    const booleanSettings = ['filteringEnabled', 'checkForUpdates', 'imageFilteringEnabled', 'filterRedditCommentThreads', 'showBlurMessage'];
+    const booleanSettings = ['filteringEnabled', 'checkForUpdates', 'imageFilteringEnabled', 'filterRedditCommentThreads', 'showBlurMessage', 'autoUpdateNewDevelopments'];
     for (const key of booleanSettings) {
       if (key in settings) {
         if (typeof settings[key] !== 'boolean') {

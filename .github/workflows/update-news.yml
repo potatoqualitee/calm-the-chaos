@@ -1,0 +1,29 @@
+name: Update News Gist
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+jobs:
+  update-gist:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install and cache PowerShell modules
+        uses: potatoqualitee/psmodulecache@v6.0
+        with:
+          modules-to-cache: PSOpenAI
+
+      - name: Run news update script
+        shell: pwsh
+        env:
+          BRAVE_API_KEY: ${{ secrets.BRAVE_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          BING_API_KEY: ${{ secrets.BING_API_KEY }}
+        run: |
+          ./.github/workflows/update-news-gist.ps1

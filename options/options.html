@@ -280,9 +280,23 @@
       <div id="importStatus" class="import-status"></div>
 
       <div class="settings-section">
-        <h3>Remote Configuration</h3>
+        <h3>New Developments</h3>
         <div class="info">
-          Import settings from shared URLs to sync with team configurations.
+          Configure automatic updates for breaking news and emerging topics.
+          </div>
+          <div class="auto-update-option">
+            <label class="switch">
+              <input type="checkbox" id="autoUpdateNewDevelopments" checked>
+              <span class="slider"></span>
+            </label>
+            <span class="update-text">Auto-update new developments every 30 minutes</span>
+          </div>
+          </div>
+
+          <div class="settings-section">
+            <h3>Custom Keyword Lists</h3>
+            <div class="info">
+              Import additional keywords from your own URLs or shared lists.
         </div>
         <div class="keyword-list" id="configUrls"></div>
         <div class="add-keyword">
@@ -294,7 +308,7 @@
             <input type="checkbox" id="checkForUpdates">
             <span class="slider"></span>
           </label>
-          <span class="update-text">Check for new keywords on startup</span>
+          <span class="update-text">Check custom lists for updates on startup</span>
         </div>
       </div>
     </div>

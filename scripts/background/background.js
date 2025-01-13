@@ -4,6 +4,13 @@ import { PRECONFIGURED_DOMAINS } from '../core/config/preconfiguredDomains.js';
 
 import { needsImmediateBlur } from '../core/config/immediateBlur.js';
 
+// Handle install/update
+chrome.runtime.onInstalled.addListener(async (details) => {
+    if (details.reason === 'install' || details.reason === 'update') {
+        await updateNewDevelopments();
+    }
+});
+
 // Function to inject content scripts and CSS
 async function injectContentScripts(tabId, url) {
     try {
@@ -157,5 +164,60 @@ chrome.permissions.onRemoved.addListener(async (permissions) => {
     }
 });
 
-// Initialize all event handlers when the background script loads
-initializeEventHandlers();
+// Fetch and update new developments
+async function updateNewDevelopments() {
+    try {
+        const response = await fetch('https://gist.githubusercontent.com/potatoqualitee/3488593dcc622acc736055fa00a9745e/raw/new-development.json');
+        if (!response.ok) throw new Error('Failed to fetch new developments');
+
+        const newDevelopments = await response.json();
+        const { keywordGroups = {} } = await chrome.storage.local.get('keywordGroups');
+
+        // Update the new developments category
+        keywordGroups['New Developments'] = Object.keys(newDevelopments['New Developments']?.keywords || {});
+        await chrome.storage.local.set({ keywordGroups });
+
+        // Send message to all tabs to update their regex
+        const tabs = await chrome.tabs.query({});
+        for (const tab of tabs) {
+            try {
+                await chrome.tabs.sendMessage(tab.id, { type: 'updateKeywords' });
+            } catch (error) {
+                // Ignore errors for tabs that don't have our content script
+                console.debug('Could not send updateRegex message to tab:', tab.id);
+            }
+        }
+    } catch (error) {
+        console.error('Error updating new developments:', error);
+    }
+}
+
+// Handle alarm
+chrome.alarms.onAlarm.addListener(async (alarm) => {
+    if (alarm.name === 'updateNewDevelopments') {
+        const { autoUpdateNewDevelopments = true } = await chrome.storage.local.get('autoUpdateNewDevelopments');
+        if (autoUpdateNewDevelopments) {
+            await updateNewDevelopments();
+        }
+    }
+});
+
+// Initialize alarm and event handlers
+async function initialize() {
+    // Initialize event handlers
+    initializeEventHandlers();
+
+    // Create alarm for new developments updates
+    const { autoUpdateNewDevelopments = true } = await chrome.storage.local.get('autoUpdateNewDevelopments');
+    if (autoUpdateNewDevelopments) {
+        chrome.alarms.create('updateNewDevelopments', {
+            periodInMinutes: 30,
+            delayInMinutes: 1 // First update after 1 minute
+        });
+        // Initial update
+        await updateNewDevelopments();
+    }
+}
+
+// Start initialization
+initialize();

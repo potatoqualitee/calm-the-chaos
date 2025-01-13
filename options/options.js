@@ -34,7 +34,8 @@ export async function initializeSettings() {
       'filterRedditCommentThreads',
       'filterFacebookCommentThreads',
       'showBlurMessage',
-      'allTimeKeywordStats'
+      'allTimeKeywordStats',
+      'autoUpdateNewDevelopments'
     ]);
 
     console.log('Initial storage data:', result);
@@ -172,10 +173,14 @@ export async function initializeSettings() {
 
     const filterFacebookInput = document.getElementById('filterFacebookCommentThreads');
     if (filterFacebookInput) filterFacebookInput.checked = filterFacebookCommentThreads;
-
     const showBlurMessageInput = document.getElementById('showBlurMessage');
     if (showBlurMessageInput) showBlurMessageInput.checked = showBlurMessage;
 
+    // Update auto-update new developments setting
+    const autoUpdateInput = document.getElementById('autoUpdateNewDevelopments');
+    if (autoUpdateInput) autoUpdateInput.checked = result.autoUpdateNewDevelopments !== undefined ? result.autoUpdateNewDevelopments : true;
+
+    // Update image filtering form elements
     // Update image filtering form elements
     const imageFilteringInput = document.getElementById('imageFilteringEnabled');
     if (imageFilteringInput) imageFilteringInput.checked = imageFilteringEnabled;
