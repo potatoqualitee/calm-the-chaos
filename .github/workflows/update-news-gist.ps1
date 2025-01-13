@@ -107,7 +107,12 @@ function Update-Gist {
             Write-Output "Total keywords gathered: $(($allKeywords | Measure-Object).Count)"
 
             $params = @{
+                ApiType       = "azure"
+                AuthType      = "azure"
+                ApiKey        = $env:OPENAI_API_KEY
                 Model         = "gpt-4o-mini"
+                ApiBase       = $env:OPENAI_API_BASE
+                ApiVersion    = "2024-08-01-preview"
                 Verbose       = $false
                 SystemMessage = "You are an expert news-headline analyzer focused on spotting content that can cause distress, anxiety, or a desire to disengage (i.e., political turmoil, extreme violence, hateful speech, severe crises, etc.).
 

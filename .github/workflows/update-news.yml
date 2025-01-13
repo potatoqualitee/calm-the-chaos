@@ -24,6 +24,7 @@ jobs:
           BRAVE_API_KEY: ${{ secrets.BRAVE_API_KEY }}
           GIST_PAT: ${{ secrets.GIST_PAT }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_API_BASE: ${{ secrets.OPENAI_API_BASE }}
           BING_API_KEY: ${{ secrets.BING_API_KEY }}
         run: |
           ./.github/workflows/update-news-gist.ps1
