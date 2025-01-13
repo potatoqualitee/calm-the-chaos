@@ -3,8 +3,8 @@ function Update-Gist {
     param ()
     process {
         # Validate environment variables
-        if (-not $env:BRAVE_API_KEY -or -not $env:GITHUB_TOKEN -or -not $env:BING_API_KEY) {
-            throw "BRAVE_API_KEY or GITHUB_TOKEN or BING_API_KEY environment variable is not set"
+        if (-not $env:BRAVE_API_KEY -or -not $env:GIST_PAT -or -not $env:BING_API_KEY) {
+            throw "BRAVE_API_KEY or GIST_PAT or BING_API_KEY environment variable is not set"
         }
         try {
             if ((Get-Random -Minimum 1 -Maximum 3) -eq 1) {
@@ -243,7 +243,7 @@ function Update-Gist {
             # Set up headers for the GitHub API request
             $gistHeaders = @{
                 "Accept"               = "application/vnd.github+json"
-                "Authorization"        = "Bearer $env:GITHUB_TOKEN"
+                "Authorization"        = "Bearer $env:GIST_PAT"
                 "X-GitHub-Api-Version" = "2022-11-28"
             }
 

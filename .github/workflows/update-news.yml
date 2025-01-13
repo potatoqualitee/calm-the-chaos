@@ -22,7 +22,7 @@ jobs:
         shell: pwsh
         env:
           BRAVE_API_KEY: ${{ secrets.BRAVE_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIST_PAT: ${{ secrets.GIST_PAT }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           BING_API_KEY: ${{ secrets.BING_API_KEY }}
         run: |
