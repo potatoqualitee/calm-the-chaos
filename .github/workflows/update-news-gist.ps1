@@ -127,7 +127,7 @@ function Update-Gist {
                     1. Extract **new, distressing terms or phrases** that are not in the pre-existing keyword list.
                     2. Focus on concise, impactful phrases representing events, people, or places linked to distressing news.
                     3. Avoid:
-                    - Neutral or generic terms that lack an emotional charge.
+                    - Neutral or generic terms that lack an emotional charge like 'App Store suit', 'military officers', or 'economic growth'.
                     - Overly specific phrases tied to exact headline wording
                        - Gaza hostages released → Gaza hostages
                        - Student loans cancelled → Student loans
@@ -136,7 +136,6 @@ function Update-Gist {
                        - Hunter Biden report → Hunter Biden
                        - IRS stimulus checks → stimulus checks
                     - Terms already covered in the pre-existing list:
-
                     $allKeywords"
                 Message       = $newstitles
                 Format        = "json_schema"

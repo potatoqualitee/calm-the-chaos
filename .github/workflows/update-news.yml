@@ -1,4 +1,4 @@
-name: Update News Gist
+name: Trending news
 
 on:
   schedule:
