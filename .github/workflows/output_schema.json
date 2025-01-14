@@ -1,0 +1,11 @@
+{
+    "type": "object",
+    "properties": {
+        "is_same_topic": {
+            "type": "boolean",
+            "description": "Whether the two terms refer to the exact same topic/subject/entity (not just related). For example, 'Trump' and 'Trump Organization' would be false - they are related but distinct topics"
+        }
+    },
+    "required": ["is_same_topic"],
+    "additionalProperties": false
+}

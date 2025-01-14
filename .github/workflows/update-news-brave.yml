@@ -1,8 +1,8 @@
-name: Full News Update
+name: Quick Brave News Update
 
 on:
   schedule:
-    - cron: '0 */2 * * *'  # Every 2 hours
+    - cron: '*/30 * * * *'  # Every 30 minutes
   workflow_dispatch:
 
 jobs:
@@ -18,17 +18,6 @@ jobs:
         with:
           modules-to-cache: PSOpenAI
 
-      - name: Install Ollama
-        run: |
-          curl -fsSL https://ollama.com/install.sh | sh
-          ollama serve &
-          sleep 10  # Wait for Ollama service to start
-
-      - name: Pull Ollama model
-        run: |
-          ollama pull llama3.1
-          sleep 10  # Wait for model to be ready
-
       - name: Run news update script
         shell: pwsh
         env:
@@ -36,7 +25,6 @@ jobs:
           GIST_PAT: ${{ secrets.GIST_PAT }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_API_BASE: ${{ secrets.OPENAI_API_BASE }}
-          BING_API_KEY: ${{ secrets.BING_API_KEY }}
         run: |
           Import-Module ./.github/workflows/update-news-gist.psm1
-          Update-Gist -ApiSource 'Both'
+          Update-Gist -ApiSource 'Brave'
