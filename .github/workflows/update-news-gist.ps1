@@ -93,11 +93,12 @@ function Update-Gist {
             Write-Output "Gathering keywords from category files..."
             # Get all keywords from category files
             $allKeywords = Get-ChildItem -Path "./keywords/categories/*.json" -Exclude "new-developments.json", "us-political-figures-single-name.json" | ForEach-Object {
-                Write-Output "Processing category file: $($PSItem.Name)"
+                Write-Output "--- $($PSItem.Name) ---"
                 $json = Get-Content -Path $PSItem.FullName -Raw | ConvertFrom-Json
                 $title = $json.PSObject.Properties | Select-Object -First 1
                 $title.Value.keywords.PSObject.Properties.Name
             }
+            $keywordsfromfiles = $allKeywords
 
             Write-Output "Fetching existing keywords from Gist..."
             $existingjson = Invoke-RestMethod https://gist.githubusercontent.com/potatoqualitee/3488593dcc622acc736055fa00a9745e/raw/new-development.json
@@ -114,26 +115,29 @@ function Update-Gist {
                 ApiBase       = $env:OPENAI_API_BASE
                 ApiVersion    = "2024-08-01-preview"
                 Verbose       = $false
-                SystemMessage = "You are an expert news-headline analyzer focused on spotting content that can cause distress, anxiety, or a desire to disengage (i.e., political turmoil, extreme violence, hateful speech, severe crises, etc.).
+                SystemMessage = "
+                    **System Prompt:**
+                    You are an AI designed to extract **distressing keywords** from U.S.-centric but globally relevant news headlines. Focus on topics tied to **conflict, violence, or inflammatory rhetoric** that evoke strong emotions and are distressing across the political spectrum. Avoid bias toward any ideology or stance.
 
-                - You have access to an existing list of disqualifying keywords (e.g., references to war, gun violence, inflammatory politicians, controversial legislation) that are already being blocked.
-                - Use that list only as a guide to understand the kinds of people, topics, or phrases that are considered inflammatory or distressing.
+                    **Input Details**:
+                    1. **Headlines**: A batch of recent, distressing, or controversial news headlines.
+                    2. **Pre-existing Keywords**: A comprehensive list of terms to exclude from the output.
 
-                Your task: When a headline contains a new or unlisted trigger (e.g., 'Idaho Supreme Court' overturning gay marriage) represents the same categories of distress (violent acts, hateful rhetoric, political clampdowns, or major social upheaval) - then flag that headline accordingly.
+                    **Task**:
+                    1. Extract **new, distressing terms or phrases** that are not in the pre-existing keyword list.
+                    2. Focus on concise, impactful phrases representing events, people, or places linked to distressing news.
+                    3. Avoid:
+                    - Neutral or generic terms that lack an emotional charge.
+                    - Overly specific phrases tied to exact headline wording
+                       - Gaza hostages released → Gaza hostages
+                       - Student loans cancelled → Student loans
+                       - IRS stimulus checks → stimulus checks
+                       - calls for special session → special session
+                       - Hunter Biden report → Hunter Biden
+                       - IRS stimulus checks → stimulus checks
+                    - Terms already covered in the pre-existing list:
 
-                1. If a headline references a new or emergent person, entity, or topic that aligns with the same high-distress categories exemplified by our existing keyword list, flag it.
-                2. Ignore trivial or unrelated uses of words that happen to appear in the same domain but have no distressing or inflammatory context.
-                3. Ignore words that would be too broad such as 'ruthless'
-
-                Goal: Make sure new triggers (like 'Idaho Supreme Court' in a harmful civil rights context) are also caught-even if they aren't in the existing keyword list.
-
-                Existing keywords: $allKeywords
-
-                Prefer conciseness.
-                DO NOT: LA schools closed due to wildfires
-                DO: wildfires
-                DO NOT: Tougher U.S. sanctions to curb Russian oil supply
-                DO: Russian oil"
+                    $allKeywords"
                 Message       = $newstitles
                 Format        = "json_schema"
                 JsonSchema    = $jsonSchema
@@ -141,6 +145,10 @@ function Update-Gist {
 
             Write-Output "Requesting AI analysis of headlines..."
             $result = Request-ChatCompletion @params
+            if (-not $result.answer) {
+                Write-Error "No answer returned from AI model"
+                throw "No answer returned from AI model"
+            }
             $processedKeywords = @{}
             $currentTime = Get-Date
             $cutoffTime = $currentTime.AddHours(-72)
@@ -178,13 +186,28 @@ function Update-Gist {
                     Write-Output "Skipping keyword with special characters: $keyword"
                     continue
                 }
-                if (-not ($existingkeywords | Where-Object { $keyword.Split(' ') -contains $PSItem }) -and -not ($allKeywords | Where-Object { $keyword.Split(' ') -contains $PSItem })) {
-                    Write-Output "Adding new keyword: $keyword"
-                    $processedKeywords[$keyword] = @{
-                        weight      = 3
-                        description = "Current trending topic"
-                        timestamp   = $currentTime.ToString('o')  # ISO 8601 format
+
+                <# LEAVE THIS ALONE: Sometimes I am tempted to remove keywords but i shouldn't
+                # bc the person might not have it blocked in mutesky but maybe I'll change my mind
+                foreach ($existingKw in @($processedKeywords.Keys)) {
+                    foreach ($kw in $keywordsfromfiles) {
+                        if ($kw.length -le 3) {
+                            continue
+                        }
+                        if ($existingKw -match "\b$kw(ing|s|ed|er|ment)?\b") {
+                            Write-Output "Removing new keyword '$existingKw' as it is contained within existing keyword '$kw'"
+                            $processedKeywords.Remove($existingKw)
+                            continue
+                        }
                     }
+                }
+                #>
+
+                Write-Output "Adding new keyword: $keyword"
+                $processedKeywords[$keyword] = @{
+                    weight      = 3
+                    description = "Current trending topic"
+                    timestamp   = $currentTime.ToString('o')  # ISO 8601 format
                 }
             }
 
@@ -194,41 +217,23 @@ function Update-Gist {
                 #  Slim down to 50 max and remove duplicates
                 Write-Output "Going slim it down from: $($processedKeywords.Keys) because there are $(($processedKeywords.Keys | Measure-Object).Count -gt 50) keywords"
 
-                $params.SystemMessage = "You are an expert content filtering analyst specializing in optimizing keyword lists for anxiety-reducing content filters. Your task is to analyze and refine a list of potentially distressing keywords.
-
-                Guidelines:
-                1. LIMIT: Return exactly 50 keywords maximum, prioritizing based on:
-                - Primary: Terms with highest potential for causing anxiety/distress (e.g., 'mass shooting' over 'political debate')
-                - Secondary: Terms with highest likelihood of appearance in headlines
-
-                2. DUPLICATE HANDLING:
-                - Remove redundant variations (e.g., keep 'Trump' over 'Trump Administration', 'Trump Campaign')
-                - Choose the most broadly applicable term that maintains accuracy
-                - Exception: Keep specific variations only if they represent distinctly different contexts
-
-                3. SELECTION CRITERIA:
-                - Prefer concrete terms over abstract concepts
-                - Prioritize current, active threats/issues over historical references
-                - Focus on terms that represent ongoing or developing situations
-                - Keep terms that are unique identifiers for major distressing events
-
-                Output Format: Return a JSON array of exactly 50 or fewer strings, representing the most critical keywords for content filtering.
-
-                Example Transformation:
-                Input: ['Trump', 'Trump Administration', 'Trump Campaign', 'mass shooting']
-                Output: ['Trump', 'mass shooting']
-                Reasoning: 'Trump' covers all Trump-related content, 'mass shooting' is distressing."
-                $params.Message = $processedKeywords.Keys -join " "
+                $params.SystemMessage = "Order these keywords and keyword phrases by their relevance to distressing news headlines, from most distressing to least distressing. Focus on terms that are **most distressing** for those looking to avoid disaster and politics."
+                $params.Message = $processedKeywords.Keys | Out-String
                 $result = Request-ChatCompletion @params
 
                 # Create new hashtable with filtered keywords
                 $filteredKeywords = @{}
-                foreach ($keyword in ($result.answer | ConvertFrom-Json).keywords) {
+                $resultCount = 0
+                foreach ($keyword in (($result.answer | ConvertFrom-Json).keywords | Select-Object -First 50)) {
                     if ($processedKeywords.ContainsKey($keyword)) {
+                        $resultCount++
                         $filteredKeywords[$keyword] = $processedKeywords[$keyword]
                     }
                 }
-                $processedKeywords = $filteredKeywords
+                if ($resultCount -gt 20) {
+                    # i've seen it do 0 before
+                    $processedKeywords = $filteredKeywords
+                }
                 Write-Output "Total updated combined keywords: $(($processedKeywords.Keys | Measure-Object).Count)"
             }
 
