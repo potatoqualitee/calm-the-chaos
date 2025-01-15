@@ -1,7 +1,6 @@
 function Get-BraveNews {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory)]
         [string]$ApiKey = $env:BRAVE_API_KEY
     )
 

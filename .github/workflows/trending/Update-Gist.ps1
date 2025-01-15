@@ -11,70 +11,20 @@ function Update-Gist {
     )
 
     process {
-        Write-Verbose "Starting gist update process using $ApiSource API(s)"
+        Write-Verbose "Starting gist update process"
 
         # Validate environment variables
-        $requiredVars = @('BRAVE_API_KEY', 'GIST_PAT', 'OPENAI_API_KEY', 'OPENAI_API_BASE', 'BING_API_KEY')
-
-        foreach ($var in $requiredVars) {
-            if (-not (Get-Item env:$var -ErrorAction SilentlyContinue)) {
-                throw "$var environment variable is not set"
-            }
+        if (-not (Get-Item env:GIST_PAT -ErrorAction SilentlyContinue)) {
+            throw "GIST_PAT environment variable is not set"
         }
+
         try {
-            $allNewsTitles = @()
-            $braveKeywords = @()
-            $bingKeywords = @()
-
-            # Get JSON schema
-            $jsonSchema = Get-Content -Path "./.github/workflows/keywords.json" -Raw
-
-            # Set default parameter values for OpenAI calls
-            $PSDefaultParameterValues = @{
-                'Get-OpenAIAnalysis:Model' = $Model
-                'Get-OpenAIAnalysis:JsonSchema' = $jsonSchema
+            # Get trending topics
+            $processedKeywords = Set-TrendingTopic -ApiSource $ApiSource -Model $Model
+            if (-not $processedKeywords) {
+                Write-Warning "No keywords found to update"
+                return
             }
-
-            # API Calls based on selected source
-            if ($ApiSource -in @('Brave', 'Both')) {
-                Write-Verbose "Processing Brave news..."
-                $braveTitles = Get-BraveNews
-                $allNewsTitles += $braveTitles
-
-                $openAiParams = @{
-                    Headlines = $braveTitles
-                }
-                $braveKeywords = Get-OpenAIAnalysis @openAiParams
-            }
-
-            if ($ApiSource -in @('Bing', 'Both')) {
-                Write-Verbose "Processing Bing news..."
-                $bingTitles = Get-BingNews
-                $allNewsTitles += $bingTitles
-
-                $openAiParams = @{
-                    Headlines = $bingTitles
-                }
-                $bingKeywords = Get-OpenAIAnalysis @openAiParams
-            }
-
-            # Combine keywords from both sources
-            $newKeywords = @($braveKeywords) + @($bingKeywords) | Select-Object -Unique
-            Write-Debug "Processed headlines from both sources"
-
-            Write-Verbose "Gathering keywords from category files..."
-            $allKeywords = Get-ChildItem -Path "./keywords/categories/*.json" -Exclude @(
-                "new-developments.json",
-                "us-political-figures-single-name.json"
-            ) | ForEach-Object {
-                Write-Debug "Processing $($_.Name)"
-                $json = Get-Content -Path $_.FullName -Raw | ConvertFrom-Json
-                $title = $json.PSObject.Properties | Select-Object -First 1
-                $title.Value.keywords.PSObject.Properties.Name
-            }
-
-            Write-Verbose "Extracted keywords: $($newKeywords -join ', ')"
-            $termGroups = Group-SimilarTerm -Term $newKeywords
 
             # Fetch gist history
             Write-Verbose "Fetching gist history..."
@@ -107,11 +57,6 @@ function Update-Gist {
                 }
             }
 
-            if (-not $newKeywords -or $newKeywords.Count -eq 0) {
-                Write-Warning "No keywords found in AI responses"
-                return
-            }
-
             # Calculate max values for scoring
             $maxFrequency = ($keywordHistory.Values |
                 Where-Object { $_ -ne $null } |
@@ -126,22 +71,18 @@ function Update-Gist {
             if ($maxAppearances -eq 0) { $maxAppearances = 1 }
 
             # Score and select best terms
-            $processedKeywords = @{}
-            foreach ($group in $termGroups.Values) {
-                $bestTerm = $group | Sort-Object {
-                    $historyData = if ($keywordHistory.ContainsKey($_)) {
-                        $keywordHistory[$_]
-                    }
-                    else {
-                        @{ appearances = 0; lastSeen = $null }
-                    }
-                    Get-TermScore -Term $_ -NewsFrequency 1 -HistoryData $historyData -Variation $group -MaxFrequency $maxFrequency -MaxAppearance $maxAppearances
-                } -Descending | Select-Object -First 1
+            $scoredKeywords = @{}
+            foreach ($keyword in $processedKeywords.Keys) {
+                $historyData = if ($keywordHistory.ContainsKey($keyword)) {
+                    $keywordHistory[$keyword]
+                }
+                else {
+                    @{ appearances = 0; lastSeen = $null }
+                }
 
-                $processedKeywords[$bestTerm] = @{
-                    weight = 3
-                    description = "Current trending topic"
-                    timestamp = (Get-Date).ToString('o')
+                $score = Get-TermScore -Term $keyword -NewsFrequency 1 -HistoryData $historyData -MaxFrequency $maxFrequency -MaxAppearance $maxAppearances
+                if ($score -gt 0) {
+                    $scoredKeywords[$keyword] = $processedKeywords[$keyword]
                 }
             }
 
@@ -150,7 +91,7 @@ function Update-Gist {
             $newsObject = @{
                 "New Developments" = @{
                     description = "Recently emerging political figures and developing stories"
-                    keywords = $processedKeywords
+                    keywords = $scoredKeywords
                 }
             }
 

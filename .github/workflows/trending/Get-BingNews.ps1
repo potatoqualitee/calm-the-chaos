@@ -1,7 +1,6 @@
 function Get-BingNews {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory)]
         [string]$ApiKey = $env:BING_API_KEY
     )
 
