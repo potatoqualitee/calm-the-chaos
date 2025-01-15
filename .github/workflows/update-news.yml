@@ -38,5 +38,5 @@ jobs:
           OPENAI_API_BASE: ${{ secrets.OPENAI_API_BASE }}
           BING_API_KEY: ${{ secrets.BING_API_KEY }}
         run: |
-          Import-Module ./.github/workflows/update-news-gist.psm1
-          Update-Gist -ApiSource 'Both'
+          Import-Module ./.github/workflows/trending/trending.psm1
+          Update-Gist -ApiSource 'Both' -Verbose

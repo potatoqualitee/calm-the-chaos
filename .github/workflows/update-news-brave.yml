@@ -26,5 +26,5 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_API_BASE: ${{ secrets.OPENAI_API_BASE }}
         run: |
-          Import-Module ./.github/workflows/update-news-gist.psm1
-          Update-Gist -ApiSource 'Brave'
+          Import-Module ./.github/workflows/trending/trending.psm1
+          Update-Gist -ApiSource 'Brave' -Verbose
