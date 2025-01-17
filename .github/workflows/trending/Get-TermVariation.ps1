@@ -37,7 +37,7 @@ $script:deduplicationScore = @{
 function Get-TermVariation {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory = $true,
+        [Parameter(Mandatory,
                    Position = 0,
                    ValueFromPipeline = $true,
                    HelpMessage = "Term to generate variations for")]
