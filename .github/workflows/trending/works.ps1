@@ -83,26 +83,21 @@ function Invoke-AIAnalysis {
     process {
         Write-Verbose "Processing content: $Content"
 
-        $content = "You are a content filtering system evaluating keywords for duplication. You must determine if two keywords should be treated as duplicates in the context of filtering distressing or controversial news content.
+        $content = "Compare these news keywords:
+        Keyword A: $($Keywords[0])
+        Keyword B: $($Keywords[1])
 
-        Compare these keywords:
-        Keyword 1: $($Keywords[0])
-        Keyword 2: $($Keywords[1])
+        SAME keywords:
+        'Pacific Palisades fires' and 'Los Angeles fires'
+        'DOD chief' and 'Department of Defense chief'
+        'Manhattan crash' and 'New York crash'
+        'Hollywood incident' and 'LA incident'
 
-        Would filtering content containing Keyword A capture essentially the same distressing or controversial content as filtering Keyword B?
-
-        Consider them duplicates ONLY if:
-        - They refer to the exact same event, person, or concept
-        - One is a direct subset of the other (e.g., 'gunshot' vs 'gunshots')
-        - They are synonyms specifically in the context of distressing news (e.g., 'killing' and 'slaying')
-
-        Examples of words that are NOT duplicates:
-        - 'Hollywood' and 'military' (even though they can appear in related content)
-        - 'protest' and 'violence' (even though they sometimes co-occur)
-        - 'murder' and 'crime' (one is too broad)
-        - 'Trump' and 'Biden' (even though both are politicians)
-
-        Based ONLY on the criteria above, should these be treated as duplicate keywords for content filtering purposes?"
+        DIFFERENT keywords:
+        'San Diego fire' and 'LA fire'
+        'Navy chief' and 'Army chief'
+        'north crash' and 'south crash'
+        'old storm' and 'new storm'"
         Write-Warning $content
         try {
             # Construct the request payload

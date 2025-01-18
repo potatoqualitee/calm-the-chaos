@@ -10,8 +10,7 @@
             "description": "Second news topic you were provided to compare."
         },
         "similar": {
-            "type": "boolean",
-            "description": "True if the two news topics would likely be strongly related, false otherwise."
+            "type": "boolean"
         },
         "explanation": {
             "type": "string",
