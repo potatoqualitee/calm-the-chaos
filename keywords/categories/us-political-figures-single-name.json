@@ -14,6 +14,10 @@
                 "weight": 2,
                 "description": "Common political figure"
             },
+            "Bessent": {
+                "weight": 3,
+                "description": "Frequent political figure"
+            },
             "Biden": {
                 "weight": 3,
                 "description": "Highly frequent president"
@@ -154,6 +158,10 @@
                 "weight": 1,
                 "description": "Regular political figure"
             },
+            "Milley": {
+                "weight": 1,
+                "description": "Regular military figure"
+            },
             "MTG": {
                 "weight": 3,
                 "description": "Highly frequent House figure"
@@ -191,6 +199,10 @@
                 "description": "Common former vice president"
             },
             "Ramaswamy": {
+                "weight": 3,
+                "description": "Frequent political figure"
+            },
+            "Rubio": {
                 "weight": 3,
                 "description": "Frequent political figure"
             },

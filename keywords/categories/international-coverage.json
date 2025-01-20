@@ -62,6 +62,18 @@
                 "weight": 3,
                 "description": "Frequent international term"
             },
+            "Greenland conflict": {
+                "weight": 3,
+                "description": "Frequent international term"
+            },
+            "Greenlander": {
+                "weight": 1,
+                "description": "Regular international term"
+            },
+            "Guantanamo Bay": {
+                "weight": 2,
+                "description": "Frequent international term"
+            },
             "IDF": {
                 "weight": 0,
                 "description": "Military organization name"
@@ -129,6 +141,10 @@
             "peace negotiation": {
                 "weight": 1,
                 "description": "Common diplomatic term"
+            },
+            "Panama Canal": {
+                "weight": 3,
+                "description": "Frequent international term"
             },
             "peace talks": {
                 "weight": 1,

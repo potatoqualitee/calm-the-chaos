@@ -62,6 +62,10 @@
                 "weight": 0,
                 "description": "Regular position title"
             },
+            "CDC": {
+                "weight": 2,
+                "description": "Frequent agency name"
+            },
             "Chief Justice": {
                 "weight": 1,
                 "description": "Frequent official title"
@@ -81,6 +85,10 @@
             "CIA": {
                 "weight": 1,
                 "description": "Frequent agency name"
+            },
+            "Citizens United": {
+                "weight": 1,
+                "description": "Common ruling term"
             },
             "Civil Service": {
                 "weight": 0,
@@ -310,6 +318,10 @@
                 "weight": 1,
                 "description": "Frequent policy term"
             },
+            "DHS": {
+                "weight": 1,
+                "description": "Frequent agency name"
+            },
             "federal authority": {
                 "weight": 0,
                 "description": "Common governance term"
@@ -493,6 +505,10 @@
             "Immigration and Customs": {
                 "weight": 1,
                 "description": "Common agency name"
+            },
+            "inauguration": {
+                "weight": 3,
+                "description": "Highly frequent presidential transition ceremony"
             },
             "Intelligence agency": {
                 "weight": 0,

@@ -14,10 +14,6 @@
                 "weight": 1,
                 "description": "Current security concern"
             },
-            "inauguration": {
-                "weight": 1,
-                "description": "Current political event"
-            },
             "Linda McMahon": {
                 "weight": 3,
                 "description": "Nominee"

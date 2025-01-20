@@ -54,7 +54,11 @@
                 "weight": 1,
                 "description": "Frequent financial crisis term"
             },
-            "medicare reform": {
+            "medicaid": {
+                "weight": 1,
+                "description": "Common policy debate term"
+            },
+            "medicare": {
                 "weight": 1,
                 "description": "Common policy debate term"
             },
@@ -85,10 +89,6 @@
             "Texas hospitals": {
                 "weight": 0,
                 "description": "Regional healthcare term"
-            },
-            "trans minor": {
-                "weight": 2,
-                "description": "Frequent healthcare policy term"
             },
             "universal healthcare": {
                 "weight": 3,

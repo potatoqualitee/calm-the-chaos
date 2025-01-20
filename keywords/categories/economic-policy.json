@@ -94,6 +94,10 @@
                 "weight": 1,
                 "description": "Common institution term"
             },
+            "financial assistance": {
+                "weight": 2,
+                "description": "Frequent crisis term"
+            },
             "financial collapse": {
                 "weight": 2,
                 "description": "Frequent crisis term"
@@ -122,7 +126,15 @@
                 "weight": 1,
                 "description": "Regular policy term"
             },
+            "inflation": {
+                "weight": 1,
+                "description": "Regular policy term"
+            },
             "interest rates": {
+                "weight": 2,
+                "description": "Frequent financial term"
+            },
+            "Foreign Aid": {
                 "weight": 2,
                 "description": "Frequent financial term"
             },
@@ -167,6 +179,10 @@
                 "description": "Common financial criticism"
             },
             "price gouging": {
+                "weight": 2,
+                "description": "Frequent economic criticism"
+            },
+            "price of eggs": {
                 "weight": 2,
                 "description": "Frequent economic criticism"
             },
@@ -229,6 +245,10 @@
             "trade war": {
                 "weight": 2,
                 "description": "Frequent international term"
+            },
+            "Trumponomicsr": {
+                "weight": 2,
+                "description": "Frequent policy term"
             },
             "unemployment": {
                 "weight": 3,

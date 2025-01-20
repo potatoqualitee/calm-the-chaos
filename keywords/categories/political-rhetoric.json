@@ -6,10 +6,6 @@
                 "weight": 0,
                 "description": "Occasional political criticism term"
             },
-            "agent saboteur": {
-                "weight": 0,
-                "description": "Rare conspiracy-related accusation"
-            },
             "alpha male": {
                 "weight": 1,
                 "description": "Common social media term"
@@ -17,6 +13,10 @@
             "alternative facts": {
                 "weight": 0,
                 "description": "Occasional media criticism term"
+            },
+            "america": {
+                "weight": 2,
+                "description": "Common nationalist slogan"
             },
             "america first": {
                 "weight": 2,
@@ -139,6 +139,14 @@
                 "description": "Common partisan accusation"
             },
             "conspiracy theory": {
+                "weight": 2,
+                "description": "Frequent misinformation term"
+            },
+            "conspiracy theorist": {
+                "weight": 1,
+                "description": "Common misinformation term"
+            },
+            "conspiracy": {
                 "weight": 2,
                 "description": "Frequent misinformation term"
             },
@@ -286,6 +294,10 @@
                 "weight": 2,
                 "description": "Frequent ideology attack"
             },
+            "federal corruption": {
+                "weight": 0,
+                "description": "Occasional government term"
+            },
             "federal purge": {
                 "weight": 0,
                 "description": "Occasional government term"
@@ -309,6 +321,10 @@
             "grooming": {
                 "weight": 3,
                 "description": "Highly frequent accusation term"
+            },
+            "Gulf of America": {
+                "weight": 3,
+                "description": "Highly frequent political term"
             },
             "hate speech": {
                 "weight": 2,
@@ -350,9 +366,29 @@
                 "weight": 2,
                 "description": "Frequent partisan attack"
             },
+            "saboteur": {
+                "weight": 0,
+                "description": "Rare conspiracy-related accusation"
+            },
             "stolen election": {
                 "weight": 3,
                 "description": "Highly frequent conspiracy claim"
+            },
+            "tiktok": {
+                "weight": 3,
+                "description": "Highly frequent political phrase"
+            },
+            "Tech-bro": {
+                "weight": 1,
+                "description": "Common political phrase"
+            },
+            "Tech bro": {
+                "weight": 1,
+                "description": "Common political phrase"
+            },
+            "Techbro": {
+                "weight": 1,
+                "description": "Common political phrase"
             },
             "threat to democracy": {
                 "weight": 3,
@@ -361,6 +397,10 @@
             "thoughts and prayers": {
                 "weight": 1,
                 "description": "Common political response phrase"
+            },
+            "Tyranny": {
+                "weight": 1,
+                "description": "Common political criticism"
             },
             "virtue signaling": {
                 "weight": 1,
