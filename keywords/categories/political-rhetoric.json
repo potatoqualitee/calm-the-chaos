@@ -6,10 +6,6 @@
                 "weight": 0,
                 "description": "Occasional political criticism term"
             },
-            "agent saboteur": {
-                "weight": 0,
-                "description": "Rare conspiracy-related accusation"
-            },
             "alpha male": {
                 "weight": 1,
                 "description": "Common social media term"
@@ -350,9 +346,17 @@
                 "weight": 2,
                 "description": "Frequent partisan attack"
             },
+            "saboteur": {
+                "weight": 0,
+                "description": "Rare conspiracy-related accusation"
+            },
             "stolen election": {
                 "weight": 3,
                 "description": "Highly frequent conspiracy claim"
+            },
+            "tiktok": {
+                "weight": 3,
+                "description": "Highly frequent political phrase"
             },
             "threat to democracy": {
                 "weight": 3,

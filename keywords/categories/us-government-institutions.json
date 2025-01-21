@@ -494,6 +494,10 @@
                 "weight": 1,
                 "description": "Common agency name"
             },
+            "inauguration": {
+                "weight": 3,
+                "description": "Highly frequent presidential transition ceremony"
+            },
             "Intelligence agency": {
                 "weight": 0,
                 "description": "Regular structure term"

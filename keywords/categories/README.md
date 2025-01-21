@@ -8,11 +8,10 @@ Each category file follows this structure:
 ```json
 {
   "Category Name": {
-    "weight": 7-9,
     "description": "Category description",
     "keywords": {
       "term": {
-        "weight": 0-10,
+        "weight": 0-3,
         "description": "Term description"
       }
     }
