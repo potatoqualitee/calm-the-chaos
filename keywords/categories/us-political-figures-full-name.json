@@ -294,6 +294,10 @@
                 "weight": 3,
                 "description": "Highly frequent political figure"
             },
+            "Marco Rubio": {
+                "weight": 3,
+                "description": "Highly frequent Cabinet figure"
+            },
             "Marjorie Taylor Greene": {
                 "weight": 3,
                 "description": "Highly frequent House figure"

@@ -194,6 +194,10 @@
                 "weight": 3,
                 "description": "Frequent political figure"
             },
+            "Rubio": {
+                "weight": 3,
+                "description": "Frequent political figure"
+            },
             "RFK Jr": {
                 "weight": 2,
                 "description": "Common political figure"
