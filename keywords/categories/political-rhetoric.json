@@ -2,7 +2,7 @@
     "Political Rhetoric": {
         "description": "Highly charged political language and attack terms that consistently generate intense reactions",
         "keywords": {
-            "activist agenda": {
+            "activist": {
                 "weight": 0,
                 "description": "Occasional political criticism term"
             },
@@ -14,15 +14,15 @@
                 "weight": 0,
                 "description": "Occasional media criticism term"
             },
+            "america": {
+                "weight": 2,
+                "description": "Frequent nationalist reference term"
+            },
             "america first": {
                 "weight": 2,
                 "description": "Common nationalist slogan"
             },
-            "american carnage": {
-                "weight": 0,
-                "description": "Rarely used political term"
-            },
-            "American Exceptionalism": {
+            "american exceptionalism": {
                 "weight": 0,
                 "description": "Occasional nationalist term"
             },
@@ -40,11 +40,11 @@
             },
             "anti-americanism": {
                 "weight": 1,
-                "description": "Moderate-use nationalist criticism"
+                "description": "Common nationalist criticism term"
             },
             "anti-establishment": {
                 "weight": 1,
-                "description": "Regular political term"
+                "description": "Common anti-authority political term"
             },
             "anti-family": {
                 "weight": 1,
@@ -52,13 +52,13 @@
             },
             "anti-freedom": {
                 "weight": 1,
-                "description": "Regular liberty-based attack"
+                "description": "Common liberty-based attack"
             },
             "anti-woke": {
                 "weight": 2,
                 "description": "Frequent cultural term"
             },
-            "Authoritarianism": {
+            "authoritarianism": {
                 "weight": 2,
                 "description": "Common political criticism"
             },
@@ -98,10 +98,6 @@
                 "weight": 2,
                 "description": "Frequent social media term"
             },
-            "carjacking epidemic": {
-                "weight": 1,
-                "description": "Periodic crime narrative"
-            },
             "censorship": {
                 "weight": 2,
                 "description": "Frequent free speech term"
@@ -114,11 +110,11 @@
                 "weight": 3,
                 "description": "Highly frequent political movement term"
             },
-            "Christofascism": {
+            "christofascism": {
                 "weight": 2,
                 "description": "Frequent ideology criticism term"
             },
-            "Christofascist": {
+            "christofascist": {
                 "weight": 2,
                 "description": "Frequent ideology criticism term"
             },
@@ -130,9 +126,9 @@
                 "weight": 1,
                 "description": "Regular geographic criticism"
             },
-            "communist agenda": {
+            "communist": {
                 "weight": 1,
-                "description": "Common partisan accusation"
+                "description": "Common ideology"
             },
             "conspiracy theory": {
                 "weight": 2,
@@ -148,7 +144,7 @@
             },
             "coup": {
                 "weight": 3,
-                "description": "Frequent political accusation"
+                "description": "Highly frequent political accusation"
             },
             "crime spike": {
                 "weight": 1,
@@ -166,7 +162,11 @@
                 "weight": 2,
                 "description": "Frequent social conflict term"
             },
-            "dark MAGA": {
+            "cybertruck": {
+                "weight": 2,
+                "description": "Electric vehicle political symbol"
+            },
+            "dark maga": {
                 "weight": 0,
                 "description": "Niche political movement term"
             },
@@ -174,17 +174,9 @@
                 "weight": 3,
                 "description": "Highly frequent conspiracy term"
             },
-            "deep state purge": {
-                "weight": 1,
-                "description": "Occasional conspiracy term"
-            },
             "defund": {
                 "weight": 1,
                 "description": "Common policy action term"
-            },
-            "defund police": {
-                "weight": 2,
-                "description": "Frequent policy debate term"
             },
             "democratic socialism": {
                 "weight": 1,
@@ -230,13 +222,9 @@
                 "weight": 1,
                 "description": "Regular media criticism"
             },
-            "election denier": {
+            "election": {
                 "weight": 3,
                 "description": "Frequent political label"
-            },
-            "election integrity": {
-                "weight": 3,
-                "description": "Frequent voting term"
             },
             "elitism": {
                 "weight": 1,
@@ -245,10 +233,6 @@
             "end of democracy": {
                 "weight": 3,
                 "description": "Frequent political fear term"
-            },
-            "esg mandate": {
-                "weight": 1,
-                "description": "Moderate-use policy term"
             },
             "establishment": {
                 "weight": 1,
@@ -270,6 +254,10 @@
                 "weight": 3,
                 "description": "Highly frequent ideology term"
             },
+            "fascist": {
+                "weight": 2,
+                "description": "Frequent ideology attack"
+            },
             "fake news": {
                 "weight": 3,
                 "description": "Highly frequent media term"
@@ -277,10 +265,6 @@
             "false flag": {
                 "weight": 1,
                 "description": "Common conspiracy term"
-            },
-            "fascist": {
-                "weight": 2,
-                "description": "Frequent ideology attack"
             },
             "federal purge": {
                 "weight": 0,
@@ -314,6 +298,10 @@
                 "weight": 1,
                 "description": "Common political criticism"
             },
+            "mandate": {
+                "weight": 1,
+                "description": "Moderate-use policy term"
+            },
             "misinformation": {
                 "weight": 3,
                 "description": "Highly frequent media term"
@@ -330,13 +318,9 @@
                 "weight": 2,
                 "description": "Frequent social division term"
             },
-            "political correctness": {
+            "political": {
                 "weight": 1,
                 "description": "Common cultural term"
-            },
-            "political witch hunt": {
-                "weight": 3,
-                "description": "Frequent persecution claim"
             },
             "radical left": {
                 "weight": 2,
@@ -350,13 +334,21 @@
                 "weight": 0,
                 "description": "Rare conspiracy-related accusation"
             },
+            "spacex": {
+                "weight": 2,
+                "description": "Space company political symbol"
+            },
+            "starlink": {
+                "weight": 2,
+                "description": "Satellite internet political symbol"
+            },
             "stolen election": {
                 "weight": 3,
                 "description": "Highly frequent conspiracy claim"
             },
-            "tiktok": {
-                "weight": 3,
-                "description": "Highly frequent political phrase"
+            "tesla": {
+                "weight": 2,
+                "description": "Electric vehicle company political symbol"
             },
             "threat to democracy": {
                 "weight": 3,
@@ -365,6 +357,10 @@
             "thoughts and prayers": {
                 "weight": 1,
                 "description": "Common political response phrase"
+            },
+            "tiktok": {
+                "weight": 3,
+                "description": "Highly frequent social media platform in political debates"
             },
             "virtue signaling": {
                 "weight": 1,
@@ -377,6 +373,10 @@
             "voter suppression": {
                 "weight": 3,
                 "description": "Frequent election term"
+            },
+            "witch hunt": {
+                "weight": 3,
+                "description": "Frequent persecution claim"
             },
             "woke": {
                 "weight": 3,
