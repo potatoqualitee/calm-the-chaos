@@ -54,6 +54,18 @@
                 "weight": 3,
                 "description": "Highly frequent controversy term"
             },
+            "ICE arrests": {
+                "weight": 3,
+                "description": "Highly frequent policy term"
+            },
+            "ICE confirms": {
+                "weight": 2,
+                "description": "Frequent policy term"
+            },
+            "ICE raid": {
+                "weight": 3,
+                "description": "Highly frequent policy term"
+            },
             "illegal immigration": {
                 "weight": 3,
                 "description": "Highly frequent policy term"
@@ -106,9 +118,9 @@
                 "weight": 1,
                 "description": "Common legal term"
             },
-            "refugee crisis": {
-                "weight": 1,
-                "description": "Common humanitarian term"
+            "refugee": {
+                "weight": 2,
+                "description": "Frequent humanitarian term"
             },
             "sanctuary city": {
                 "weight": 1,

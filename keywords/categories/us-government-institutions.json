@@ -62,6 +62,10 @@
                 "weight": 0,
                 "description": "Regular position title"
             },
+            "CDC": {
+                "weight": 2,
+                "description": "Frequent agency name"
+            },
             "Chief Justice": {
                 "weight": 1,
                 "description": "Frequent official title"
@@ -81,6 +85,10 @@
             "CIA": {
                 "weight": 1,
                 "description": "Frequent agency name"
+            },
+            "Citizens United": {
+                "weight": 1,
+                "description": "Common ruling term"
             },
             "Civil Service": {
                 "weight": 0,
@@ -309,6 +317,10 @@
             "Executive Order": {
                 "weight": 1,
                 "description": "Frequent policy term"
+            },
+            "DHS": {
+                "weight": 1,
+                "description": "Frequent agency name"
             },
             "federal authority": {
                 "weight": 0,

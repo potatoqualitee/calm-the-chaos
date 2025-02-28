@@ -86,6 +86,14 @@
                 "weight": 0,
                 "description": "Regular political network term"
             },
+            "left wing": {
+                "weight": 1,
+                "description": "Frequent political label term"
+            },
+            "leftwing": {
+                "weight": 1,
+                "description": "Frequent political label term"
+            },
             "liberal": {
                 "weight": 1,
                 "description": "Frequent political identity term"
@@ -166,7 +174,11 @@
                 "weight": 1,
                 "description": "Common opposition term"
             },
-            "right-wing": {
+            "right wing": {
+                "weight": 1,
+                "description": "Frequent political label term"
+            },
+            "rightwing": {
                 "weight": 1,
                 "description": "Frequent political label term"
             },

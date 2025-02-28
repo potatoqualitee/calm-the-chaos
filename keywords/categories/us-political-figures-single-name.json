@@ -14,6 +14,10 @@
                 "weight": 2,
                 "description": "Common political figure"
             },
+            "Bessent": {
+                "weight": 3,
+                "description": "Frequent political figure"
+            },
             "Biden": {
                 "weight": 3,
                 "description": "Highly frequent president"
@@ -153,6 +157,10 @@
             "Melania": {
                 "weight": 1,
                 "description": "Regular political figure"
+            },
+            "Milley": {
+                "weight": 1,
+                "description": "Regular military figure"
             },
             "MTG": {
                 "weight": 3,
