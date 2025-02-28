@@ -2,6 +2,7 @@ import { startNewDetectionCycle } from '../../contentDetectionModule.js';
 import { ContentObserver } from '../ContentObserver.js';
 import { FilterProcessor } from './FilterProcessor.js';
 import { nodeHider } from '../../nodeHidingModule.js';
+import inputProtector from '../../utils/InputProtector.js';
 
 export class FilteringMutationObserver extends ContentObserver {
     constructor() {
@@ -10,6 +11,14 @@ export class FilteringMutationObserver extends ContentObserver {
         this.memoryManagementInterval = null;
         this.pendingMutations = new Map(); // Track unique mutations by node
         this.filterProcessor = new FilterProcessor(this.history);
+
+        // Performance optimization settings
+        this.debounceTime = 500; // Increased from 250ms to 500ms
+        this.lastProcessTime = 0;
+        this.throttleInterval = 1000; // Minimum time between processing in ms
+        this.mutationCount = 0;
+        this.maxMutationsPerBatch = 100; // Maximum mutations to process in one batch
+
         this.setupMemoryManagement();
     }
 
@@ -56,37 +65,43 @@ export class FilteringMutationObserver extends ContentObserver {
 
             this.observer = new MutationObserver((mutations) => {
                 try {
+                    // Skip processing if we're throttling
+                    const now = Date.now();
+                    if (now - this.lastProcessTime < this.throttleInterval && this.pendingMutations.size > 0) {
+                        // If we're already throttling, just add to pending mutations
+                        this.addMutationsToPending(mutations);
+                        return;
+                    }
+
+                    // Clear any existing timeout
                     if (this.timeoutId) {
                         clearTimeout(this.timeoutId);
                     }
 
-                    // Store mutations for batched processing
-                    mutations.forEach(mutation => {
-                        try {
-                            if (mutation.addedNodes.length > 0 ||
-                                (mutation.type === 'characterData' && mutation.target.textContent?.trim())) {
-                                this.pendingMutations.set(
-                                    mutation.target || mutation.addedNodes[0],
-                                    mutation
-                                );
-                            }
-                        } catch (error) {
-                            console.debug('Error storing mutation:', error);
-                        }
-                    });
+                    // Add new mutations to pending queue, filtering out input-related ones
+                    this.addMutationsToPending(mutations);
+
+                    // If we have too many mutations, increase debounce time dynamically
+                    let currentDebounceTime = this.debounceTime;
+                    if (this.mutationCount > 500) {
+                        currentDebounceTime = Math.min(2000, this.debounceTime * 2);
+                        console.debug(`High mutation rate detected (${this.mutationCount}), increasing debounce to ${currentDebounceTime}ms`);
+                    }
 
                     // Debounce processing to batch mutations
                     this.timeoutId = setTimeout(() => {
                         try {
                             if (this.pendingMutations.size > 0) {
+                                this.lastProcessTime = Date.now();
                                 const batchedMutations = Array.from(this.pendingMutations.values());
                                 this.pendingMutations.clear();
+                                this.mutationCount = 0;
                                 this.processMutationBatch(batchedMutations);
                             }
                         } catch (error) {
                             console.debug('Error processing mutation batch:', error);
                         }
-                    }, 250); // Reduced debounce time for better responsiveness
+                    }, currentDebounceTime);
                 } catch (error) {
                     console.debug('Error in observer callback:', error);
                 }
@@ -107,6 +122,45 @@ export class FilteringMutationObserver extends ContentObserver {
         }
     }
 
+    /**
+     * Add mutations to the pending queue, filtering out input-related ones
+     * @param {MutationRecord[]} mutations - The mutations to add
+     */
+    addMutationsToPending(mutations) {
+        let inputRelatedCount = 0;
+        let addedCount = 0;
+
+        for (const mutation of mutations) {
+            try {
+                // Skip input-related mutations
+                if (inputProtector.isMutationInputRelated(mutation)) {
+                    inputRelatedCount++;
+                    continue;
+                }
+
+                // Only add mutations with added nodes or character data changes
+                if (mutation.addedNodes.length > 0 ||
+                    (mutation.type === 'characterData' && mutation.target.textContent?.trim())) {
+
+                    // Use a unique key for the mutation
+                    const key = mutation.target || (mutation.addedNodes.length > 0 ? mutation.addedNodes[0] : null);
+                    if (key) {
+                        this.pendingMutations.set(key, mutation);
+                        addedCount++;
+                        this.mutationCount++;
+                    }
+                }
+            } catch (error) {
+                console.debug('Error storing mutation:', error);
+            }
+        }
+
+        // Log stats if we filtered a significant number of mutations
+        if (inputRelatedCount > 5) {
+            console.debug(`Filtered ${inputRelatedCount} input-related mutations, added ${addedCount}`);
+        }
+    }
+
     cleanup() {
         if (this.timeoutId) {
             clearTimeout(this.timeoutId);
@@ -117,17 +171,37 @@ export class FilteringMutationObserver extends ContentObserver {
             this.memoryManagementInterval = null;
         }
         this.pendingMutations.clear();
+        this.mutationCount = 0;
         super.cleanup();
     }
 
     processMutationBatch(mutations) {
+        // Limit batch size to prevent performance issues
+        const limitedMutations = mutations.length > this.maxMutationsPerBatch
+            ? mutations.slice(0, this.maxMutationsPerBatch)
+            : mutations;
+
+        if (mutations.length > this.maxMutationsPerBatch) {
+            console.debug(`Limiting mutation batch from ${mutations.length} to ${this.maxMutationsPerBatch}`);
+        }
+
         const elementNodes = new Set();
         const textNodes = new Set();
 
         // Efficiently categorize mutations
-        for (const mutation of mutations) {
+        for (const mutation of limitedMutations) {
+            // Double-check for input-related mutations
+            if (inputProtector.isMutationInputRelated(mutation)) {
+                continue;
+            }
+
             if (mutation.addedNodes.length > 0) {
                 for (const node of mutation.addedNodes) {
+                    // Skip input-related nodes
+                    if (inputProtector.isInInputContext(node)) {
+                        continue;
+                    }
+
                     if (node.nodeType === Node.ELEMENT_NODE) {
                         elementNodes.add(node);
                     } else if (node.nodeType === Node.TEXT_NODE && node.textContent?.trim()) {
@@ -136,14 +210,18 @@ export class FilteringMutationObserver extends ContentObserver {
                 }
             } else if (mutation.type === 'characterData' &&
                 mutation.target.nodeType === Node.TEXT_NODE &&
-                mutation.target.textContent?.trim()) {
+                mutation.target.textContent?.trim() &&
+                !inputProtector.isInInputContext(mutation.target)) {
                 textNodes.add(mutation.target);
             }
         }
 
+        // Use requestIdleCallback if available, otherwise fallback to requestAnimationFrame
+        const scheduleTask = window.requestIdleCallback || window.requestAnimationFrame;
+
         // Process elements first as they might contain text nodes
         if (elementNodes.size > 0) {
-            requestAnimationFrame(() => {
+            scheduleTask(() => {
                 startNewDetectionCycle();
                 this.filterProcessor.processContent(Array.from(elementNodes));
             });
@@ -151,7 +229,7 @@ export class FilteringMutationObserver extends ContentObserver {
 
         // Then process text nodes
         if (textNodes.size > 0) {
-            requestAnimationFrame(() => {
+            scheduleTask(() => {
                 this.filterProcessor.processContent(Array.from(textNodes));
             });
         }

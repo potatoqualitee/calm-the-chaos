@@ -12,6 +12,7 @@ import { handleGoogleNews } from '../../platforms/handleGoogleNews.js';
 import { handleStackOverflow } from '../../platforms/handleStackOverflow.js';
 import { handleYahoo } from '../../platforms/handleYahoo.js';
 import { handleBluesky } from '../../platforms/handleBluesky.js';
+import { handleGmail } from '../../platforms/handleGmail.js';
 
 class HandlerRegistry {
     constructor() {
@@ -28,7 +29,8 @@ class HandlerRegistry {
             ['youtube.com', handleYouTube],
             ['stackoverflow.com', handleStackOverflow],
             ['yahoo.com', handleYahoo],
-            ['bsky.app', handleBluesky]
+            ['bsky.app', handleBluesky],
+            ['mail.google.com', handleGmail]
         ]);
     }
 
