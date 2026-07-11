@@ -1,0 +1,5 @@
+#!/bin/sh
+# Calm the Chaos pre-commit hook: scan staged changes for leaked secrets.
+# Activated via  core.hooksPath=.githooks  (set automatically by `npm install`,
+# or manually with:  git config core.hooksPath .githooks).
+node "$(git rev-parse --show-toplevel)/scripts/check-secrets.cjs"

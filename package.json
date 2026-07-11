@@ -1,5 +1,7 @@
 {
   "scripts": {
+    "prepare": "git config core.hooksPath .githooks || exit 0",
+    "check-secrets": "node scripts/check-secrets.cjs",
     "build": "webpack --config webpack.config.js --mode production",
     "watch": "webpack --config webpack.config.js --mode development --watch",
     "test": "node --test tests/*.test.cjs",
