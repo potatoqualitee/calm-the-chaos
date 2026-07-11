@@ -55,7 +55,10 @@ module.exports = (_env, { mode = 'development' } = {}) => ({
         },
         {
           from: "keywords",
-          to: "keywords"
+          to: "keywords",
+          globOptions: {
+            ignore: ["**/*.ps1"]
+          }
         },
         {
           from: "styles",
