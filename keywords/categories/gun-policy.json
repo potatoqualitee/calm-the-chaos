@@ -170,6 +170,10 @@
                 "weight": 1,
                 "description": "Common incident term"
             },
+            "shooting": {
+                "weight": 3,
+                "description": "Highly frequent violence term covering all shooting coverage"
+            },
             "shooting death": {
                 "weight": 1,
                 "description": "Common mortality term"

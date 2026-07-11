@@ -403,6 +403,26 @@
                 "weight": 2,
                 "description": "Frequent system criticism"
             },
+            "paedophile": {
+                "weight": 2,
+                "description": "Inflammatory accusation term (British spelling)"
+            },
+            "paedophilia": {
+                "weight": 2,
+                "description": "Inflammatory accusation term (British spelling)"
+            },
+            "pedo": {
+                "weight": 2,
+                "description": "Inflammatory accusation slur; may substring-match torpedo/speedo"
+            },
+            "pedophile": {
+                "weight": 2,
+                "description": "Inflammatory accusation term"
+            },
+            "pedophilia": {
+                "weight": 2,
+                "description": "Inflammatory accusation term"
+            },
             "polarization": {
                 "weight": 2,
                 "description": "Frequent social division term"

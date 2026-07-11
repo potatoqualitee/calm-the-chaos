@@ -2,6 +2,12 @@
     "New Developments": {
         "description": "Recently emerging political figures and developing stories",
         "lifecycle": "event",
-        "keywords": {}
+        "keywords": {
+            "Salgado Araujo": {
+                "weight": 3,
+                "description": "ICE-shooting victim in developing Houston story",
+                "reviewAfter": "2026-08-10"
+            }
+        }
     }
 }

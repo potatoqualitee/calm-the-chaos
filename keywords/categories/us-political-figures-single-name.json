@@ -153,6 +153,10 @@
                 "weight": 2,
                 "description": "White House press secretary"
             },
+            "Mamdani": {
+                "weight": 3,
+                "description": "Highly frequent New York mayoral figure"
+            },
             "Manchin": {
                 "weight": 1,
                 "description": "Former senator"
@@ -197,6 +201,10 @@
                 "weight": 3,
                 "description": "Highly frequent House representative"
             },
+            "Paxton": {
+                "weight": 2,
+                "description": "Texas attorney general in recurring scandal coverage"
+            },
             "Pelosi": {
                 "weight": 3,
                 "description": "Highly frequent House figure"
@@ -204,6 +212,10 @@
             "Pence": {
                 "weight": 2,
                 "description": "Common former vice president"
+            },
+            "Platner": {
+                "weight": 1,
+                "description": "Maine US Senate candidate in current campaign controversy"
             },
             "R.F.K. Jr": {
                 "weight": 3,
@@ -244,6 +256,10 @@
             "Swalwell": {
                 "weight": 1,
                 "description": "Former House representative and political figure"
+            },
+            "Talarico": {
+                "weight": 2,
+                "description": "Texas legislator and US Senate candidate"
             },
             "Thune": {
                 "weight": 3,

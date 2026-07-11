@@ -74,6 +74,10 @@
                 "weight": 1,
                 "description": "Common exploitation term"
             },
+            "gang rape": {
+                "weight": 2,
+                "description": "Frequent assault term"
+            },
             "gender-based violence": {
                 "weight": 2,
                 "description": "Frequent harm term"
@@ -121,6 +125,18 @@
             "raped": {
                 "weight": 3,
                 "description": "Highly sensitive violence term"
+            },
+            "raping": {
+                "weight": 2,
+                "description": "Frequent assault term"
+            },
+            "rapist": {
+                "weight": 3,
+                "description": "Highly frequent assault term"
+            },
+            "rapists": {
+                "weight": 2,
+                "description": "Frequent assault term"
             },
             "sex crime": {
                 "weight": 3,

@@ -2,6 +2,11 @@
     "Immigration": {
         "description": "Terms related to immigration policy, border security, and migration that consistently generate intense public debate",
         "keywords": {
+            "Abolish ICE": {
+                "weight": 2,
+                "description": "Recurring activist rallying phrase",
+                "lifecycle": "evergreen"
+            },
             "Alien Enemies Act": {
                 "weight": 2,
                 "description": "Recurring immigration enforcement law",

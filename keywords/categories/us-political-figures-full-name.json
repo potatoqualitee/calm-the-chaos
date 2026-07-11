@@ -157,6 +157,10 @@
                 "weight": 1,
                 "description": "Regular governor"
             },
+            "Graham Platner": {
+                "weight": 1,
+                "description": "Maine US Senate candidate in current campaign controversy"
+            },
             "Greg Abbott": {
                 "weight": 2,
                 "description": "Common governor"
@@ -192,6 +196,10 @@
             "Jamaal Bowman": {
                 "weight": 1,
                 "description": "Former House representative"
+            },
+            "James Talarico": {
+                "weight": 2,
+                "description": "Texas legislator and US Senate candidate"
             },
             "Jamieson Greer": {
                 "weight": 2,
@@ -284,6 +292,10 @@
             "Kelly Tshibaka": {
                 "weight": 1,
                 "description": "Moderate-use political figure"
+            },
+            "Ken Paxton": {
+                "weight": 2,
+                "description": "Texas attorney general in recurring scandal coverage"
             },
             "Ketanji Brown Jackson": {
                 "weight": 2,
@@ -517,6 +529,10 @@
                 "weight": 1,
                 "description": "Regular House figure"
             },
+            "Summer Lee": {
+                "weight": 1,
+                "description": "Pennsylvania House representative"
+            },
             "Susie Wiles": {
                 "weight": 2,
                 "description": "White House chief of staff"
@@ -560,6 +576,10 @@
             "William Pulte": {
                 "weight": 1,
                 "description": "Acting director of national intelligence"
+            },
+            "Zohran Mamdani": {
+                "weight": 3,
+                "description": "Highly frequent New York mayoral figure"
             }
         }
     }
