@@ -307,6 +307,10 @@
                 "description": "Country name",
                 "lifecycle": "cyclical"
             },
+            "settler": {
+                "weight": 2,
+                "description": "Israeli settler violence in West Bank conflict coverage"
+            },
             "shipping attack": {
                 "weight": 1,
                 "description": "Commercial shipping security term",

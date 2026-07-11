@@ -3,6 +3,11 @@
         "description": "Recently emerging political figures and developing stories",
         "lifecycle": "event",
         "keywords": {
+            "Nolan Wells": {
+                "weight": 3,
+                "description": "Teen football player whose death is a developing investigation drawing heavy coverage and speculation",
+                "reviewAfter": "2026-08-11"
+            },
             "Salgado Araujo": {
                 "weight": 3,
                 "description": "ICE-shooting victim in developing Houston story",

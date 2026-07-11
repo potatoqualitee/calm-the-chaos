@@ -312,6 +312,11 @@
                 "weight": 1,
                 "description": "Common acronym"
             },
+            "EEOC": {
+                "weight": 1,
+                "description": "Federal employment-discrimination agency in current NYT legal fight",
+                "lifecycle": "evergreen"
+            },
             "Election Assistance Commission": {
                 "weight": 1,
                 "description": "Federal election administration agency",
