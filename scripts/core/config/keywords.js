@@ -1,4 +1,4 @@
-import linkedinExceptions from '../../../keywords/linkedin-exceptions.json';
+import { getEnabledCategoryKeywords } from './keywordMetadata.js';
 
 // Import all JSON files from the categories directory
 function importAll(r) {
@@ -15,12 +15,11 @@ const categoryFiles = importAll(require.context('../../../keywords/categories/',
 // Convert each file from new format to old format and combine
 const combinedKeywords = Object.values(categoryFiles).reduce((acc, categoryData) => {
   const categoryName = Object.keys(categoryData)[0];
-  acc[categoryName] = Object.keys(categoryData[categoryName].keywords);
+  acc[categoryName] = getEnabledCategoryKeywords(categoryData[categoryName]);
   return acc;
 }, {});
 
 export const DEFAULT_KEYWORD_GROUPS = combinedKeywords;
-export const LINKEDIN_EXCEPTIONS = linkedinExceptions;
 
 export function getMatchingOption(keyword) {
   return keyword.length <= 3 ? 'exact' : 'flexible';

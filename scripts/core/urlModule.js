@@ -72,8 +72,10 @@ function getIgnoredDomainsPatterns(ignoredDomains, disabledDomainGroups) {
 // Function to check if URL is a pre-configured domain
 function isPreconfiguredDomain(url) {
   try {
-    const { hostname } = new URL(url);
-    return PRECONFIGURED_DOMAINS.some(preconfiguredDomain => hostname.includes(preconfiguredDomain));
+    const hostname = new URL(url).hostname.toLowerCase().replace(/^www\./, '');
+    return PRECONFIGURED_DOMAINS.some(preconfiguredDomain =>
+      hostname === preconfiguredDomain || hostname.endsWith('.' + preconfiguredDomain)
+    );
   } catch (e) {
     console.error('Error parsing URL:', e);
     return false;

@@ -147,8 +147,9 @@
                 "description": "Frequent military development term"
             },
             "naval blockade": {
-                "weight": 0,
-                "description": "Common military tactic term"
+                "weight": 2,
+                "description": "Coercive maritime military and foreign-policy tactic",
+                "lifecycle": "cyclical"
             },
             "no-fly zone": {
                 "weight": 1,
@@ -181,6 +182,18 @@
             "nuclear weapon": {
                 "weight": 1,
                 "description": "Highly frequent weapons term"
+            },
+            "Operation Epic Fury": {
+                "weight": 3,
+                "description": "Current U.S. military operation in the 2026 Iran war",
+                "lifecycle": "event",
+                "reviewAfter": "2026-08-10"
+            },
+            "Operation Midnight Hammer": {
+                "weight": 2,
+                "description": "U.S. strikes on Iranian nuclear facilities referenced in current war coverage",
+                "lifecycle": "event",
+                "reviewAfter": "2026-08-10"
             },
             "peacekeeping force": {
                 "weight": 0,

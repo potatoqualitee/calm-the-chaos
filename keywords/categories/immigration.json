@@ -2,6 +2,11 @@
     "Immigration": {
         "description": "Terms related to immigration policy, border security, and migration that consistently generate intense public debate",
         "keywords": {
+            "Alien Enemies Act": {
+                "weight": 2,
+                "description": "Recurring immigration enforcement law",
+                "lifecycle": "evergreen"
+            },
             "amnesty": {
                 "weight": 2,
                 "description": "Frequent policy debate term"
@@ -9,6 +14,11 @@
             "asylum seeker": {
                 "weight": 1,
                 "description": "Common legal status term"
+            },
+            "birthright citizenship": {
+                "weight": 3,
+                "description": "High-priority constitutional immigration term",
+                "lifecycle": "evergreen"
             },
             "border crisis": {
                 "weight": 3,
@@ -30,6 +40,11 @@
                 "weight": 2,
                 "description": "Frequent policy debate term"
             },
+            "CBP": {
+                "weight": 1,
+                "description": "Customs and Border Protection acronym",
+                "lifecycle": "evergreen"
+            },
             "citizenship status": {
                 "weight": 1,
                 "description": "Regular legal term"
@@ -37,6 +52,11 @@
             "deportation": {
                 "weight": 2,
                 "description": "Frequent enforcement term"
+            },
+            "deportation flight": {
+                "weight": 2,
+                "description": "Immigration removal operation term",
+                "lifecycle": "evergreen"
             },
             "detention center": {
                 "weight": 1,
@@ -54,13 +74,19 @@
                 "weight": 3,
                 "description": "Highly frequent controversy term"
             },
+            "ICE agents": {
+                "weight": 2,
+                "description": "Immigration enforcement personnel term",
+                "lifecycle": "evergreen"
+            },
             "ICE arrests": {
                 "weight": 3,
                 "description": "Highly frequent policy term"
             },
-            "ICE confirms": {
-                "weight": 2,
-                "description": "Frequent policy term"
+            "ICE detention": {
+                "weight": 3,
+                "description": "High-priority immigration detention term",
+                "lifecycle": "evergreen"
             },
             "ICE raid": {
                 "weight": 3,
@@ -78,9 +104,19 @@
                 "weight": 1,
                 "description": "Common policy term"
             },
+            "Immigration and Customs Enforcement": {
+                "weight": 2,
+                "description": "Federal immigration enforcement agency",
+                "lifecycle": "evergreen"
+            },
             "immigration ban": {
                 "weight": 1,
                 "description": "Common policy term"
+            },
+            "immigration crackdown": {
+                "weight": 3,
+                "description": "High-priority enforcement policy term",
+                "lifecycle": "evergreen"
             },
             "immigration crisis": {
                 "weight": 2,
@@ -93,6 +129,11 @@
             "immigration reform": {
                 "weight": 2,
                 "description": "Frequent policy term"
+            },
+            "mass deportation": {
+                "weight": 3,
+                "description": "High-priority immigration policy term",
+                "lifecycle": "evergreen"
             },
             "migrant caravan": {
                 "weight": 1,
@@ -121,6 +162,11 @@
             "refugee": {
                 "weight": 2,
                 "description": "Frequent humanitarian term"
+            },
+            "removal proceedings": {
+                "weight": 1,
+                "description": "Immigration court process term",
+                "lifecycle": "evergreen"
             },
             "sanctuary city": {
                 "weight": 1,

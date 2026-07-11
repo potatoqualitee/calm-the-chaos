@@ -94,6 +94,11 @@
                 "weight": 0,
                 "description": "Regular system term"
             },
+            "civil service purge": {
+                "weight": 2,
+                "description": "Federal workforce controversy term",
+                "lifecycle": "cyclical"
+            },
             "committee chair": {
                 "weight": 0,
                 "description": "Basic position title"
@@ -187,8 +192,9 @@
                 "description": "Regular department name"
             },
             "Department of Government Efficiency": {
-                "weight": 0,
-                "description": "Basic department name"
+                "weight": 3,
+                "description": "High-priority federal restructuring body",
+                "lifecycle": "cyclical"
             },
             "Department of Health and Human Services": {
                 "weight": 1,
@@ -230,6 +236,11 @@
                 "weight": 0,
                 "description": "Regular department name"
             },
+            "Department of War": {
+                "weight": 2,
+                "description": "Current defense department name",
+                "lifecycle": "cyclical"
+            },
             "Deputy Attorney General": {
                 "weight": 0,
                 "description": "Regular position title"
@@ -258,6 +269,10 @@
                 "weight": 0,
                 "description": "Regular position title"
             },
+            "DHS": {
+                "weight": 1,
+                "description": "Frequent agency name"
+            },
             "Director of National Intelligence": {
                 "weight": 1,
                 "description": "Common position title"
@@ -279,12 +294,28 @@
                 "description": "Basic acronym"
             },
             "DOGE": {
-                "weight": 0,
-                "description": "Basic acronym"
+                "weight": 1,
+                "description": "Ambiguous acronym also used for Dogecoin",
+                "lifecycle": "cyclical"
+            },
+            "DOGE cuts": {
+                "weight": 2,
+                "description": "Federal restructuring and spending-cut term",
+                "lifecycle": "cyclical"
+            },
+            "DOGE layoffs": {
+                "weight": 2,
+                "description": "Federal workforce reduction term",
+                "lifecycle": "cyclical"
             },
             "DOJ": {
                 "weight": 1,
                 "description": "Common acronym"
+            },
+            "Election Assistance Commission": {
+                "weight": 1,
+                "description": "Federal election administration agency",
+                "lifecycle": "evergreen"
             },
             "Electoral College": {
                 "weight": 1,
@@ -318,13 +349,10 @@
                 "weight": 1,
                 "description": "Frequent policy term"
             },
-            "DHS": {
-                "weight": 1,
-                "description": "Frequent agency name"
-            },
-            "federal authority": {
-                "weight": 0,
-                "description": "Common governance term"
+            "executive power": {
+                "weight": 2,
+                "description": "Recurring constitutional authority term",
+                "lifecycle": "evergreen"
             },
             "executive session": {
                 "weight": 0,
@@ -342,21 +370,13 @@
                 "weight": 0,
                 "description": "Regular position title"
             },
-            "federal government": {
-                "weight": 1,
-                "description": "Common institution term"
-            },
-            "federal money": {
-                "weight": 1,
-                "description": "Common funding term"
-            },
-            "federal taxes": {
-                "weight": 1,
-                "description": "Common revenue term"
-            },
             "Federal agency": {
                 "weight": 0,
                 "description": "Regular structure term"
+            },
+            "federal authority": {
+                "weight": 0,
+                "description": "Common governance term"
             },
             "Federal Bureau of Investigation": {
                 "weight": 1,
@@ -370,6 +390,23 @@
                 "weight": 0,
                 "description": "Regular personnel term"
             },
+            "federal government": {
+                "weight": 1,
+                "description": "Common institution term"
+            },
+            "federal layoffs": {
+                "weight": 2,
+                "description": "Federal workforce reduction term",
+                "lifecycle": "cyclical"
+            },
+            "federal money": {
+                "weight": 1,
+                "description": "Common funding term"
+            },
+            "federal taxes": {
+                "weight": 1,
+                "description": "Common revenue term"
+            },
             "Federal Trade Commission": {
                 "weight": 0,
                 "description": "Regular agency name"
@@ -379,8 +416,9 @@
                 "description": "Regular personnel term"
             },
             "Federal workforce": {
-                "weight": 0,
-                "description": "Regular personnel term"
+                "weight": 2,
+                "description": "Durable federal employment term",
+                "lifecycle": "evergreen"
             },
             "FEMA": {
                 "weight": 1,
@@ -394,13 +432,13 @@
                 "weight": 1,
                 "description": "Frequent procedural term"
             },
-            "First Lady": {
-                "weight": 1,
-                "description": "Official White House position"
-            },
             "Financial Services Committee": {
                 "weight": 0,
                 "description": "Regular committee name"
+            },
+            "First Lady": {
+                "weight": 1,
+                "description": "Official White House position"
             },
             "Food and Drug Administration": {
                 "weight": 1,
@@ -426,13 +464,18 @@
                 "weight": 0,
                 "description": "Basic agency name"
             },
-            "government funded": {
-                "weight": 0,
-                "description": "Common budget term"
-            },
             "Government agency": {
                 "weight": 0,
                 "description": "Basic structure term"
+            },
+            "government downsizing": {
+                "weight": 1,
+                "description": "Federal restructuring policy term",
+                "lifecycle": "cyclical"
+            },
+            "government funded": {
+                "weight": 0,
+                "description": "Common budget term"
             },
             "government shutdown": {
                 "weight": 3,
@@ -482,13 +525,13 @@
                 "weight": 1,
                 "description": "Common institution name"
             },
-            "House passes": {
-                "weight": 0,
-                "description": "Common legislative action term"
-            },
             "House parliamentarian": {
                 "weight": 0,
                 "description": "Basic position title"
+            },
+            "House passes": {
+                "weight": 0,
+                "description": "Common legislative action term"
             },
             "House rules": {
                 "weight": 0,
@@ -507,8 +550,13 @@
                 "description": "Common agency name"
             },
             "inauguration": {
-                "weight": 3,
-                "description": "Highly frequent presidential transition ceremony"
+                "weight": 0,
+                "description": "Cyclical presidential transition ceremony",
+                "lifecycle": "cyclical"
+            },
+            "intel officials": {
+                "weight": 0,
+                "description": "Common government personnel term"
             },
             "Intelligence agency": {
                 "weight": 0,
@@ -521,10 +569,6 @@
             "Intelligence community": {
                 "weight": 1,
                 "description": "Common structure term"
-            },
-            "intel officials": {
-                "weight": 0,
-                "description": "Common government personnel term"
             },
             "Internal Revenue Service": {
                 "weight": 1,
@@ -670,13 +714,13 @@
                 "weight": 1,
                 "description": "Common committee name"
             },
-            "parliamentary procedure": {
-                "weight": 0,
-                "description": "Basic process term"
-            },
             "parliamentarian": {
                 "weight": 0,
                 "description": "Basic position title"
+            },
+            "parliamentary procedure": {
+                "weight": 0,
+                "description": "Basic process term"
             },
             "party whip": {
                 "weight": 0,
@@ -686,29 +730,31 @@
                 "weight": 1,
                 "description": "Frequent institution name"
             },
-            "POTUS": {
-                "weight": 1,
-                "description": "Frequent position acronym"
-            },
             "political power struggle": {
                 "weight": 0,
                 "description": "Common political conflict term"
             },
+            "POTUS": {
+                "weight": 1,
+                "description": "Frequent position acronym"
+            },
+            "president-elect": {
+                "weight": 0,
+                "description": "Cyclical transitional office title",
+                "lifecycle": "cyclical"
+            },
             "Press Secretary": {
                 "weight": 1,
                 "description": "Common position title"
-            },
-            "president-elect": {
-                "weight": 3,
-                "description": "Highly frequent transitional position term"
             },
             "Principal Deputy": {
                 "weight": 0,
                 "description": "Basic position title"
             },
             "Project 2025": {
-                "weight": 1,
-                "description": "Common initiative name"
+                "weight": 2,
+                "description": "Current governing initiative and policy blueprint",
+                "lifecycle": "cyclical"
             },
             "proof of citizenship": {
                 "weight": 0,
@@ -722,6 +768,11 @@
                 "weight": 0,
                 "description": "Basic position title"
             },
+            "reduction in force": {
+                "weight": 2,
+                "description": "Federal workforce reduction process",
+                "lifecycle": "cyclical"
+            },
             "representatives": {
                 "weight": 1,
                 "description": "Common legislative term"
@@ -731,12 +782,17 @@
                 "description": "Regular committee name"
             },
             "Schedule F": {
-                "weight": 1,
-                "description": "Common policy term"
+                "weight": 2,
+                "description": "Federal civil service classification policy",
+                "lifecycle": "cyclical"
             },
             "SCOTUS": {
                 "weight": 1,
                 "description": "Frequent court acronym"
+            },
+            "secession": {
+                "weight": 0,
+                "description": "Common political conflict term"
             },
             "Secretary of Agriculture": {
                 "weight": 0,
@@ -757,10 +813,6 @@
             "Secretary of Energy": {
                 "weight": 0,
                 "description": "Regular position title"
-            },
-            "secession": {
-                "weight": 0,
-                "description": "Common political conflict term"
             },
             "Secretary of Health and Human Services": {
                 "weight": 1,
@@ -798,13 +850,10 @@
                 "weight": 0,
                 "description": "Regular position title"
             },
-            "shutdown threat": {
-                "weight": 3,
-                "description": "Highly frequent crisis term"
-            },
-            "shutdown looms": {
-                "weight": 0,
-                "description": "Common crisis term"
+            "Secretary of War": {
+                "weight": 2,
+                "description": "Current defense cabinet title",
+                "lifecycle": "cyclical"
             },
             "Senate": {
                 "weight": 1,
@@ -858,17 +907,13 @@
                 "weight": 0,
                 "description": "Regular position title"
             },
-            "Speaker of the House": {
-                "weight": 1,
-                "description": "Frequent position title"
-            },
-            "spending bill": {
+            "shutdown looms": {
                 "weight": 0,
-                "description": "Common legislation term"
+                "description": "Common crisis term"
             },
-            "Speakership": {
-                "weight": 2,
-                "description": "Frequent leadership term"
+            "shutdown threat": {
+                "weight": 3,
+                "description": "Highly frequent crisis term"
             },
             "Social Security Administration": {
                 "weight": 1,
@@ -877,6 +922,18 @@
             "Solicitor General": {
                 "weight": 0,
                 "description": "Regular position title"
+            },
+            "Speaker of the House": {
+                "weight": 1,
+                "description": "Frequent position title"
+            },
+            "Speakership": {
+                "weight": 2,
+                "description": "Frequent leadership term"
+            },
+            "spending bill": {
+                "weight": 0,
+                "description": "Common legislation term"
             },
             "SSA": {
                 "weight": 0,
@@ -910,13 +967,13 @@
                 "weight": 1,
                 "description": "Common labor organization"
             },
-            "Trade Representative": {
-                "weight": 0,
-                "description": "Regular position title"
-            },
             "top court": {
                 "weight": 0,
                 "description": "Common judicial term"
+            },
+            "Trade Representative": {
+                "weight": 0,
+                "description": "Regular position title"
             },
             "Transportation Security Administration": {
                 "weight": 0,
@@ -938,9 +995,18 @@
                 "weight": 1,
                 "description": "Common institution term"
             },
-            "USAID": {
+            "US House": {
                 "weight": 0,
-                "description": "Basic agency acronym"
+                "description": "Common legislative body term"
+            },
+            "US restrictions": {
+                "weight": 0,
+                "description": "Common policy term"
+            },
+            "USAID": {
+                "weight": 2,
+                "description": "U.S. foreign assistance agency",
+                "lifecycle": "evergreen"
             },
             "USDA": {
                 "weight": 0,
@@ -953,14 +1019,6 @@
             "USTR": {
                 "weight": 0,
                 "description": "Basic agency acronym"
-            },
-            "US House": {
-                "weight": 0,
-                "description": "Common legislative body term"
-            },
-            "US restrictions": {
-                "weight": 0,
-                "description": "Common policy term"
             },
             "Veterans Affairs Committee": {
                 "weight": 0,

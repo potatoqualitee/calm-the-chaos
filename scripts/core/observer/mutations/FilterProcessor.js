@@ -5,168 +5,228 @@ import { findMinimalContentContainer, handleGenericMedia } from '../../elementPr
 import { hideNodes } from '../../nodeHidingModule.js';
 import { containsBlockedContent, startNewDetectionCycle } from '../../contentDetectionModule.js';
 import { handlerRegistry } from '../../handlers/handlerRegistry.js';
+import { removeImmediateBlur } from '../../config/immediateBlur.js';
 
-// Domains that should skip generic filtering
-const SKIP_GENERIC_DOMAINS = ['stackoverflow.com'];
+const SETTINGS_KEYS = [
+    'ignoredDomains',
+    'disabledDomainGroups',
+    'filteringEnabled',
+    'enabledDomains',
+    'filterAllSites'
+];
+
+const SKIP_FULL_GENERIC_DOMAINS = ['cnn.com', 'reddit.com', 'stackoverflow.com', 'bsky.app'];
+const IGNORED_TEXT_ANCESTORS = 'script, style, noscript, template, textarea, input, select, option, [contenteditable="true"]';
+const SEMANTIC_CONTENT_SELECTOR = [
+    '[data-testid="card-headline"]',
+    'h1',
+    'h2',
+    'h3',
+    'h4',
+    'article a[href]',
+    '[role="article"] a[href]'
+].join(', ');
+
+let cachedSettings = null;
+let pendingSettingsRequest = null;
+
+function getFilteringSettings() {
+    if (cachedSettings) return Promise.resolve(cachedSettings);
+    if (pendingSettingsRequest) return pendingSettingsRequest;
+
+    pendingSettingsRequest = new Promise(resolve => {
+        chromeStorageGet(SETTINGS_KEYS, result => {
+            cachedSettings = {
+                ignoredDomains: result.ignoredDomains || {},
+                disabledDomainGroups: result.disabledDomainGroups || [],
+                filteringEnabled: result.filteringEnabled !== undefined ? result.filteringEnabled : true,
+                enabledDomains: result.enabledDomains || [],
+                filterAllSites: result.filterAllSites || false
+            };
+            pendingSettingsRequest = null;
+            resolve(cachedSettings);
+        });
+    });
+
+    return pendingSettingsRequest;
+}
+
+if (typeof chrome !== 'undefined' && chrome.storage?.onChanged) {
+    chrome.storage.onChanged.addListener((changes, areaName) => {
+        if (areaName === 'local' && SETTINGS_KEYS.some(key => key in changes)) {
+            cachedSettings = null;
+        }
+    });
+}
+
+function hostnameMatches(hostname, domain) {
+    return hostname === domain || hostname.endsWith(`.${domain}`);
+}
 
 export class FilterProcessor {
     constructor(history) {
         this.history = history;
     }
 
-    async handleGenericSites(nodesToHide) {
-        try {
-            const BLOCKED_REGEX = getBlockedRegex();
+    getProcessingRoots(nodes) {
+        if (!nodes) {
+            const mainRegions = Array.from(document.querySelectorAll('main, [role="main"]'))
+                .filter(region => !region.parentElement?.closest('main, [role="main"]'));
+            return mainRegions.length > 0 ? mainRegions : [document.body];
+        }
 
-            // If no pattern (all keywords disabled), skip filtering
-            if (!BLOCKED_REGEX) {
-                console.log('Content filtering is disabled - all keywords are disabled');
-                return;
+        const candidateNodes = [];
+        for (const node of nodes) {
+            if (!node?.isConnected) continue;
+            if (node.nodeType !== Node.ELEMENT_NODE && node.nodeType !== Node.TEXT_NODE) continue;
+
+            const element = node.nodeType === Node.TEXT_NODE ? node.parentElement : node;
+            if (!element || element.closest(IGNORED_TEXT_ANCESTORS)) continue;
+
+            candidateNodes.push(node);
+        }
+
+        const candidateSet = new Set(candidateNodes);
+        return candidateNodes.filter(node => {
+            let ancestor = node.parentNode;
+            while (ancestor && ancestor !== document) {
+                if (candidateSet.has(ancestor)) return false;
+                ancestor = ancestor.parentNode;
             }
+            return true;
+        });
+    }
 
-            const walker = document.createTreeWalker(
-                document.body,
-                NodeFilter.SHOW_TEXT,
-                {
-                    acceptNode: (node) => {
-                        try {
-                            // Skip text nodes in editable content
-                            if (node.parentElement?.isContentEditable) {
-                                return NodeFilter.FILTER_REJECT;
-                            }
+    shouldInspectTextNode(node) {
+        if (this.history.has(node)) return false;
+        if (!node.textContent?.trim()) return false;
 
-                            return containsBlockedContent(node.textContent).length > 0
-                                ? NodeFilter.FILTER_ACCEPT
-                                : NodeFilter.FILTER_REJECT;
-                        } catch (error) {
-                            console.debug('Error in walker acceptNode:', error);
-                            return NodeFilter.FILTER_REJECT;
-                        }
-                    }
-                }
-            );
+        const parent = node.parentElement;
+        if (!parent || parent.closest(IGNORED_TEXT_ANCESTORS)) return false;
+        return containsBlockedContent(node.textContent).length > 0;
+    }
 
-            let node;
-            while ((node = walker.nextNode())) {
+    collectMatchingTextNodes(root) {
+        if (root.nodeType === Node.TEXT_NODE) {
+            return this.shouldInspectTextNode(root) ? [root] : [];
+        }
+
+        const matchingNodes = [];
+        const walker = document.createTreeWalker(
+            root,
+            NodeFilter.SHOW_TEXT,
+            {
+                acceptNode: node => this.shouldInspectTextNode(node)
+                    ? NodeFilter.FILTER_ACCEPT
+                    : NodeFilter.FILTER_REJECT
+            }
+        );
+
+        let node;
+        while ((node = walker.nextNode())) matchingNodes.push(node);
+        return matchingNodes;
+    }
+
+    collectSemanticContent(root) {
+        if (root.nodeType !== Node.ELEMENT_NODE) return [];
+        const elements = new Set();
+        if (root.matches(SEMANTIC_CONTENT_SELECTOR)) elements.add(root);
+        root.querySelectorAll(SEMANTIC_CONTENT_SELECTOR).forEach(element => elements.add(element));
+        return [...elements].filter(element =>
+            !this.history.has(element) &&
+            !element.closest('header, footer, nav, [role="navigation"]') &&
+            containsBlockedContent(element.innerText || element.textContent).length > 0
+        );
+    }
+
+    async handleGenericSites(nodesToHide, roots) {
+        if (!getBlockedRegex()) return;
+
+        for (const root of roots) {
+            for (const element of this.collectSemanticContent(root)) {
                 try {
-                    if (!this.history.has(node)) {
-                        const container = findMinimalContentContainer(node);
-                        if (container) {
-                            nodesToHide.add(container);
-                            this.history.add(node);
-                        }
+                    const container = await findMinimalContentContainer(element);
+                    if (container) {
+                        this.history.add(element);
+                        nodesToHide.add(container);
                     }
                 } catch (error) {
-                    console.debug('Error processing node in handleGenericSites:', error);
+                    console.debug('Error selecting semantic content container:', error);
                 }
             }
-        } catch (error) {
-            console.debug('Error in handleGenericSites:', error);
+
+            for (const textNode of this.collectMatchingTextNodes(root)) {
+                try {
+                    const container = await findMinimalContentContainer(textNode);
+                    if (container) {
+                        this.history.add(textNode);
+                        nodesToHide.add(container);
+                    }
+                } catch (error) {
+                    console.debug('Error selecting content container:', error);
+                }
+            }
         }
+    }
+
+    shouldSkipFullGeneric(hostname) {
+        return SKIP_FULL_GENERIC_DOMAINS.some(domain => hostnameMatches(hostname, domain));
+    }
+
+    finalizeInitialFiltering() {
+        document.documentElement.setAttribute('data-calm-chaos-state', 'filtered');
+        removeImmediateBlur();
     }
 
     async processContent(nodes = null) {
         const currentUrl = window.location.href;
-        console.debug('Current URL:', currentUrl);
+        const isFullScan = nodes === null;
 
-        // Skip non-http(s) URLs immediately
-        if (!currentUrl || (!currentUrl.startsWith('http://') && !currentUrl.startsWith('https://'))) {
-            return;
-        }
+        if (!currentUrl || !/^https?:\/\//.test(currentUrl)) return;
 
-        // Get all required settings first
-        const result = await new Promise(resolve => {
-            chromeStorageGet([
-                'ignoredDomains',
-                'disabledDomainGroups',
-                'filteringEnabled',
-                'enabledDomains',
-                'filterAllSites'
-            ], resolve);
-        });
-
-        const {
-            ignoredDomains = {},
-            disabledDomainGroups = [],
-            filteringEnabled = true,
-            enabledDomains = [],
-            filterAllSites = false
-        } = result;
-
-        // Check if extension is enabled for this URL before doing ANY processing
+        const settings = await getFilteringSettings();
         if (!isExtensionEnabledOnUrl(
             currentUrl,
-            ignoredDomains,
-            disabledDomainGroups,
-            filteringEnabled,
-            enabledDomains,
-            filterAllSites
+            settings.ignoredDomains,
+            settings.disabledDomainGroups,
+            settings.filteringEnabled,
+            settings.enabledDomains,
+            settings.filterAllSites
         )) {
-            console.log('Content filtering is disabled for this URL:', currentUrl);
             return;
         }
 
         try {
-            // Only get regex patterns if extension is enabled for this URL
-            const BLOCKED_REGEX = getBlockedRegex();
+            if (!getBlockedRegex()) return;
 
-            // If no pattern (all keywords disabled), skip filtering
-            if (!BLOCKED_REGEX) {
-                console.log('Content filtering is disabled - all keywords are disabled');
-                return;
+            startNewDetectionCycle();
+            const nodesToHide = new Set();
+            const roots = this.getProcessingRoots(nodes);
+            if (roots.length === 0) return;
+
+            const hostname = window.location.hostname.replace(/^www\./, '').toLowerCase();
+            const handler = handlerRegistry.getHandler(hostname);
+
+            if (isFullScan && handler) {
+                await handlerRegistry.executePlatformHandler(hostname, nodesToHide);
             }
 
-            // Start a new detection cycle for this filtering run
-            startNewDetectionCycle();
+            if (!isFullScan || !this.shouldSkipFullGeneric(hostname)) {
+                await this.handleGenericSites(nodesToHide, roots);
+            }
 
-            const nodesToHide = new Set();
-
-            // Get hostname without 'www.' prefix
-            const hostname = window.location.hostname.replace(/^www\./, '');
-            console.debug('Normalized hostname:', hostname);
-
-            try {
-                // Check if there's a platform-specific handler
-                const hasHandler = handlerRegistry.getHandler(hostname);
-
-                if (hasHandler) {
-                    // Execute platform handler
-                    await handlerRegistry.executePlatformHandler(hostname, nodesToHide);
-
-                    // Skip generic filtering for Reddit to avoid interference
-                    if (!hostname.includes('reddit.com') && !SKIP_GENERIC_DOMAINS.includes(hostname)) {
-                        await this.handleGenericSites(nodesToHide);
-                    }
-                } else {
-                    // For sites without handlers, do generic filtering
-                    await this.handleGenericSites(nodesToHide);
-                }
-
-                // Handle images
-                await handleGenericMedia(nodesToHide);
-
-                // If specific nodes were passed, process them
-                if (nodes) {
-                    for (const node of nodes) {
-                        if (node instanceof Element) {
-                            // Check for images in the node
-                            const images = node.getElementsByTagName('img');
-                            if (images.length > 0) {
-                                await handleGenericMedia(nodesToHide);
-                            }
-                        }
-                    }
-                }
-
-                // Hide all collected nodes
-                if (nodesToHide.size > 0) {
-                    hideNodes(nodesToHide);
-                }
-            } catch (error) {
-                console.error('Error during content filtering:', error);
+            await handleGenericMedia(nodesToHide, roots);
+            if (nodesToHide.size > 0) {
+                await hideNodes(nodesToHide);
             }
         } catch (error) {
-            console.debug('Error checking extension enabled status:', error);
+            console.error('Error during content filtering:', error);
+        } finally {
+            if (isFullScan) this.finalizeInitialFiltering();
         }
     }
+}
+
+export function clearFilteringSettingsCache() {
+    cachedSettings = null;
 }

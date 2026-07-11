@@ -22,18 +22,24 @@ class SpeedReaderDetector {
      * Set up mutation observer to detect SpeedReader after dynamic changes
      */
     setupSpeedReaderObserver() {
-        const observer = new MutationObserver(() => {
+        const check = () => {
             if (!this.isSpeedReader && this.detectSpeedReader()) {
-                console.log('SpeedReader detected after page update');
                 this.isSpeedReader = true;
             }
-        });
+        };
+
+        const observer = new MutationObserver(check);
 
         observer.observe(document.documentElement, {
             attributes: true,
-            childList: true,
-            subtree: true
+            attributeFilter: ['data-font-family', 'data-font-size', 'data-column-width'],
+            childList: false,
+            subtree: false
         });
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', check, { once: true });
+        }
     }
 
     /**
@@ -83,4 +89,4 @@ class SpeedReaderDetector {
 const detector = new SpeedReaderDetector();
 
 export const isSpeedReader = () => detector.getStatus();
-export default SpeedReaderDetector;
+export default detector;

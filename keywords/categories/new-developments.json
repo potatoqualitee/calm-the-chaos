@@ -1,6 +1,7 @@
 {
     "New Developments": {
         "description": "Recently emerging political figures and developing stories",
+        "lifecycle": "event",
         "keywords": {}
     }
 }

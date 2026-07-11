@@ -10,13 +10,13 @@
                 "weight": 1,
                 "description": "Frequent nationalist movement term"
             },
-            "antifa movement": {
-                "weight": 1,
-                "description": "Frequent activist group term"
-            },
             "anti-government": {
                 "weight": 1,
                 "description": "Common political stance term"
+            },
+            "antifa movement": {
+                "weight": 1,
+                "description": "Frequent activist group term"
             },
             "Black Lives Matter": {
                 "weight": 3,
@@ -74,13 +74,13 @@
                 "weight": 1,
                 "description": "Common legislative group term"
             },
-            "Green Party": {
-                "weight": 0,
-                "description": "Occasional third party term"
-            },
             "GOP": {
                 "weight": 3,
                 "description": "Frequent party reference term"
+            },
+            "Green Party": {
+                "weight": 0,
+                "description": "Occasional third party term"
             },
             "Koch network": {
                 "weight": 0,
@@ -110,13 +110,13 @@
                 "weight": 1,
                 "description": "Common political activity term"
             },
-            "Mar-a-Lago": {
-                "weight": 3,
-                "description": "Significant political venue and organization hub"
-            },
             "MAGA": {
                 "weight": 3,
                 "description": "Highly frequent movement term"
+            },
+            "Mar-a-Lago": {
+                "weight": 3,
+                "description": "Significant political venue and organization hub"
             },
             "militant": {
                 "weight": 1,
@@ -157,6 +157,12 @@
             "Progressive Caucus": {
                 "weight": 1,
                 "description": "Regular legislative group term"
+            },
+            "Project Veritas": {
+                "weight": 1,
+                "description": "Activist media organization",
+                "lifecycle": "tenure",
+                "reviewedAt": "2026-07-10"
             },
             "protest movement": {
                 "weight": 1,
@@ -201,6 +207,12 @@
             "Trumpism": {
                 "weight": 1,
                 "description": "Frequent political movement term"
+            },
+            "Turning Point USA": {
+                "weight": 2,
+                "description": "Conservative youth advocacy organization",
+                "lifecycle": "tenure",
+                "reviewedAt": "2026-07-10"
             },
             "watchdog": {
                 "weight": 0,

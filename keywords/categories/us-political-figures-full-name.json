@@ -1,6 +1,9 @@
 {
     "US Political Figures - Full Name": {
         "description": "Full names of US political figures who consistently generate significant public discourse",
+        "lifecycle": "tenure",
+        "reviewCadenceDays": 90,
+        "reviewedAt": "2026-07-10",
         "keywords": {
             "Alexandria Ocasio-Cortez": {
                 "weight": 3,
@@ -28,7 +31,7 @@
             },
             "Anthony Blinken": {
                 "weight": 1,
-                "description": "Regular cabinet official"
+                "description": "Former secretary of state"
             },
             "Asa Hutchinson": {
                 "weight": 1,
@@ -38,10 +41,6 @@
                 "weight": 3,
                 "description": "Frequent Senate figure"
             },
-            "Brian Thompson": {
-                "weight": 3,
-                "description": "Frequent political figure"
-            },
             "Bill Barr": {
                 "weight": 1,
                 "description": "Regular former official"
@@ -50,6 +49,10 @@
                 "weight": 1,
                 "description": "Regular governor"
             },
+            "Brooke Rollins": {
+                "weight": 1,
+                "description": "Secretary of Agriculture"
+            },
             "Chris Christie": {
                 "weight": 2,
                 "description": "Common political figure"
@@ -57,6 +60,10 @@
             "Chris Murphy": {
                 "weight": 1,
                 "description": "Regular Senate figure"
+            },
+            "Chris Wright": {
+                "weight": 2,
+                "description": "Secretary of Energy"
             },
             "Chuck Grassley": {
                 "weight": 1,
@@ -86,10 +93,6 @@
                 "weight": 1,
                 "description": "Moderate-use political figure"
             },
-            "Dianne Feinstein": {
-                "weight": 1,
-                "description": "Regular Senate figure"
-            },
             "Donald Trump": {
                 "weight": 3,
                 "description": "Highly frequent president"
@@ -100,11 +103,15 @@
             },
             "Doug Burgum": {
                 "weight": 1,
-                "description": "Moderate-use political figure"
+                "description": "Secretary of the Interior"
+            },
+            "Doug Collins": {
+                "weight": 1,
+                "description": "Secretary of Veterans Affairs"
             },
             "Dr. Mehmet Oz": {
                 "weight": 2,
-                "description": "Common political figure"
+                "description": "Administrator of the Centers for Medicare & Medicaid Services"
             },
             "Elena Kagan": {
                 "weight": 1,
@@ -128,7 +135,7 @@
             },
             "Eric Swalwell": {
                 "weight": 1,
-                "description": "Regular House figure"
+                "description": "Former House representative and political figure"
             },
             "Fani Willis": {
                 "weight": 2,
@@ -170,29 +177,29 @@
                 "weight": 2,
                 "description": "Common political figure"
             },
+            "Howard Lutnick": {
+                "weight": 1,
+                "description": "Secretary of Commerce"
+            },
             "Ilhan Omar": {
                 "weight": 3,
                 "description": "Frequent House figure"
             },
-            "John Roberts": {
-                "weight": 2,
-                "description": "Common Supreme Court justice"
-            },
-            "Kamala Harris": {
-                "weight": 3,
-                "description": "Highly frequent vice president"
-            },
             "J.D. Vance": {
-                "weight": 1,
-                "description": "Regular Senate figure"
+                "weight": 3,
+                "description": "Vice president"
             },
             "Jamaal Bowman": {
+                "weight": 1,
+                "description": "Former House representative"
+            },
+            "Jamieson Greer": {
                 "weight": 2,
-                "description": "Common House figure"
+                "description": "United States Trade Representative"
             },
             "JD Vance": {
-                "weight": 1,
-                "description": "Regular Senate figure"
+                "weight": 3,
+                "description": "Vice president"
             },
             "Jeff Landry": {
                 "weight": 1,
@@ -204,15 +211,15 @@
             },
             "Joe Biden": {
                 "weight": 3,
-                "description": "Highly frequent president"
+                "description": "Former president"
             },
             "Joe Kennedy III": {
                 "weight": 1,
                 "description": "Moderate-use political figure"
             },
             "Joe Manchin": {
-                "weight": 2,
-                "description": "Common Senate figure"
+                "weight": 1,
+                "description": "Former senator"
             },
             "John Bolton": {
                 "weight": 1,
@@ -226,13 +233,37 @@
                 "weight": 1,
                 "description": "Regular Senate figure"
             },
+            "John Ratcliffe": {
+                "weight": 1,
+                "description": "CIA director"
+            },
+            "John Roberts": {
+                "weight": 2,
+                "description": "Common Supreme Court justice"
+            },
+            "John Thune": {
+                "weight": 3,
+                "description": "Senate majority leader"
+            },
             "Josh Hawley": {
                 "weight": 2,
                 "description": "Common Senate figure"
             },
+            "Kamala Harris": {
+                "weight": 3,
+                "description": "Former vice president"
+            },
             "Kari Lake": {
                 "weight": 2,
                 "description": "Common political figure"
+            },
+            "Karoline Leavitt": {
+                "weight": 2,
+                "description": "White House press secretary"
+            },
+            "Kash Patel": {
+                "weight": 2,
+                "description": "FBI director"
             },
             "Katie Britt": {
                 "weight": 1,
@@ -240,7 +271,15 @@
             },
             "Katie Porter": {
                 "weight": 1,
-                "description": "Regular House figure"
+                "description": "Former House representative and political figure"
+            },
+            "Keith Sonderling": {
+                "weight": 1,
+                "description": "Acting secretary of labor and nominee for the permanent role"
+            },
+            "Kelly Loeffler": {
+                "weight": 1,
+                "description": "Small Business Administration administrator"
             },
             "Kelly Tshibaka": {
                 "weight": 1,
@@ -251,8 +290,8 @@
                 "description": "Common Supreme Court justice"
             },
             "Kevin McCarthy": {
-                "weight": 3,
-                "description": "Frequent House figure"
+                "weight": 1,
+                "description": "Former House speaker and representative"
             },
             "Kris Kobach": {
                 "weight": 1,
@@ -260,19 +299,31 @@
             },
             "Kristi Noem": {
                 "weight": 1,
-                "description": "Regular governor"
+                "description": "Former homeland security secretary and governor"
             },
             "Kyrsten Sinema": {
-                "weight": 2,
-                "description": "Common Senate figure"
+                "weight": 1,
+                "description": "Former senator"
             },
             "Larry Elder": {
+                "weight": 1,
+                "description": "Regular political figure"
+            },
+            "Laura Loomer": {
                 "weight": 1,
                 "description": "Regular political figure"
             },
             "Lauren Boebert": {
                 "weight": 3,
                 "description": "Frequent House figure"
+            },
+            "Lee Zeldin": {
+                "weight": 1,
+                "description": "Environmental Protection Agency administrator"
+            },
+            "Linda McMahon": {
+                "weight": 1,
+                "description": "Education secretary"
             },
             "Lindsey Graham": {
                 "weight": 2,
@@ -284,15 +335,7 @@
             },
             "Lloyd Austin": {
                 "weight": 1,
-                "description": "Regular cabinet official"
-            },
-            "Laura Loomer": {
-                "weight": 1,
-                "description": "Regular political figure"
-            },
-            "Luigi Mangione": {
-                "weight": 3,
-                "description": "Highly frequent political figure"
+                "description": "Former secretary of defense"
             },
             "Marco Rubio": {
                 "weight": 3,
@@ -300,7 +343,7 @@
             },
             "Marjorie Taylor Greene": {
                 "weight": 3,
-                "description": "Highly frequent House figure"
+                "description": "Former House representative and political figure"
             },
             "Mark Kelly": {
                 "weight": 1,
@@ -310,21 +353,25 @@
                 "weight": 1,
                 "description": "Regular military figure"
             },
+            "Markwayne Mullin": {
+                "weight": 2,
+                "description": "Homeland security secretary"
+            },
             "Matt Gaetz": {
-                "weight": 3,
-                "description": "Frequent House figure"
+                "weight": 2,
+                "description": "Former House representative and political media figure"
             },
             "Meghan McCain": {
                 "weight": 1,
                 "description": "Regular media figure"
             },
             "Merrick Garland": {
-                "weight": 3,
-                "description": "Frequent cabinet official"
+                "weight": 2,
+                "description": "Former attorney general"
             },
             "Mike Garcia": {
                 "weight": 1,
-                "description": "Moderate-use House figure"
+                "description": "Former House representative"
             },
             "Mike Johnson": {
                 "weight": 3,
@@ -343,12 +390,12 @@
                 "description": "Regular former official"
             },
             "Mitch McConnell": {
-                "weight": 3,
-                "description": "Frequent Senate leader"
+                "weight": 2,
+                "description": "Senior senator and former Senate leader"
             },
             "Mitt Romney": {
-                "weight": 2,
-                "description": "Common Senate figure"
+                "weight": 1,
+                "description": "Former senator"
             },
             "Nancy Mace": {
                 "weight": 1,
@@ -366,9 +413,17 @@
                 "weight": 3,
                 "description": "Frequent political figure"
             },
+            "Pam Bondi": {
+                "weight": 2,
+                "description": "Former attorney general tied to ongoing Epstein-files controversy"
+            },
             "Pete Buttigieg": {
                 "weight": 2,
-                "description": "Common cabinet official"
+                "description": "Former transportation secretary and political figure"
+            },
+            "Pete Hegseth": {
+                "weight": 3,
+                "description": "Secretary of War"
             },
             "Rand Paul": {
                 "weight": 1,
@@ -386,13 +441,13 @@
                 "weight": 1,
                 "description": "Regular Senate figure"
             },
-            "Robert F. Kennedy Jr": {
-                "weight": 2,
-                "description": "Frequent political figure"
-            },
             "Robert F Kennedy Jr": {
-                "weight": 2,
-                "description": "Frequent political figure"
+                "weight": 3,
+                "description": "Secretary of Health and Human Services"
+            },
+            "Robert F. Kennedy Jr": {
+                "weight": 3,
+                "description": "Secretary of Health and Human Services"
             },
             "Roger Stone": {
                 "weight": 1,
@@ -410,6 +465,10 @@
                 "weight": 1,
                 "description": "Regular former official"
             },
+            "Russ Vought": {
+                "weight": 2,
+                "description": "Office of Management and Budget director"
+            },
             "Samuel Alito": {
                 "weight": 1,
                 "description": "Regular Supreme Court justice"
@@ -419,8 +478,16 @@
                 "description": "Regular governor"
             },
             "Scott Bessent": {
-                "weight": 2,
-                "description": "Common cabinet member"
+                "weight": 3,
+                "description": "Secretary of the Treasury"
+            },
+            "Scott Turner": {
+                "weight": 1,
+                "description": "Secretary of Housing and Urban Development"
+            },
+            "Sean Duffy": {
+                "weight": 1,
+                "description": "Secretary of Transportation"
             },
             "Sidney Powell": {
                 "weight": 1,
@@ -438,6 +505,10 @@
                 "weight": 1,
                 "description": "Regular political figure"
             },
+            "Stephen Miller": {
+                "weight": 3,
+                "description": "Senior White House policy official"
+            },
             "Steve Bannon": {
                 "weight": 3,
                 "description": "Frequent political figure"
@@ -445,6 +516,10 @@
             "Steve Scalise": {
                 "weight": 1,
                 "description": "Regular House figure"
+            },
+            "Susie Wiles": {
+                "weight": 2,
+                "description": "White House chief of staff"
             },
             "Ted Cruz": {
                 "weight": 3,
@@ -458,9 +533,17 @@
                 "weight": 1,
                 "description": "Regular governor"
             },
+            "Todd Blanche": {
+                "weight": 2,
+                "description": "Acting attorney general"
+            },
             "Tom Cotton": {
                 "weight": 1,
                 "description": "Regular Senate figure"
+            },
+            "Tom Homan": {
+                "weight": 2,
+                "description": "White House border policy official"
             },
             "Tommy Tuberville": {
                 "weight": 1,
@@ -468,11 +551,15 @@
             },
             "Tulsi Gabbard": {
                 "weight": 1,
-                "description": "Regular political figure"
+                "description": "Former director of national intelligence"
             },
             "Vivek Ramaswamy": {
                 "weight": 3,
                 "description": "Frequent political figure"
+            },
+            "William Pulte": {
+                "weight": 1,
+                "description": "Acting director of national intelligence"
             }
         }
     }

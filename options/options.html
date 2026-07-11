@@ -64,6 +64,14 @@
         <div class="keyword-groups" id="keywordGroups"></div>
       </div>
 
+      <div class="content-section" id="retiredKeywordsSection" hidden>
+        <h3>Retired Curated Keywords</h3>
+        <div class="info">
+          These used to be enabled defaults. They remain filtered while you review them; keep one to move it to Custom Keywords, or remove it to follow the refreshed catalog.
+        </div>
+        <div class="keyword-list" id="retiredKeywords"></div>
+      </div>
+
       <div class="content-section">
         <h3>Custom Keywords</h3>
         <div class="info">
@@ -174,19 +182,19 @@
         </div>
         <div id="elementGroups" class="keyword-groups"></div>
       </div>
-<div class="content-section" style="opacity: 0.5">
-  <h3>Collapse Style: Coming Soon</h3>
+<div class="content-section">
+  <h3>Collapse Style</h3>
   <div class="info">
     Choose how filtered content should be hidden from view
   </div>
   <div id="collapseOptions" class="matching-options">
     <div class="radio-option">
-      <input type="radio" id="hideCompletely" name="collapseStyle" value="hideCompletely" checked disabled>
+      <input type="radio" id="hideCompletely" name="collapseStyle" value="hideCompletely" checked>
       <label for="hideCompletely">Hide Completely - Remove entire element from view</label>
     </div>
     <div class="radio-option">
-      <input type="radio" id="keepContainer" name="collapseStyle" value="keepContainer" disabled>
-      <label for="keepContainer">Keep Container - Hide content but preserve layout space</label>
+      <input type="radio" id="keepContainer" name="collapseStyle" value="keepContainer">
+      <label for="keepContainer">Keep Container - Hide content, preserve layout, and reduce layout shifts</label>
     </div>
   </div>
 </div>

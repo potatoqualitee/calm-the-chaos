@@ -6,23 +6,28 @@ class YouTubeHandler extends BaseHandler {
     constructor() {
         super();
         this.selectors = {
-            videos: 'ytd-rich-grid-media:not(footer *), ytd-video-renderer:not(footer *), ytd-compact-video-renderer:not(footer *)',
+            videos: [
+                'ytd-rich-grid-media',
+                'ytd-video-renderer',
+                'ytd-compact-video-renderer',
+                'ytd-grid-video-renderer',
+                'ytd-reel-item-renderer',
+                'yt-lockup-view-model'
+            ].map(selector => `${selector}:not(footer *)`).join(', '),
             comments: 'ytd-comment-thread-renderer:not(footer *)'
         };
     }
 
-    handlePreconfigured() {
+    async handlePreconfigured(roots = null) {
         // Handle YouTube videos
-        this.processSelectors([this.selectors.videos], (video) => {
-            this.checkAndHideElement(video);
-        }, 'YouTube video');
+        await this.processSelectors([this.selectors.videos], video =>
+            this.checkAndHideElement(video), 'YouTube video', roots);
 
         // Handle YouTube comments
-        this.processSelectors([this.selectors.comments], (comment) => {
-            this.checkAndHideElement(comment);
-        }, 'YouTube comment');
+        await this.processSelectors([this.selectors.comments], comment =>
+            this.checkAndHideElement(comment), 'YouTube comment', roots);
     }
 }
 
 const handler = new YouTubeHandler();
-export const handleYouTube = (nodesToHide) => handler.handle(nodesToHide);
+export const handleYouTube = (nodesToHide, roots = null) => handler.handle(nodesToHide, roots);

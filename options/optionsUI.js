@@ -304,74 +304,89 @@ export function updateElementGroups(elementGroups, disabledElementGroups, disabl
   });
 }
 
-export function updateKeywordGroups(groups, customKeywords, disabledGroups, disabledKeywords) {
-  console.log('Updating keyword groups:', { groups, customKeywords, disabledGroups, disabledKeywords });
-
+export function updateKeywordGroups(
+  groups, customKeywords, disabledGroups, disabledKeywords, retiredDefaultKeywords = []
+) {
   const container = document.getElementById('keywordGroups');
-  if (!container) {
-    console.error('Keyword groups container not found');
-    return;
-  }
+  if (!container) return;
   container.innerHTML = '';
 
-  const sortedGroupNames = Object.keys(groups).sort();
-  console.log('Sorted group names:', sortedGroupNames);
+  const refresh = async () => {
+    const result = await storage.getStorageData([
+      'keywordGroups', 'customKeywords', 'disabledGroups',
+      'disabledKeywords', 'retiredDefaultKeywords'
+    ]);
+    updateKeywordGroups(
+      result.keywordGroups || {}, result.customKeywords || [],
+      result.disabledGroups || [], result.disabledKeywords || [],
+      result.retiredDefaultKeywords || []
+    );
+  };
 
-  sortedGroupNames.forEach(groupName => {
+  Object.keys(groups).sort().forEach(groupName => {
     const keywords = groups[groupName];
-    // Convert group name to URL-friendly ID
     const groupId = groupName
-      .replace(/[^a-zA-Z0-9\s-()]/g, '') // Remove special characters except spaces, hyphens, and parentheses
-      .replace(/\s+/g, '-') // Replace spaces with hyphens
-      .replace(/\(|\)/g, '') // Remove parentheses
-      .replace(/-+/g, '-') // Replace multiple hyphens with single hyphen
-      .trim(); // Remove leading/trailing spaces
-
+      .replace(/[^a-zA-Z0-9\s-()]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/\(|\)/g, '')
+      .replace(/-+/g, '-')
+      .trim();
     const group = document.createElement('div');
     group.className = 'keyword-group';
     group.id = groupId;
-
     const header = document.createElement('div');
     header.className = 'group-header';
-
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.checked = !disabledGroups.includes(groupName);
     checkbox.onchange = async () => {
       await storage.toggleGroup(groupName);
-      // Refresh the UI to reflect the changes
-      const result = await storage.getStorageData(['keywordGroups', 'customKeywords', 'disabledGroups', 'disabledKeywords']);
-      updateKeywordGroups(result.keywordGroups, result.customKeywords, result.disabledGroups, result.disabledKeywords);
+      await refresh();
     };
-
     const title = document.createElement('div');
     title.className = 'group-title';
     title.textContent = groupName;
-
-    header.appendChild(checkbox);
-    header.appendChild(title);
+    header.append(checkbox, title);
     group.appendChild(header);
-
     const keywordList = document.createElement('div');
     keywordList.className = 'keyword-list';
-
     [...keywords].sort().forEach(keyword => {
-      const item = createKeywordItem(keyword, !disabledKeywords.includes(keyword));
-      keywordList.appendChild(item);
+      keywordList.appendChild(createKeywordItem(keyword, !disabledKeywords.includes(keyword)));
     });
-
     group.appendChild(keywordList);
     container.appendChild(group);
   });
 
-  // Custom keywords
   const customList = document.getElementById('customKeywords');
   if (customList) {
     customList.innerHTML = '';
-
     [...customKeywords].sort().forEach(keyword => {
-      const item = createKeywordItem(keyword, !disabledKeywords.includes(keyword), true);
-      customList.appendChild(item);
+      customList.appendChild(createKeywordItem(keyword, !disabledKeywords.includes(keyword), true));
+    });
+  }
+
+  const retiredSection = document.getElementById('retiredKeywordsSection');
+  const retiredList = document.getElementById('retiredKeywords');
+  if (retiredSection && retiredList) {
+    retiredList.innerHTML = '';
+    retiredSection.hidden = retiredDefaultKeywords.length === 0;
+    retiredDefaultKeywords.forEach(value => {
+      const record = typeof value === 'string' ? { keyword: value } : value;
+      const item = document.createElement('div');
+      item.className = 'keyword-item';
+      const label = document.createElement('label');
+      label.textContent = record.keyword;
+      label.title = record.reason || 'Removed from the curated catalog';
+      const keep = document.createElement('button');
+      keep.textContent = 'Keep';
+      keep.onclick = async () => { await storage.keepRetiredKeyword(record.keyword); await refresh(); };
+      const remove = document.createElement('button');
+      remove.className = 'remove-btn';
+      remove.setAttribute('aria-label', 'Stop filtering this retired keyword');
+      remove.innerHTML = '&times;';
+      remove.onclick = async () => { await storage.removeRetiredKeyword(record.keyword); await refresh(); };
+      item.append(label, keep, remove);
+      retiredList.appendChild(item);
     });
   }
 }
@@ -379,18 +394,13 @@ export function updateKeywordGroups(groups, customKeywords, disabledGroups, disa
 export function createKeywordItem(keyword, checked, isCustom = false) {
   const item = document.createElement('div');
   item.className = 'keyword-item';
-
   const checkbox = document.createElement('input');
   checkbox.type = 'checkbox';
   checkbox.checked = checked;
   checkbox.onchange = () => storage.toggleKeyword(keyword);
-
   const label = document.createElement('label');
   label.textContent = keyword;
-
-  item.appendChild(checkbox);
-  item.appendChild(label);
-
+  item.append(checkbox, label);
   if (isCustom) {
     const removeBtn = document.createElement('button');
     removeBtn.className = 'remove-btn';
@@ -398,7 +408,6 @@ export function createKeywordItem(keyword, checked, isCustom = false) {
     removeBtn.onclick = () => storage.removeCustomKeyword(keyword);
     item.appendChild(removeBtn);
   }
-
   return item;
 }
 

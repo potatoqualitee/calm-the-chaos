@@ -4,19 +4,42 @@
         "keywords": {
             "Afghanistan": {
                 "weight": 0,
-                "description": "Country name"
+                "description": "Country name",
+                "lifecycle": "cyclical"
             },
             "Baltic": {
                 "weight": 0,
-                "description": "Regional name"
+                "description": "Regional name",
+                "lifecycle": "cyclical"
             },
             "Beijing": {
                 "weight": 0,
-                "description": "City name"
+                "description": "City name",
+                "lifecycle": "cyclical"
+            },
+            "Board of Peace": {
+                "weight": 2,
+                "description": "Current international peace body",
+                "lifecycle": "cyclical"
+            },
+            "Caracas": {
+                "weight": 1,
+                "description": "Venezuelan capital used in conflict coverage",
+                "lifecycle": "cyclical"
             },
             "CCP": {
                 "weight": 0,
                 "description": "Organization name"
+            },
+            "China": {
+                "weight": 2,
+                "description": "Country name in trade and security coverage",
+                "lifecycle": "cyclical"
+            },
+            "Chinese": {
+                "weight": 1,
+                "description": "Demonym in trade and security coverage",
+                "lifecycle": "cyclical"
             },
             "conflict zone": {
                 "weight": 1,
@@ -56,7 +79,18 @@
             },
             "Gaza": {
                 "weight": 0,
-                "description": "Region name"
+                "description": "Region name",
+                "lifecycle": "cyclical"
+            },
+            "Gaza ceasefire": {
+                "weight": 2,
+                "description": "Recurring ceasefire and negotiation term",
+                "lifecycle": "cyclical"
+            },
+            "Gaza war": {
+                "weight": 3,
+                "description": "Recurring conflict term",
+                "lifecycle": "cyclical"
             },
             "global conflict": {
                 "weight": 3,
@@ -64,15 +98,43 @@
             },
             "Greenland conflict": {
                 "weight": 3,
-                "description": "Frequent international term"
+                "description": "Frequent international term",
+                "lifecycle": "cyclical"
             },
             "Greenlander": {
                 "weight": 1,
-                "description": "Regular international term"
+                "description": "Regular international term",
+                "lifecycle": "cyclical"
             },
             "Guantanamo Bay": {
                 "weight": 2,
-                "description": "Frequent international term"
+                "description": "Frequent international term",
+                "lifecycle": "cyclical"
+            },
+            "Hezbollah": {
+                "weight": 2,
+                "description": "Lebanese political and militant organization",
+                "lifecycle": "cyclical"
+            },
+            "Hormuz": {
+                "weight": 3,
+                "description": "Common shorthand for the Strait of Hormuz",
+                "lifecycle": "cyclical"
+            },
+            "Hormuz blockade": {
+                "weight": 3,
+                "description": "Shipping and energy disruption term",
+                "lifecycle": "cyclical"
+            },
+            "Houthi": {
+                "weight": 2,
+                "description": "Yemeni movement name used in conflict coverage",
+                "lifecycle": "cyclical"
+            },
+            "Houthis": {
+                "weight": 2,
+                "description": "Plural reference to the Yemeni movement",
+                "lifecycle": "cyclical"
             },
             "IDF": {
                 "weight": 0,
@@ -87,48 +149,98 @@
                 "description": "Common diplomatic term"
             },
             "Iran": {
-                "weight": 0,
-                "description": "Country name"
+                "weight": 3,
+                "description": "Current high-priority country term",
+                "lifecycle": "cyclical"
+            },
+            "Iran ceasefire": {
+                "weight": 2,
+                "description": "Ceasefire, breakdown, and negotiation term in the 2026 Iran war",
+                "lifecycle": "cyclical"
+            },
+            "Iran nuclear program": {
+                "weight": 2,
+                "description": "Recurring nuclear policy term",
+                "lifecycle": "cyclical"
+            },
+            "Iran war": {
+                "weight": 3,
+                "description": "Current high-priority conflict term",
+                "lifecycle": "cyclical"
+            },
+            "Iranian": {
+                "weight": 2,
+                "description": "Country demonym in current conflict coverage",
+                "lifecycle": "cyclical"
             },
             "Iraq": {
                 "weight": 0,
-                "description": "Country name"
+                "description": "Country name",
+                "lifecycle": "cyclical"
+            },
+            "IRGC": {
+                "weight": 2,
+                "description": "Iranian Revolutionary Guard acronym",
+                "lifecycle": "cyclical"
+            },
+            "Islamic Revolutionary Guard Corps": {
+                "weight": 2,
+                "description": "Iranian military organization",
+                "lifecycle": "cyclical"
             },
             "Israel": {
                 "weight": 0,
-                "description": "Country name"
+                "description": "Country name",
+                "lifecycle": "cyclical"
+            },
+            "Israel Gaza war": {
+                "weight": 3,
+                "description": "Recurring regional conflict term",
+                "lifecycle": "cyclical"
             },
             "Kashmir": {
                 "weight": 0,
-                "description": "Region name"
-            },
-            "Kyiv": {
-                "weight": 0,
-                "description": "City name"
+                "description": "Region name",
+                "lifecycle": "cyclical"
             },
             "Kremlin": {
                 "weight": 3,
-                "description": "Russian government center/metonym"
+                "description": "Russian government center/metonym",
+                "lifecycle": "cyclical"
+            },
+            "Kyiv": {
+                "weight": 0,
+                "description": "City name",
+                "lifecycle": "cyclical"
             },
             "Lebanon": {
                 "weight": 0,
-                "description": "Country name"
+                "description": "Country name",
+                "lifecycle": "cyclical"
+            },
+            "maritime blockade": {
+                "weight": 2,
+                "description": "Recurring international shipping conflict term",
+                "lifecycle": "cyclical"
             },
             "Middle East": {
                 "weight": 0,
-                "description": "Region name"
+                "description": "Region name",
+                "lifecycle": "cyclical"
             },
             "missile strike": {
                 "weight": 1,
                 "description": "Frequent military term"
             },
             "NATO": {
-                "weight": 0,
-                "description": "Organization name"
+                "weight": 2,
+                "description": "Alliance name in current Ukraine and transatlantic security coverage",
+                "lifecycle": "cyclical"
             },
             "North Korea": {
                 "weight": 0,
-                "description": "Country name"
+                "description": "Country name",
+                "lifecycle": "cyclical"
             },
             "nuclear talks": {
                 "weight": 3,
@@ -136,27 +248,55 @@
             },
             "Palestine": {
                 "weight": 0,
-                "description": "Region name"
+                "description": "Region name",
+                "lifecycle": "cyclical"
+            },
+            "Panama Canal": {
+                "weight": 3,
+                "description": "Frequent international term",
+                "lifecycle": "cyclical"
             },
             "peace negotiation": {
                 "weight": 1,
                 "description": "Common diplomatic term"
             },
-            "Panama Canal": {
-                "weight": 3,
-                "description": "Frequent international term"
-            },
             "peace talks": {
                 "weight": 1,
                 "description": "Common diplomatic term"
+            },
+            "Persian Gulf": {
+                "weight": 2,
+                "description": "Region central to Iran and shipping coverage",
+                "lifecycle": "cyclical"
             },
             "political asylum": {
                 "weight": 0,
                 "description": "Regular international term"
             },
+            "Red Sea": {
+                "weight": 2,
+                "description": "Recurring shipping and regional conflict term",
+                "lifecycle": "cyclical"
+            },
+            "regime change": {
+                "weight": 2,
+                "description": "Recurring foreign policy and conflict term",
+                "lifecycle": "evergreen"
+            },
+            "Revolutionary Guard": {
+                "weight": 2,
+                "description": "Common shortened Iranian organization name",
+                "lifecycle": "cyclical"
+            },
             "Russia": {
                 "weight": 0,
-                "description": "Country name"
+                "description": "Country name",
+                "lifecycle": "cyclical"
+            },
+            "Russia Ukraine war": {
+                "weight": 3,
+                "description": "Recurring European conflict term",
+                "lifecycle": "cyclical"
             },
             "sanctions": {
                 "weight": 1,
@@ -164,23 +304,53 @@
             },
             "Saudi Arabia": {
                 "weight": 0,
-                "description": "Country name"
+                "description": "Country name",
+                "lifecycle": "cyclical"
+            },
+            "shipping attack": {
+                "weight": 1,
+                "description": "Commercial shipping security term",
+                "lifecycle": "cyclical"
             },
             "South China Sea": {
                 "weight": 0,
-                "description": "Region name"
+                "description": "Region name",
+                "lifecycle": "cyclical"
             },
             "Strait of Hormuz": {
-                "weight": 0,
-                "description": "Region name"
+                "weight": 3,
+                "description": "Critical energy chokepoint in the Iran conflict",
+                "lifecycle": "cyclical"
             },
             "Syria": {
                 "weight": 0,
-                "description": "Country name"
+                "description": "Country name",
+                "lifecycle": "cyclical"
             },
             "Taiwan": {
                 "weight": 0,
-                "description": "Region name"
+                "description": "Region name",
+                "lifecycle": "cyclical"
+            },
+            "Taiwan Strait": {
+                "weight": 2,
+                "description": "Recurring East Asian security term",
+                "lifecycle": "cyclical"
+            },
+            "tanker attack": {
+                "weight": 2,
+                "description": "Energy shipping security term",
+                "lifecycle": "cyclical"
+            },
+            "tanker seizure": {
+                "weight": 2,
+                "description": "Recurring maritime crisis term",
+                "lifecycle": "cyclical"
+            },
+            "Tehran": {
+                "weight": 2,
+                "description": "Iranian capital and government metonym",
+                "lifecycle": "cyclical"
             },
             "territorial dispute": {
                 "weight": 1,
@@ -196,23 +366,42 @@
             },
             "UAE": {
                 "weight": 0,
-                "description": "Country name"
+                "description": "Country name",
+                "lifecycle": "cyclical"
             },
             "Ukraine": {
                 "weight": 0,
-                "description": "Country name"
+                "description": "Country name",
+                "lifecycle": "cyclical"
+            },
+            "Ukraine war": {
+                "weight": 3,
+                "description": "Recurring European conflict term",
+                "lifecycle": "cyclical"
             },
             "UN resolution": {
                 "weight": 0,
                 "description": "Regular diplomatic term"
             },
+            "uranium enrichment": {
+                "weight": 2,
+                "description": "Recurring nuclear policy term",
+                "lifecycle": "evergreen"
+            },
+            "Venezuela": {
+                "weight": 2,
+                "description": "Current intervention and foreign policy term",
+                "lifecycle": "cyclical"
+            },
+            "Venezuela intervention": {
+                "weight": 2,
+                "description": "Current US foreign policy term",
+                "lifecycle": "cyclical"
+            },
             "West Bank": {
                 "weight": 0,
-                "description": "Region name"
-            },
-            "Yemen": {
-                "weight": 0,
-                "description": "Country name"
+                "description": "Region name",
+                "lifecycle": "cyclical"
             },
             "world war": {
                 "weight": 3,
@@ -225,6 +414,11 @@
             "world war III": {
                 "weight": 3,
                 "description": "Highly frequent conflict term"
+            },
+            "Yemen": {
+                "weight": 0,
+                "description": "Country name",
+                "lifecycle": "cyclical"
             }
         }
     }

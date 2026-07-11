@@ -1,46 +1,43 @@
 export const DEFAULT_ELEMENT_GROUPS = {
   'Social Media Posts': [
     '[role="article"]',
+    'article',
     '[data-ad-comet-preview="message"]',
     'div[data-testid="tweet"]',
-    '[data-testid="tweetText"]',
     '.feed-shared-update-v2',
-    '.update-components-actor__meta',
     '[data-testid="post-container"]',
+    '[data-urn^="urn:li:activity"]',
+    'shreddit-post',
     '.feed-item'
   ],
   'Comments & Replies': [
     '[data-testid="reply"]',
     '[data-testid="comment"]',
+    'shreddit-comment',
+    'ytd-comment-thread-renderer',
     'li:has(span[dir="auto"])'
   ],
   'Video Content': [
     'ytd-rich-grid-media',
     'ytd-video-renderer',
-    'a#video-title',
-    'yt-formatted-string.style-scope.ytd-video-renderer',
-    'yt-formatted-string.metadata-snippet-text',
-    'yt-formatted-string#description-text',
-    'yt-formatted-string.video-description',
-    'yt-formatted-string.content',
-    'h3.title-and-badge.style-scope.ytd-video-renderer',
-    'yt-formatted-string.title',
-    'yt-formatted-string.caption',
-    '.text-wrapper.style-scope.ytd-video-renderer',
-    '.metadata-snippet-container-one-line.style-scope.ytd-video-renderer'
+    'ytd-compact-video-renderer',
+    'ytd-reel-item-renderer',
+    'yt-lockup-view-model'
   ],
   'News & Articles': [
+    'article',
     'article[role="presentation"]',
     '.article',
     '.story',
     '.news-item',
-    '.entry'
+    '.entry',
+    '[data-component-name="card"]',
+    '[data-testid$="-article"]',
+    '[data-testid$="-live"]',
+    '[data-testid="anchor-inner-wrapper"]'
   ],
   'Generic Content': [
     '.post',
-    '.content',
-    '.wrapper',
-    '.item',
     '[data-ks-item]'
   ],
   'Media & Lists': [
@@ -49,9 +46,7 @@ export const DEFAULT_ELEMENT_GROUPS = {
     '.image-container',
     '[class*="grid-item"]',
     '[class*="list-item"]',
-    '[class*="card"]',
-    '[class*="article"]',
-    '[class*="post"]'
+    '[class~="card"]'
   ]
 };
 

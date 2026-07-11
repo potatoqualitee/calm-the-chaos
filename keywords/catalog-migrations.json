@@ -1,0 +1,277 @@
+{
+    "schemaVersion": 1,
+    "catalogVersion": "2026.07.1",
+    "reviewedAt": "2026-07-10",
+    "categoryFiles": [
+        "climate-and-environment.json",
+        "economic-policy.json",
+        "education.json",
+        "gun-policy.json",
+        "healthcare-and-public-health.json",
+        "immigration.json",
+        "international-coverage.json",
+        "lgbtq.json",
+        "media-personalities.json",
+        "military-and-defense.json",
+        "new-developments.json",
+        "political-organizations.json",
+        "political-rhetoric.json",
+        "political-violence-and-security-threats.json",
+        "race-relations.json",
+        "relational-violence.json",
+        "religion.json",
+        "reproductive-health.json",
+        "social-policy.json",
+        "us-government-institutions.json",
+        "us-political-figures-full-name.json",
+        "us-political-figures-single-name.json",
+        "vaccine-policy.json",
+        "world-leaders.json"
+    ],
+    "lifecyclePolicy": {
+        "evergreen": "Durable membership; rare removal",
+        "cyclical": "Durable membership with reviewed priority",
+        "tenure": "Review at least every 90 days",
+        "event": "Explicit reviewAfter decision; never silently deleted"
+    },
+    "migrations": [
+        {
+            "version": "2026.07.1",
+            "releasedAt": "2026-07-10",
+            "changes": [
+                {
+                    "type": "retire",
+                    "keyword": "Andrzej Duda",
+                    "category": "World Leaders",
+                    "lifecycle": "tenure",
+                    "preserveExistingMute": true,
+                    "reason": "No longer the current Polish head of state"
+                },
+                {
+                    "type": "retire",
+                    "keyword": "Brian Thompson",
+                    "category": "US Political Figures - Full Name",
+                    "lifecycle": "event",
+                    "preserveExistingMute": true,
+                    "reason": "Single-event victim, not a durable political figure"
+                },
+                {
+                    "type": "retire",
+                    "keyword": "Dianne Feinstein",
+                    "category": "US Political Figures - Full Name",
+                    "lifecycle": "tenure",
+                    "preserveExistingMute": true,
+                    "reason": "Deceased former officeholder"
+                },
+                {
+                    "type": "retire",
+                    "keyword": "Ebrahim Raisi",
+                    "category": "World Leaders",
+                    "lifecycle": "tenure",
+                    "preserveExistingMute": true,
+                    "reason": "Deceased former Iranian president"
+                },
+                {
+                    "type": "retire",
+                    "keyword": "Fumio Kishida",
+                    "category": "World Leaders",
+                    "lifecycle": "tenure",
+                    "preserveExistingMute": true,
+                    "reason": "No longer the current Japanese head of government"
+                },
+                {
+                    "type": "retire",
+                    "keyword": "ICE confirms",
+                    "category": "Immigration",
+                    "lifecycle": "event",
+                    "preserveExistingMute": true,
+                    "reason": "Headline fragment rather than a durable concept"
+                },
+                {
+                    "type": "retire",
+                    "keyword": "Justin Trudeau",
+                    "category": "World Leaders",
+                    "lifecycle": "tenure",
+                    "preserveExistingMute": true,
+                    "reason": "No longer the current Canadian head of government"
+                },
+                {
+                    "type": "retire",
+                    "keyword": "Kissinger",
+                    "category": "US Political Figures - Single Name",
+                    "lifecycle": "tenure",
+                    "preserveExistingMute": true,
+                    "reason": "Deceased historical figure"
+                },
+                {
+                    "type": "retire",
+                    "keyword": "Kyle Rittenhouse",
+                    "category": "Media Personalities",
+                    "lifecycle": "event",
+                    "preserveExistingMute": true,
+                    "reason": "Incident-linked figure without sustained media role"
+                },
+                {
+                    "type": "retire",
+                    "keyword": "Luigi Mangione",
+                    "category": "US Political Figures - Full Name",
+                    "lifecycle": "event",
+                    "preserveExistingMute": true,
+                    "reason": "Criminal case belongs in expiring developments"
+                },
+                {
+                    "type": "retire",
+                    "keyword": "Mangione",
+                    "category": "US Political Figures - Single Name",
+                    "lifecycle": "event",
+                    "preserveExistingMute": true,
+                    "reason": "Criminal case belongs in expiring developments"
+                },
+                {
+                    "type": "retire",
+                    "keyword": "Olaf Scholz",
+                    "category": "World Leaders",
+                    "lifecycle": "tenure",
+                    "preserveExistingMute": true,
+                    "reason": "No longer the current German head of government"
+                },
+                {
+                    "type": "retire",
+                    "keyword": "Rishi Sunak",
+                    "category": "World Leaders",
+                    "lifecycle": "tenure",
+                    "preserveExistingMute": true,
+                    "reason": "No longer the current British head of government"
+                },
+                {
+                    "type": "retire",
+                    "keyword": "rittenhouse",
+                    "category": "Political Violence and Security Threats",
+                    "lifecycle": "event",
+                    "preserveExistingMute": true,
+                    "reason": "Incident-linked surname belongs in expiring developments"
+                },
+                {
+                    "type": "retire",
+                    "keyword": "Sheikh Hasina",
+                    "category": "World Leaders",
+                    "lifecycle": "tenure",
+                    "preserveExistingMute": true,
+                    "reason": "No longer the current Bangladeshi head of government"
+                },
+                {
+                    "type": "retire",
+                    "keyword": "Texas hospitals",
+                    "category": "Healthcare and Public Health",
+                    "lifecycle": "event",
+                    "preserveExistingMute": true,
+                    "reason": "Arbitrary regional headline phrase"
+                },
+                {
+                    "type": "retire",
+                    "keyword": "tiktok",
+                    "category": "Political Rhetoric",
+                    "lifecycle": "cyclical",
+                    "preserveExistingMute": true,
+                    "reason": "Overbroad term replaced by scoped policy phrases"
+                },
+                {
+                    "type": "retire",
+                    "keyword": "Tsai Ing-wen",
+                    "category": "World Leaders",
+                    "lifecycle": "tenure",
+                    "preserveExistingMute": true,
+                    "reason": "No longer the current Taiwanese head of state"
+                },
+                {
+                    "type": "retire",
+                    "keyword": "Yoon Suk-yeol",
+                    "category": "World Leaders",
+                    "lifecycle": "tenure",
+                    "preserveExistingMute": true,
+                    "reason": "No longer the current South Korean head of state"
+                },
+                {
+                    "type": "rename",
+                    "from": "Tim Cast",
+                    "to": "Timcast",
+                    "preservePreference": true,
+                    "reason": "Correct media brand spelling"
+                },
+                {
+                    "type": "rename",
+                    "from": "Trumponomicsr",
+                    "to": "Trumponomics",
+                    "preservePreference": true,
+                    "reason": "Correct typo"
+                },
+                {
+                    "type": "retire",
+                    "keyword": "Bird-Flu",
+                    "category": "New Developments",
+                    "lifecycle": "event",
+                    "preserveExistingMute": true,
+                    "reason": "Expired December 2024 health story"
+                },
+                {
+                    "type": "retire",
+                    "keyword": "Charles Kushner",
+                    "category": "New Developments",
+                    "lifecycle": "event",
+                    "preserveExistingMute": true,
+                    "reason": "Expired nomination-cycle entry"
+                },
+                {
+                    "type": "retire",
+                    "keyword": "drone sightings",
+                    "category": "New Developments",
+                    "lifecycle": "event",
+                    "preserveExistingMute": true,
+                    "reason": "Expired December 2024 security story"
+                },
+                {
+                    "type": "move",
+                    "keyword": "Linda McMahon",
+                    "fromCategory": "New Developments",
+                    "toCategory": "US Political Figures - Full Name",
+                    "lifecycle": "tenure",
+                    "preservePreference": true,
+                    "reason": "Graduated from a nomination story to the current political roster"
+                },
+                {
+                    "type": "retire",
+                    "keyword": "Gabriel Boric",
+                    "category": "World Leaders",
+                    "lifecycle": "tenure",
+                    "preserveExistingMute": true,
+                    "reason": "No longer the current Chilean head of state"
+                },
+                {
+                    "type": "rename",
+                    "from": "sexualization children",
+                    "to": "sexualization of children",
+                    "preservePreference": true,
+                    "reason": "Correct malformed phrase"
+                },
+                {
+                    "type": "move",
+                    "keyword": "Project Veritas",
+                    "fromCategory": "Media Personalities",
+                    "toCategory": "Political Organizations",
+                    "lifecycle": "tenure",
+                    "preservePreference": true,
+                    "reason": "Classify the activist media organization with political organizations"
+                },
+                {
+                    "type": "move",
+                    "keyword": "naval blockade",
+                    "fromCategory": "International Coverage",
+                    "toCategory": "Military and Defense",
+                    "lifecycle": "cyclical",
+                    "preservePreference": true,
+                    "reason": "Consolidate the duplicate under its canonical military category"
+                }
+            ]
+        }
+    ]
+}

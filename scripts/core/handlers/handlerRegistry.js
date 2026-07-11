@@ -1,12 +1,10 @@
 // handlerRegistry.js
 
 import { handleReddit } from '../../platforms/handleReddit.js';
-import { handleFacebook } from '../../platforms/handleFacebook.js';
 import { handleInstagram } from '../../platforms/handleInstagram.js';
 import { handleLinkedIn } from '../../platforms/handleLinkedIn.js';
 import { handleYouTube } from '../../platforms/handleYouTube.js';
 import { handleCNN } from '../../platforms/handleCNN.js';
-import { handleMSN } from '../../platforms/handleMSN.js';
 import { handleBBC } from '../../platforms/handleBBC.js';
 import { handleGoogleNews } from '../../platforms/handleGoogleNews.js';
 import { handleStackOverflow } from '../../platforms/handleStackOverflow.js';
@@ -20,9 +18,9 @@ class HandlerRegistry {
             ['reddit.com', handleReddit],
             ['news.google.com', handleGoogleNews],
             ['cnn.com', handleCNN],
-            //['msn.com', handleMSN], // doesn't work yet
-            ['bbc.', handleBBC],
-            // ['facebook.com', handleFacebook], // just terrible perf
+            ['bbc.com', handleBBC],
+            ['bbc.co.uk', handleBBC],
+            ['bbc.in', handleBBC],
             ['instagram.com', handleInstagram],
             ['linkedin.com', handleLinkedIn],
             ['youtube.com', handleYouTube],
@@ -39,11 +37,6 @@ class HandlerRegistry {
      * @returns {boolean} - Whether the hostname matches the pattern
      */
     isDomainMatch(hostname, pattern) {
-        // Special case for BBC
-        if (pattern === 'bbc.') {
-            return hostname.startsWith(pattern);
-        }
-
         // Split hostname and pattern into parts
         const hostParts = hostname.split('.');
         const patternParts = pattern.split('.');
@@ -87,18 +80,20 @@ class HandlerRegistry {
      * @param {string} hostname - The current hostname
      * @param {Set} nodesToHide - Set of nodes to hide
      */
-    executePlatformHandler(hostname, nodesToHide) {
+    async executePlatformHandler(hostname, nodesToHide, roots = null) {
         const handler = this.getHandler(hostname);
         if (handler) {
             try {
                 console.debug(`Executing handler for ${hostname}`);
-                handler(nodesToHide);
+                await handler(nodesToHide, roots);
+                return true;
             } catch (error) {
                 console.debug(`Error executing handler for ${hostname}:`, error);
             }
         } else {
             console.debug(`No handler executed for ${hostname}`);
         }
+        return false;
     }
 }
 

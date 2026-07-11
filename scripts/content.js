@@ -1,60 +1,88 @@
 import { initializeRegex } from './core/managers/regexManager.js';
-import { containsBlockedContent, startNewDetectionCycle, isSpeedReader } from './core/contentDetectionModule.js';
-import { setupFilteringObserver, cleanupFilteringObserver, filteringHistory } from './core/observer/mutations/FilteringMutationObserver.js';
-import { FilterProcessor } from './core/observer/mutations/FilterProcessor.js';
+import { clearContentDetectionCache, isSpeedReader } from './core/contentDetectionModule.js';
+import { setupFilteringObserver, processInitialFiltering, cleanupFilteringObserver } from './core/observer/mutations/FilteringMutationObserver.js';
+import { clearFilteringSettingsCache } from './core/observer/mutations/FilterProcessor.js';
+import { clearElementProcessingCache } from './core/elementProcessingModule.js';
 import { nodeHider } from './core/nodeHidingModule.js';
 import { isExtensionEnabledOnUrl } from './core/urlModule.js';
 import { chromeStorageGet, isExtensionContextValid } from './utils/chromeApi.js';
-import { needsImmediateBlur, showImmediateBlur } from './core/config/immediateBlur.js';
+import { needsImmediateBlur } from './core/config/blurSites.js';
+import { removeImmediateBlur, showImmediateBlur } from './core/config/immediateBlur.js';
+
+let lifecycleGeneration = 0;
+let initializationQueue = Promise.resolve();
+let scheduledInitialization = null;
 
 // Function to clean up all observers
 function cleanup() {
+    lifecycleGeneration++;
     cleanupFilteringObserver();
     nodeHider.reset();
-    filteringHistory.clear();
+    clearContentDetectionCache();
+    clearElementProcessingCache();
+    clearFilteringSettingsCache();
 
     // Do not remove blur during cleanup - let initialization handle it
 }
 
-// Function to initialize extension features
+function waitForDocumentBody() {
+    if (document.body) return Promise.resolve();
+    return new Promise(resolve =>
+        document.addEventListener('DOMContentLoaded', resolve, { once: true })
+    );
+}
+
 function initializeExtension() {
-    // Initialize the regex pattern
-    initializeRegex(() => {
-        // Initial filtering
-        try {
-            const processor = new FilterProcessor(filteringHistory);
-            processor.processContent();
-        } catch (error) {
-            console.debug('Error in initial filtering:', error);
-        }
+    const generation = lifecycleGeneration;
+    if (scheduledInitialization?.generation === generation) {
+        return scheduledInitialization.promise;
+    }
+
+    const run = initializationQueue.then(async () => {
+        if (generation !== lifecycleGeneration) return;
+        await waitForDocumentBody();
+        if (generation !== lifecycleGeneration) return;
+        await initializeRegex();
+        if (generation !== lifecycleGeneration) return;
+        clearContentDetectionCache();
+        setupFilteringObserver();
+        await processInitialFiltering();
     });
 
-    // Initialize the filtering observer
-    setupFilteringObserver();
+    // Reinitializations are serialized so cleanup cannot overlap a previous
+    // scan and leave the replacement observer disconnected.
+    initializationQueue = run.catch(() => {});
+    const promise = run.finally(() => {
+        if (scheduledInitialization?.generation === generation) {
+            scheduledInitialization = null;
+        }
+    });
+    scheduledInitialization = { generation, promise };
+    return promise;
 }
 
 // Check if extension should be enabled before initializing
 async function checkAndInitialize() {
     try {
         const result = await new Promise(resolve => {
-            chromeStorageGet(['ignoredDomains', 'disabledDomainGroups', 'filteringEnabled', 'enabledDomains'], resolve);
+            chromeStorageGet(['ignoredDomains', 'disabledDomainGroups', 'filteringEnabled', 'enabledDomains', 'filterAllSites'], resolve);
         });
 
         const {
             ignoredDomains = {},
             disabledDomainGroups = [],
             filteringEnabled = true,
-            enabledDomains = []
+            enabledDomains = [],
+            filterAllSites = false
         } = result;
 
         const currentUrl = window.location.href;
         const hostname = window.location.hostname.replace(/^www\./, '');
 
         // Check if extension is enabled for this URL
-        if (!isExtensionEnabledOnUrl(currentUrl, ignoredDomains, disabledDomainGroups, filteringEnabled, enabledDomains)) {
+        if (!isExtensionEnabledOnUrl(currentUrl, ignoredDomains, disabledDomainGroups, filteringEnabled, enabledDomains, filterAllSites)) {
             console.log('Extension disabled for this URL, skipping initialization');
             // Force remove any blur since filtering is disabled
-            const { removeImmediateBlur } = await import('./core/config/immediateBlur.js');
             removeImmediateBlur(true);
             cleanup(); // Ensure everything is cleaned up
             return;
@@ -74,7 +102,7 @@ async function checkAndInitialize() {
         }
 
         // Initialize extension features
-        initializeExtension();
+        await initializeExtension();
     } catch (error) {
         console.debug('Error checking extension enabled status:', error);
     }

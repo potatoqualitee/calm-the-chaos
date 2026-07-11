@@ -2,6 +2,8 @@
 // These domains are enabled by default
 export const PRECONFIGURED_DOMAINS = [
   'bbc.com',
+  'bbc.co.uk',
+  'bbc.in',
   'bsky.app',
   'cnn.com',
   //'facebook.com',
@@ -18,8 +20,9 @@ export const PRECONFIGURED_DOMAINS = [
 
 // Helper function to check if a domain matches any preconfigured domain
 export function isPreconfiguredDomain(domain) {
+  const normalizedDomain = domain.toLowerCase().replace(/^www\./, '');
   return PRECONFIGURED_DOMAINS.some(preconfigured =>
-    domain === preconfigured || domain.endsWith('.' + preconfigured)
+    normalizedDomain === preconfigured || normalizedDomain.endsWith('.' + preconfigured)
   );
 }
 

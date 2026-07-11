@@ -50,13 +50,28 @@
                 "weight": 1,
                 "description": "Common healthcare access term"
             },
-            "medical debt": {
+            "MAHA": {
                 "weight": 1,
-                "description": "Frequent financial crisis term"
+                "description": "Ambiguous acronym for Make America Healthy Again",
+                "lifecycle": "cyclical"
+            },
+            "Make America Healthy Again": {
+                "weight": 3,
+                "description": "Current public health policy movement",
+                "lifecycle": "cyclical"
             },
             "medicaid": {
                 "weight": 1,
                 "description": "Common policy debate term"
+            },
+            "medical debt": {
+                "weight": 1,
+                "description": "Frequent financial crisis term"
+            },
+            "medical misinformation": {
+                "weight": 1,
+                "description": "Recurring public health controversy term",
+                "lifecycle": "evergreen"
             },
             "medicare": {
                 "weight": 1,
@@ -85,10 +100,6 @@
             "public health policy": {
                 "weight": 0,
                 "description": "Regular policy term"
-            },
-            "Texas hospitals": {
-                "weight": 0,
-                "description": "Regional healthcare term"
             },
             "universal healthcare": {
                 "weight": 3,

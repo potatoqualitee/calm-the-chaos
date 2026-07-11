@@ -1,6 +1,5 @@
 // nodeHidingModule.js
 
-import { chromeStorageGet, chromeRuntimeSendMessage } from '../utils.js';
 import { containsBlockedContent } from './contentDetectionModule.js';
 
 // Create singleton instance
@@ -11,6 +10,16 @@ const nodeHider = new class NodeHider {
         this.currentTabId = null;
         this.blockedKeywords = new Map(); // Track keyword counts for current tab
         this.totalOccurrences = 0;
+        this.collapseStyle = 'hideCompletely';
+
+        chrome.storage.local.get('collapseStyle', result => {
+            this.collapseStyle = result.collapseStyle || 'hideCompletely';
+        });
+        chrome.storage.onChanged.addListener((changes, areaName) => {
+            if (areaName === 'local' && changes.collapseStyle) {
+                this.collapseStyle = changes.collapseStyle.newValue || 'hideCompletely';
+            }
+        });
 
         // Get current tab ID
         chrome.runtime.sendMessage({ type: 'getCurrentTab' }, (response) => {
@@ -90,9 +99,8 @@ const nodeHider = new class NodeHider {
     /**
      * Process a single container element
      * @param {Element} container - The container element to process
-     * @param {string} collapseStyle - The style to use when hiding elements
      */
-    processContainer(container, collapseStyle) {
+    processContainer(container) {
         try {
             if (!(container instanceof Element)) {
                 return;
@@ -103,21 +111,20 @@ const nodeHider = new class NodeHider {
                 return;
             }
 
-            // Check for blocked content and track keywords
-            const content = container.textContent || '';
+            // Every candidate has already passed a handler/detector match. Recheck
+            // only to collect per-tab keyword details; never discard a trusted
+            // match because a selected ancestor has a narrower text surface.
+            const content = this.getMatchableContent(container);
             const matches = containsBlockedContent(content);
+            this.processedNodes.add(container);
             if (matches.length > 0) {
-                // Track this node
-                this.processedNodes.add(container);
-
                 // Track keywords with content for deduplication
                 this.trackKeywords(matches, content);
+            }
 
-                // Only apply hiding if the node isn't already hidden
-                if (window.getComputedStyle(container).display !== 'none') {
-                    this.applyHidingStyle(container, collapseStyle);
-                    this.handleParentContainers(container, collapseStyle);
-                }
+            // Only apply hiding if the node isn't already hidden.
+            if (container.style.display !== 'none') {
+                this.applyHidingStyle(container);
             }
 
         } catch (error) {
@@ -125,12 +132,48 @@ const nodeHider = new class NodeHider {
         }
     }
 
+    getMatchableContent(container) {
+        const parts = new Set();
+        // innerText preserves the visual separation between nested headline
+        // spans and adjacent card fields. textContent can concatenate those
+        // nodes and make an otherwise exact headline impossible to match.
+        const visibleText = container.innerText || container.textContent;
+        if (visibleText?.trim()) parts.add(visibleText);
+        [
+            container.getAttribute?.('href'),
+            container.getAttribute?.('aria-label'),
+            container.title
+        ].filter(Boolean).forEach(value => parts.add(value));
+
+        const mediaElements = [];
+        if (container.matches('img, picture, source, video, svg')) {
+            mediaElements.push(container);
+        }
+        container.querySelectorAll?.('img, picture, source, video, svg').forEach(element =>
+            mediaElements.push(element)
+        );
+
+        mediaElements.forEach(element => {
+            [
+                element.alt,
+                element.getAttribute('aria-label'),
+                element.title,
+                element.currentSrc,
+                element.src,
+                element.srcset,
+                element.getAttribute('data-src'),
+                element.getAttribute('poster')
+            ].filter(Boolean).forEach(value => parts.add(value));
+        });
+
+        return [...parts].join(' ');
+    }
+
     /**
      * Apply the appropriate hiding style to the container
      * @param {Element} container - The container element
-     * @param {string} collapseStyle - The style to use when hiding elements
      */
-    applyHidingStyle(container, collapseStyle) {
+    applyHidingStyle(container) {
         if (window.getComputedStyle(container).display === 'none') {
             return;
         }
@@ -142,6 +185,13 @@ const nodeHider = new class NodeHider {
 
         // For Reddit, apply click-to-show
         const isReddit = container.closest('shreddit-post, shreddit-comment');
+        if (!isReddit && this.collapseStyle === 'keepContainer') {
+            container.style.visibility = 'hidden';
+            container.style.pointerEvents = 'none';
+            container.setAttribute('aria-hidden', 'true');
+            return;
+        }
+
         if (!isReddit) {
             // Hide without click-to-show for other platforms
             container.style.display = 'none';
@@ -187,67 +237,6 @@ const nodeHider = new class NodeHider {
     }
 
     /**
-     * Handle parent containers for consistent layout
-     * @param {Element} container - The container element
-     * @param {string} collapseStyle - The style to use when hiding elements
-     */
-    handleParentContainers(container, collapseStyle) {
-        // Cache computed styles to avoid layout thrashing
-        const computedStyles = new Map();
-        const getComputedStyleCached = (element) => {
-            if (!computedStyles.has(element)) {
-                computedStyles.set(element, window.getComputedStyle(element));
-            }
-            return computedStyles.get(element);
-        };
-
-        // Batch style reads and writes
-        const styleUpdates = [];
-        let parent = container.parentElement;
-
-        // First pass: gather all style reads
-        while (parent && parent !== document.body) {
-            if (parent.tagName === 'SHREDDIT-POST') break;
-
-            const style = getComputedStyleCached(parent);
-            const isFlexOrGrid = style.display.includes('grid') || style.display.includes('flex');
-
-            if (collapseStyle === 'hideCompletely') {
-                const hasVisibleContent = Array.from(parent.children).some(child => {
-                    const childStyle = getComputedStyleCached(child);
-                    return childStyle.display !== 'none';
-                });
-
-                styleUpdates.push({
-                    element: parent,
-                    updates: {
-                        gap: isFlexOrGrid ? '0.5rem' : null,
-                        display: !hasVisibleContent ? 'none' : null
-                    }
-                });
-            } else if (isFlexOrGrid) {
-                styleUpdates.push({
-                    element: parent,
-                    updates: { gap: '0.5rem' }
-                });
-            }
-
-            parent = parent.parentElement;
-        }
-
-        // Second pass: batch all style writes
-        requestAnimationFrame(() => {
-            styleUpdates.forEach(({ element, updates }) => {
-                Object.entries(updates).forEach(([prop, value]) => {
-                    if (value !== null) {
-                        element.style[prop] = value;
-                    }
-                });
-            });
-        });
-    }
-
-    /**
      * Reset the node hider state
      */
     reset() {
@@ -261,7 +250,7 @@ const nodeHider = new class NodeHider {
                 type: 'updateBlockCount',
                 tabId: this.currentTabId,
                 count: 0,
-                total: document.body.getElementsByTagName('*').length
+                total: 0
             });
 
             chrome.storage.local.set({
@@ -277,16 +266,24 @@ const nodeHider = new class NodeHider {
  */
 function hideNodes(nodesToHide) {
     try {
-        chromeStorageGet(['collapseStyle'], function(result) {
-            const collapseStyle = result.collapseStyle || 'hideCompletely';
-
-            nodesToHide.forEach(container => {
-                nodeHider.processContainer(container, collapseStyle);
-            });
+        const candidates = Array.from(nodesToHide)
+            .filter(container => container instanceof Element && container.isConnected);
+        const candidateSet = new Set(candidates);
+        const topLevelCandidates = candidates.filter(container => {
+            let ancestor = container.parentElement;
+            while (ancestor) {
+                if (candidateSet.has(ancestor)) return false;
+                ancestor = ancestor.parentElement;
+            }
+            return true;
         });
+
+        topLevelCandidates.forEach(container => nodeHider.processContainer(container));
     } catch (error) {
         console.debug('Error in hideNodes:', error);
     }
+
+    return Promise.resolve();
 }
 
 export { hideNodes, nodeHider };

@@ -330,5 +330,8 @@ class RedditHandler extends BaseHandler {
     }
 }
 
-const handler = new RedditHandler();
-export const handleReddit = (nodesToHide) => handler.handle(nodesToHide);
+let handler = null;
+export const handleReddit = (nodesToHide) => {
+    if (!handler) handler = new RedditHandler();
+    return handler.handle(nodesToHide);
+};

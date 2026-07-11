@@ -24,7 +24,8 @@
             },
             "covid mandate": {
                 "weight": 1,
-                "description": "Common policy term"
+                "description": "Common policy term",
+                "lifecycle": "cyclical"
             },
             "covid passport": {
                 "weight": 1,
@@ -68,7 +69,8 @@
             },
             "mask mandate": {
                 "weight": 3,
-                "description": "Frequent policy term"
+                "description": "Frequent policy term",
+                "lifecycle": "cyclical"
             },
             "mask requirement": {
                 "weight": 1,
@@ -100,7 +102,8 @@
             },
             "pandemic policy": {
                 "weight": 0,
-                "description": "Regular policy term"
+                "description": "Regular policy term",
+                "lifecycle": "cyclical"
             },
             "pandemic restriction": {
                 "weight": 1,

@@ -4,128 +4,133 @@ import * as storage from './optionsStorage.js';
 import { exportSettings, importSettings } from '../scripts/core/managers/settingsManager.js';
 import { initializeSettings } from './options.js';
 
+const keywordIdentity = value => String(value || '')
+  .normalize('NFKC')
+  .replace(/\s+/g, ' ')
+  .trim()
+  .toLowerCase();
+
 export function setupFilter() {
   const keywordFilter = document.getElementById('filterInput');
   const domainFilter = document.getElementById('domainFilterInput');
   const elementFilter = document.getElementById('elementFilterInput');
   const enableAllBtn = document.getElementById('enableAll');
   const disableAllBtn = document.getElementById('disableAll');
+  const keywordSelector = '#keywordGroups .keyword-item:not([style*="display: none"]) label, #customKeywords .keyword-item:not([style*="display: none"]) label';
 
-  // Enable/Disable All functionality
+  const visibleKeywordIdentities = () => new Set(
+    [...document.querySelectorAll(keywordSelector)]
+      .map(label => keywordIdentity(label.textContent))
+  );
+
+  const restoreSearch = searchTerm => {
+    if (!searchTerm || !keywordFilter) return;
+    keywordFilter.value = searchTerm;
+    keywordFilter.dispatchEvent(new Event('input'));
+  };
+
   enableAllBtn?.addEventListener('click', async () => {
     const searchTerm = keywordFilter?.value.toLowerCase() || '';
-    const result = await storage.getStorageData(['keywordGroups', 'customKeywords', 'disabledGroups', 'disabledKeywords']);
+    const result = await storage.getStorageData([
+      'keywordGroups', 'keywordCatalogSnapshot', 'customKeywords', 'disabledGroups',
+      'disabledKeywords', 'pinnedKeywords'
+    ]);
     const keywordGroups = result.keywordGroups || {};
-    const customKeywords = result.customKeywords || [];
     let disabledGroups = result.disabledGroups || [];
     let disabledKeywords = result.disabledKeywords || [];
+    let pinnedKeywords = result.pinnedKeywords || [];
 
-    // If there's a search term, only enable matching keywords
     if (searchTerm) {
-      // Get all visible keywords
-      const visibleKeywords = new Set();
-      document.querySelectorAll('#keywordGroups .keyword-item:not([style*="display: none"]) label, #customKeywords .keyword-item:not([style*="display: none"]) label').forEach(label => {
-        visibleKeywords.add(label.textContent);
-      });
+      const visible = visibleKeywordIdentities();
+      disabledKeywords = disabledKeywords.filter(keyword =>
+        !visible.has(keywordIdentity(keyword))
+      );
+      // Enabling visible/default keywords must not erase independent catalog
+      // pins, especially metadata-only terms that are not rendered in the list.
 
-      // Remove matching keywords from disabled lists
-      disabledKeywords = disabledKeywords.filter(keyword => !visibleKeywords.has(keyword));
-
-      // Update group disabled status
-      Object.entries(keywordGroups).forEach(([groupName, keywords]) => {
-        const hasVisibleKeywords = keywords.some(k => visibleKeywords.has(k));
-        const allKeywordsEnabled = keywords.every(k => !disabledKeywords.includes(k));
-        if (hasVisibleKeywords && allKeywordsEnabled) {
-          disabledGroups = disabledGroups.filter(g => g !== groupName);
+      const disabled = new Set(disabledKeywords.map(keywordIdentity));
+      for (const [groupName, keywords] of Object.entries(keywordGroups)) {
+        const hasVisible = keywords.some(keyword => visible.has(keywordIdentity(keyword)));
+        const anyEnabled = keywords.some(keyword => !disabled.has(keywordIdentity(keyword)));
+        if (hasVisible && anyEnabled) {
+          disabledGroups = disabledGroups.filter(group => group !== groupName);
         }
-      });
+      }
     } else {
-      // No search term, enable everything
       disabledGroups = [];
       disabledKeywords = [];
+      // Pins are explicit opt-ins, not disabled state. Enable All preserves them.
     }
 
-    await storage.setStorageData({ disabledGroups, disabledKeywords });
+    await storage.setStorageData({ disabledGroups, disabledKeywords, pinnedKeywords });
     await initializeSettings();
-
-    // Reapply the search filter if there was a search term
-    if (searchTerm) {
-      keywordFilter.value = searchTerm;
-      keywordFilter.dispatchEvent(new Event('input'));
-    }
+    restoreSearch(searchTerm);
   });
 
   disableAllBtn?.addEventListener('click', async () => {
     const searchTerm = keywordFilter?.value.toLowerCase() || '';
-    const result = await storage.getStorageData(['keywordGroups', 'customKeywords', 'disabledGroups', 'disabledKeywords']);
+    const result = await storage.getStorageData([
+      'keywordGroups', 'keywordCatalogSnapshot', 'customKeywords', 'disabledGroups',
+      'disabledKeywords', 'pinnedKeywords'
+    ]);
     const keywordGroups = result.keywordGroups || {};
+    const catalogGroups = result.keywordCatalogSnapshot || {};
+    const fullKeywordGroups = { ...keywordGroups, ...catalogGroups };
     const customKeywords = result.customKeywords || [];
     let disabledGroups = result.disabledGroups || [];
     let disabledKeywords = result.disabledKeywords || [];
+    let pinnedKeywords = result.pinnedKeywords || [];
+    const disabled = new Map(disabledKeywords.map(keyword => [keywordIdentity(keyword), keyword]));
 
-    // If there's a search term, only disable matching keywords
     if (searchTerm) {
-      // Get all visible keywords
-      document.querySelectorAll('#keywordGroups .keyword-item:not([style*="display: none"]) label, #customKeywords .keyword-item:not([style*="display: none"]) label').forEach(label => {
+      const visible = visibleKeywordIdentities();
+      for (const label of document.querySelectorAll(keywordSelector)) {
         const keyword = label.textContent;
-        if (!disabledKeywords.includes(keyword)) {
-          disabledKeywords.push(keyword);
-        }
-      });
+        if (!disabled.has(keywordIdentity(keyword))) disabled.set(keywordIdentity(keyword), keyword);
+      }
+      pinnedKeywords = pinnedKeywords.filter(keyword =>
+        !visible.has(keywordIdentity(keyword))
+      );
 
-      // Update group disabled status
-      Object.entries(keywordGroups).forEach(([groupName, keywords]) => {
-        const allKeywordsDisabled = keywords.every(k => disabledKeywords.includes(k));
-        if (allKeywordsDisabled && !disabledGroups.includes(groupName)) {
-          disabledGroups.push(groupName);
-        }
-      });
+      for (const [groupName, keywords] of Object.entries(keywordGroups)) {
+        const allDisabled = keywords.every(keyword => disabled.has(keywordIdentity(keyword)));
+        if (allDisabled && !disabledGroups.includes(groupName)) disabledGroups.push(groupName);
+      }
     } else {
-      // No search term, disable everything
-      Object.entries(keywordGroups).forEach(([groupName, keywords]) => {
-        if (!disabledGroups.includes(groupName)) {
-          disabledGroups.push(groupName);
+      pinnedKeywords = [];
+      for (const [groupName, keywords] of Object.entries(fullKeywordGroups)) {
+        if (!disabledGroups.includes(groupName)) disabledGroups.push(groupName);
+        for (const keyword of keywords) {
+          if (!disabled.has(keywordIdentity(keyword))) disabled.set(keywordIdentity(keyword), keyword);
         }
-        keywords.forEach(keyword => {
-          if (!disabledKeywords.includes(keyword)) {
-            disabledKeywords.push(keyword);
-          }
-        });
-      });
+      }
+      for (const keyword of customKeywords) {
+        if (!disabled.has(keywordIdentity(keyword))) disabled.set(keywordIdentity(keyword), keyword);
+      }
     }
 
-    await storage.setStorageData({ disabledGroups, disabledKeywords });
+    disabledKeywords = [...disabled.values()].sort((a, b) => a.localeCompare(b));
+    disabledGroups.sort();
+    await storage.setStorageData({ disabledGroups, disabledKeywords, pinnedKeywords });
     await initializeSettings();
-
-    // Reapply the search filter if there was a search term
-    if (searchTerm) {
-      keywordFilter.value = searchTerm;
-      keywordFilter.dispatchEvent(new Event('input'));
-    }
+    restoreSearch(searchTerm);
   });
 
-  // Keyword filtering
-  keywordFilter?.addEventListener('input', (e) => {
-    const searchTerm = e.target.value.toLowerCase();
+  keywordFilter?.addEventListener('input', event => {
+    const searchTerm = event.target.value.toLowerCase();
     let visibleCount = 0;
-
-    // Filter keyword items
-    document.querySelectorAll('#keywordGroups .keyword-item, #customKeywords .keyword-item').forEach(item => {
+    document.querySelectorAll('#keywordGroups .keyword-item, #customKeywords .keyword-item, #retiredKeywords .keyword-item').forEach(item => {
       const text = item.querySelector('label').textContent.toLowerCase();
       const isVisible = text.includes(searchTerm);
       item.style.display = isVisible ? '' : 'none';
       if (isVisible) visibleCount++;
     });
-
-    // Hide empty groups
     document.querySelectorAll('#keywordGroups .keyword-group').forEach(group => {
       const hasVisibleItems = Array.from(group.querySelectorAll('.keyword-item'))
         .some(item => item.style.display !== 'none');
       const groupTitle = group.querySelector('.group-title').textContent.toLowerCase();
       group.style.display = (hasVisibleItems || groupTitle.includes(searchTerm)) ? '' : 'none';
     });
-
-    // Update button text
     if (searchTerm) {
       enableAllBtn.textContent = `Enable ${visibleCount}`;
       disableAllBtn.textContent = `Disable ${visibleCount}`;
@@ -135,17 +140,12 @@ export function setupFilter() {
     }
   });
 
-  // Domain filtering
-  domainFilter?.addEventListener('input', (e) => {
-    const searchTerm = e.target.value.toLowerCase();
-
-    // Filter domain items
+  domainFilter?.addEventListener('input', event => {
+    const searchTerm = event.target.value.toLowerCase();
     document.querySelectorAll('#domainList .keyword-item, #customDomains .keyword-item').forEach(item => {
       const text = item.querySelector('label').textContent.toLowerCase();
       item.style.display = text.includes(searchTerm) ? '' : 'none';
     });
-
-    // Hide empty groups
     document.querySelectorAll('#domainList .keyword-group').forEach(group => {
       const hasVisibleItems = Array.from(group.querySelectorAll('.keyword-item'))
         .some(item => item.style.display !== 'none');
@@ -154,17 +154,12 @@ export function setupFilter() {
     });
   });
 
-  // Element filtering
-  elementFilter?.addEventListener('input', (e) => {
-    const searchTerm = e.target.value.toLowerCase();
-
-    // Filter element items
+  elementFilter?.addEventListener('input', event => {
+    const searchTerm = event.target.value.toLowerCase();
     document.querySelectorAll('#elementGroups .keyword-item').forEach(item => {
       const text = item.querySelector('label').textContent.toLowerCase();
       item.style.display = text.includes(searchTerm) ? '' : 'none';
     });
-
-    // Hide empty groups
     document.querySelectorAll('#elementGroups .keyword-group').forEach(group => {
       const hasVisibleItems = Array.from(group.querySelectorAll('.keyword-item'))
         .some(item => item.style.display !== 'none');

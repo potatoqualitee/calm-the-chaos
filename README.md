@@ -1,12 +1,12 @@
-# Calm the Chaos - Preview
+# Calm the Chaos
 
 ## Overview
 
 A [browser extension](https://chromewebstore.google.com/detail/calm-the-chaos/cholkigafekgccbkfgcmcigihipbnjoe) that filters unwanted content related to conflict, violence, and inflammatory rhetoric across every website. This extension, while only in the [Chrome Store](https://chromewebstore.google.com/detail/calm-the-chaos/cholkigafekgccbkfgcmcigihipbnjoe) also works on my favorite browser, [Brave](https://brave.com), Edge and others.
 
-> ⚠️ **Official Preview Release**: This is a preview version (v0.1.0-preview) of Calm the Chaos. Features may be incomplete or subject to change.
+> **Preview release (v0.3.0):** Features may still evolve as publisher layouts change.
 >
-> By default, content filtering is only enabled for specific platforms (CNN, LinkedIn, Reddit, StackOverflow and YouTube). You can enable filtering for additional domains through the extension settings.
+> By default, filtering is enabled for BBC, Bluesky, CNN, Google News, Instagram, LinkedIn, People, Reddit, Stack Overflow, Yahoo, and YouTube. You can enable additional domains through the extension settings.
 
 <div align="center">
   <a href="screenshots/popup.png"><img src="screenshots/popup.png" alt="Extension Popup" width="400"/></a>
@@ -69,7 +69,7 @@ While the default keywords are US-centric, you can easily maintain your own regi
   - **Reddit**: Filter posts based on keywords while keeping subreddits visible. Optionally enable comment thread filtering with granular control over top-level comments vs replies.
   - **LinkedIn**: Smart filtering of posts and articles while preserving professional networking features.
   - **YouTube**: Content filtering across video titles, descriptions, and comments.
-  - **CNN & StackOverflow**: Targeted content filtering while maintaining site functionality.
+  - **CNN, BBC & Stack Overflow**: Targeted news, article, question, answer, and sidebar filtering while maintaining site navigation.
 - **🔄 Flexible Matching**: Choose between exact and flexible matching to refine content identification.
 - **🔒 Domain Control**: Enable or disable filtering for specific domains to match your browsing habits.
 - **🔗 Updates Section**: The keyword list will be updated every few hours with the newest cast of characters and controversies.
@@ -79,7 +79,8 @@ While the default keywords are US-centric, you can easily maintain your own regi
 1. **Clone or Download**: Get this repository on your local machine.
 2. **Open Chrome Extensions**: Navigate to `chrome://extensions/`.
 3. **Enable Developer Mode**: Toggle the switch in the top right corner.
-4. **Load Unpacked**: Click and select the directory where this extension is located.
+4. **Build**: Run `npm install`, then `npm run build`.
+5. **Load Unpacked**: Click and select the generated `dist` directory.
 
 ## 🛠️ Usage
 
@@ -99,11 +100,11 @@ In the extension settings under "Elements" tab:
 To load the extension in Chrome for development:
 
 1. **Clone or Download the Repository**: Get a local copy of the project on your machine.
-2. **Open Chrome Extensions Page**: Navigate to `chrome://extensions/` in your Chrome browser.
-3. **Enable Developer Mode**: Toggle the "Developer mode" switch at the top right corner.
-4. **Load Unpacked Extension**: Click on the "Load unpacked" button.
-5. **Select the Extension Directory**: Browse to the directory where you cloned or downloaded the repository and select it.
-6. **Extension Loaded**: The extension should now be loaded into Chrome and ready for testing.
+2. **Install and Build**: Run `npm install` and `npm run build`.
+3. **Open Chrome Extensions Page**: Navigate to `chrome://extensions/` in your browser.
+4. **Enable Developer Mode**: Toggle the "Developer mode" switch at the top right corner.
+5. **Load Unpacked Extension**: Click "Load unpacked" and select the generated `dist` directory.
+6. **Verify**: Run `npm test`, `npm run benchmark:matcher`, `npm run test:sites`, and `npm run test:performance` when changing matching, site handlers, or page-load behavior.
 
 Remember to reload the extension from the extensions page after making changes to see the updates.
 

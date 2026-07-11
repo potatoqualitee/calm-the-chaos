@@ -1,14 +1,17 @@
 {
     "US Political Figures - Single Name": {
         "description": "Common single-name references to US political figures that frequently appear in public discourse",
+        "lifecycle": "tenure",
+        "reviewCadenceDays": 90,
+        "reviewedAt": "2026-07-10",
         "keywords": {
-            "AOC": {
-                "weight": 3,
-                "description": "Highly frequent House representative"
-            },
             "Alito": {
                 "weight": 1,
                 "description": "Regular Supreme Court justice"
+            },
+            "AOC": {
+                "weight": 3,
+                "description": "Highly frequent House representative"
             },
             "Bannon": {
                 "weight": 2,
@@ -16,19 +19,23 @@
             },
             "Bessent": {
                 "weight": 3,
-                "description": "Frequent political figure"
+                "description": "Secretary of the Treasury"
             },
             "Biden": {
                 "weight": 3,
-                "description": "Highly frequent president"
+                "description": "Former president"
             },
             "Blinken": {
                 "weight": 1,
-                "description": "Regular cabinet official"
+                "description": "Former secretary of state"
             },
             "Boebert": {
                 "weight": 3,
                 "description": "Frequent House figure"
+            },
+            "Bondi": {
+                "weight": 2,
+                "description": "Former attorney general tied to ongoing Epstein-files controversy"
             },
             "Booker": {
                 "weight": 1,
@@ -36,7 +43,7 @@
             },
             "Buttigieg": {
                 "weight": 2,
-                "description": "Common cabinet official"
+                "description": "Former transportation secretary and political figure"
             },
             "Cheney": {
                 "weight": 2,
@@ -56,7 +63,7 @@
             },
             "DJT": {
                 "weight": 3,
-                "description": "Highly frequent former president acronym"
+                "description": "Donald Trump initials and Trump Media ticker"
             },
             "donaldjtrump": {
                 "weight": 3,
@@ -79,12 +86,12 @@
                 "description": "Common Senate figure"
             },
             "Gaetz": {
-                "weight": 3,
-                "description": "Frequent House figure"
+                "weight": 2,
+                "description": "Former House representative and political media figure"
             },
             "Garland": {
-                "weight": 3,
-                "description": "Frequent cabinet official"
+                "weight": 2,
+                "description": "Former attorney general"
             },
             "Giuliani": {
                 "weight": 2,
@@ -103,8 +110,8 @@
                 "description": "Common Senate figure"
             },
             "Hegseth": {
-                "weight": 1,
-                "description": "Moderate-use media figure"
+                "weight": 3,
+                "description": "Secretary of War"
             },
             "Higgins": {
                 "weight": 1,
@@ -114,6 +121,10 @@
                 "weight": 0,
                 "description": "Regular governor"
             },
+            "Homan": {
+                "weight": 2,
+                "description": "White House border policy official"
+            },
             "Ilhan": {
                 "weight": 2,
                 "description": "Common House figure"
@@ -122,17 +133,13 @@
                 "weight": 2,
                 "description": "Common political figure"
             },
-            "Kamala": {
-                "weight": 3,
-                "description": "Highly frequent vice president"
-            },
             "Kagan": {
                 "weight": 1,
                 "description": "Regular Supreme Court justice"
             },
-            "Kissinger": {
-                "weight": 1,
-                "description": "Regular historical figure"
+            "Kamala": {
+                "weight": 3,
+                "description": "Former vice president"
             },
             "Klobuchar": {
                 "weight": 1,
@@ -142,17 +149,17 @@
                 "weight": 2,
                 "description": "Common political figure"
             },
-            "Manchin": {
+            "Leavitt": {
                 "weight": 2,
-                "description": "Common Senate figure"
+                "description": "White House press secretary"
             },
-            "Mangione": {
-                "weight": 3,
-                "description": "Frequent political figure"
+            "Manchin": {
+                "weight": 1,
+                "description": "Former senator"
             },
             "McConnell": {
-                "weight": 3,
-                "description": "Frequent Senate leader"
+                "weight": 2,
+                "description": "Senior senator and former Senate leader"
             },
             "Melania": {
                 "weight": 1,
@@ -164,7 +171,7 @@
             },
             "MTG": {
                 "weight": 3,
-                "description": "Highly frequent House figure"
+                "description": "Former House representative and political figure"
             },
             "Musk": {
                 "weight": 3,
@@ -180,7 +187,7 @@
             },
             "Noem": {
                 "weight": 1,
-                "description": "Regular governor"
+                "description": "Former homeland security secretary and governor"
             },
             "Obama": {
                 "weight": 3,
@@ -198,33 +205,33 @@
                 "weight": 2,
                 "description": "Common former vice president"
             },
+            "R.F.K. Jr": {
+                "weight": 3,
+                "description": "Health and human services secretary"
+            },
             "Ramaswamy": {
                 "weight": 3,
                 "description": "Frequent political figure"
             },
+            "RFK Jr": {
+                "weight": 3,
+                "description": "Health and human services secretary"
+            },
+            "Romney": {
+                "weight": 1,
+                "description": "Former senator"
+            },
             "Rubio": {
                 "weight": 3,
                 "description": "Frequent political figure"
-            },
-            "RFK Jr": {
-                "weight": 2,
-                "description": "Common political figure"
-            },
-            "R.F.K. Jr": {
-                "weight": 2,
-                "description": "Common political figure"
-            },
-            "Romney": {
-                "weight": 2,
-                "description": "Common Senate figure"
             },
             "Schumer": {
                 "weight": 3,
                 "description": "Frequent Senate leader"
             },
             "Sinema": {
-                "weight": 2,
-                "description": "Common Senate figure"
+                "weight": 1,
+                "description": "Former senator"
             },
             "Sotomayor": {
                 "weight": 1,
@@ -236,7 +243,11 @@
             },
             "Swalwell": {
                 "weight": 1,
-                "description": "Regular House figure"
+                "description": "Former House representative and political figure"
+            },
+            "Thune": {
+                "weight": 3,
+                "description": "Senate majority leader"
             },
             "Tlaib": {
                 "weight": 3,
@@ -251,8 +262,8 @@
                 "description": "Regular Senate figure"
             },
             "Vance": {
-                "weight": 1,
-                "description": "Regular Senate figure"
+                "weight": 3,
+                "description": "Vice president"
             },
             "Warnock": {
                 "weight": 1,

@@ -86,17 +86,17 @@
                 "weight": 1,
                 "description": "Common religious debate term"
             },
-            "sex-ed curriculum": {
-                "weight": 0,
-                "description": "Frequent education controversy term"
-            },
             "sex education": {
                 "weight": 2,
                 "description": "Frequent curriculum debate term"
             },
-            "sexualization children": {
+            "sex-ed curriculum": {
+                "weight": 0,
+                "description": "Frequent education controversy term"
+            },
+            "sexualization of children": {
                 "weight": 3,
-                "description": "Highly frequent accusation term"
+                "description": "Frequent accusation in curriculum debates"
             },
             "social emotional learning": {
                 "weight": 1,

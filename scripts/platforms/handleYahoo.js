@@ -26,30 +26,33 @@ class YahooHandler extends BaseHandler {
             '.ntk-wrap',
             '.js-stream-item-title',
             '#ntk-title',
-            '.need-to-know-section'
+            '.need-to-know-section',
+            'article',
+            '[role="article"]',
+            '[data-testid*="story"]'
         ];
     }
 
-    handlePreconfigured() {
+    async handlePreconfigured(roots = null) {
         // Handle stream items (news articles)
-        this.processSelectors(['li.stream-item'], (item) => {
+        await this.processSelectors(['li.stream-item, article, [role="article"], [data-testid*="story"]'], item => {
             const container = item;
-            this.checkAndHideElement(item, container);
-        }, 'Yahoo stream item');
+            return this.checkAndHideElement(item, container);
+        }, 'Yahoo stream item', roots);
 
         // Handle Need To Know / Lead Stories sections
-        this.processSelectors(['.ntk-lead, .ntk-wrap'], (story) => {
+        await this.processSelectors(['.ntk-lead, .ntk-wrap'], story => {
             const container = story;
-            this.checkAndHideElement(story, container);
-        }, 'Yahoo lead story');
+            return this.checkAndHideElement(story, container);
+        }, 'Yahoo lead story', roots);
 
         // Handle all other selectors
-        this.processSelectors(this.selectors, (element) => {
-            const container = element.closest('.ntk-lead, .ntk-wrap, li.stream-item') || element;
-            this.checkAndHideElement(element, container);
-        }, 'Yahoo element');
+        await this.processSelectors(this.selectors, element => {
+            const container = element.closest('.ntk-lead, .ntk-wrap, li.stream-item, article, [role="article"], [data-testid*="story"]') || element;
+            return this.checkAndHideElement(element, container);
+        }, 'Yahoo element', roots);
     }
 }
 
 const handler = new YahooHandler();
-export const handleYahoo = (nodesToHide) => handler.handle(nodesToHide);
+export const handleYahoo = (nodesToHide, roots = null) => handler.handle(nodesToHide, roots);

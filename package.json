@@ -1,13 +1,18 @@
 {
   "scripts": {
-    "build": "webpack --config webpack.config.js",
-    "watch": "webpack --config webpack.config.js --watch"
+    "build": "webpack --config webpack.config.js --mode production",
+    "watch": "webpack --config webpack.config.js --mode development --watch",
+    "test": "node --test tests/*.test.cjs",
+    "test:sites": "node tests/sites-smoke.cjs",
+    "test:performance": "node tests/extension-performance.cjs",
+    "benchmark:matcher": "node tests/matcher-benchmark.cjs"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",
     "@babel/preset-env": "^7.26.0",
     "babel-loader": "^9.2.1",
-    "copy-webpack-plugin": "^12.0.2",
+    "copy-webpack-plugin": "^14.0.0",
+    "puppeteer-core": "^25.3.0",
     "terser-webpack-plugin": "^5.3.10",
     "webpack": "^5.96.1",
     "webpack-cli": "^5.1.4"

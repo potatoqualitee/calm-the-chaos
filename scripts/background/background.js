@@ -2,14 +2,7 @@
 import { initializeEventHandlers } from './eventHandlers.js';
 import { PRECONFIGURED_DOMAINS } from '../core/config/preconfiguredDomains.js';
 
-import { needsImmediateBlur } from '../core/config/immediateBlur.js';
-
-// Handle install/update
-chrome.runtime.onInstalled.addListener(async (details) => {
-    if (details.reason === 'install' || details.reason === 'update') {
-        await updateNewDevelopments();
-    }
-});
+import { needsImmediateBlur } from '../core/config/blurSites.js';
 
 // Function to inject content scripts and CSS
 async function injectContentScripts(tabId, url) {
@@ -38,8 +31,10 @@ async function injectContentScripts(tabId, url) {
 // Check if a URL matches default sites
 function isDefaultSite(url) {
     try {
-        const hostname = new URL(url).hostname;
-        return PRECONFIGURED_DOMAINS.some(domain => hostname.endsWith(domain));
+        const hostname = new URL(url).hostname.toLowerCase().replace(/^www\./, '');
+        return PRECONFIGURED_DOMAINS.some(domain =>
+            hostname === domain || hostname.endsWith(`.${domain}`)
+        );
     } catch (err) {
         console.error('Invalid URL:', err);
         return false;
@@ -79,6 +74,8 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     if (changeInfo.status === 'loading' && tab.url) {
         // Check if this is a supported URL (http/https)
         if (!tab.url.match(/^https?:\/\//)) return;
+        // Default sites use the manifest's document_start content script.
+        if (isDefaultSite(tab.url)) return;
 
         try {
             // Get the current filter all sites setting
@@ -92,8 +89,8 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
                 hasPermission = await hasPermissionForUrl(tab.url);
             }
 
-            if (hasPermission || isDefaultSite(tab.url)) {
-                await injectContentScripts(tabId, tab.url);
+            if (hasPermission) {
+                await injectContentScripts(tab.id, tab.url);
             }
         } catch (err) {
             console.error('Error in tab update handler:', err);
@@ -113,7 +110,7 @@ chrome.action.onClicked.addListener(async (tab) => {
 
             const granted = await chrome.permissions.request(permission);
             if (granted) {
-                await injectContentScripts(tabId, tab.url);
+                await injectContentScripts(tab.id, tab.url);
             }
         }
     } catch (err) {
@@ -166,29 +163,42 @@ chrome.permissions.onRemoved.addListener(async (permissions) => {
 
 // Fetch and update new developments
 async function updateNewDevelopments() {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+
     try {
-        const response = await fetch('https://gist.githubusercontent.com/potatoqualitee/3488593dcc622acc736055fa00a9745e/raw/new-development.json');
+        const response = await fetch(
+            'https://gist.githubusercontent.com/potatoqualitee/3488593dcc622acc736055fa00a9745e/raw/new-development.json',
+            { signal: controller.signal }
+        );
         if (!response.ok) throw new Error('Failed to fetch new developments');
 
         const newDevelopments = await response.json();
         const { keywordGroups = {} } = await chrome.storage.local.get('keywordGroups');
+        const remoteKeywords = Object.entries(newDevelopments['New Developments']?.keywords || {})
+            .filter(([, metadata]) => Number(metadata?.weight ?? 1) > 0)
+            .map(([keyword]) => keyword)
+            .sort((a, b) => a.localeCompare(b));
+        const currentKeywords = [...(keywordGroups['New Developments'] || [])]
+            .sort((a, b) => a.localeCompare(b));
+
+        if (JSON.stringify(remoteKeywords) === JSON.stringify(currentKeywords)) return;
 
         // Update the new developments category
-        keywordGroups['New Developments'] = Object.keys(newDevelopments['New Developments']?.keywords || {});
+        keywordGroups['New Developments'] = remoteKeywords;
         await chrome.storage.local.set({ keywordGroups });
 
         // Send message to all tabs to update their regex
         const tabs = await chrome.tabs.query({});
-        for (const tab of tabs) {
-            try {
-                await chrome.tabs.sendMessage(tab.id, { type: 'updateKeywords' });
-            } catch (error) {
-                // Ignore errors for tabs that don't have our content script
-                console.debug('Could not send updateRegex message to tab:', tab.id);
-            }
-        }
+        await Promise.allSettled(tabs.map(tab =>
+            chrome.tabs.sendMessage(tab.id, { type: 'updateKeywords' })
+        ));
     } catch (error) {
-        console.error('Error updating new developments:', error);
+        if (error.name !== 'AbortError') {
+            console.error('Error updating new developments:', error);
+        }
+    } finally {
+        clearTimeout(timeoutId);
     }
 }
 
@@ -209,13 +219,26 @@ async function initialize() {
 
     // Create alarm for new developments updates
     const { autoUpdateNewDevelopments = true } = await chrome.storage.local.get('autoUpdateNewDevelopments');
+    const existingAlarm = await new Promise(resolve =>
+        chrome.alarms.get('updateNewDevelopments', resolve)
+    );
+
     if (autoUpdateNewDevelopments) {
-        chrome.alarms.create('updateNewDevelopments', {
-            periodInMinutes: 30,
-            delayInMinutes: 1 // First update after 1 minute
-        });
-        // Initial update
-        await updateNewDevelopments();
+        if (!existingAlarm || existingAlarm.periodInMinutes !== 360) {
+            if (existingAlarm) {
+                await new Promise(resolve =>
+                    chrome.alarms.clear('updateNewDevelopments', resolve)
+                );
+            }
+            chrome.alarms.create('updateNewDevelopments', {
+                periodInMinutes: 360,
+                delayInMinutes: 5
+            });
+        }
+    } else if (existingAlarm) {
+        await new Promise(resolve =>
+            chrome.alarms.clear('updateNewDevelopments', resolve)
+        );
     }
 }
 

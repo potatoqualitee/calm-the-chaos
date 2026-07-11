@@ -34,13 +34,13 @@
                 "weight": 1,
                 "description": "Common discrimination term"
             },
-            "black students": {
-                "weight": 0,
-                "description": "Common demographic term"
-            },
             "bias law": {
                 "weight": 1,
                 "description": "Regular legal term"
+            },
+            "black students": {
+                "weight": 0,
+                "description": "Common demographic term"
             },
             "book removal": {
                 "weight": 1,
@@ -155,8 +155,8 @@
                 "description": "Frequent systemic term"
             },
             "lynch": {
-                "weight": 3,
-                "description": "Highly sensitive racial violence term"
+                "weight": 1,
+                "description": "Racial-violence term with surname ambiguity"
             },
             "lynching": {
                 "weight": 3,

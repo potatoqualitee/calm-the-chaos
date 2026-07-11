@@ -20,29 +20,11 @@ class InstagramHandler extends BaseHandler {
         };
     }
 
-    handlePreconfigured() {
-        // Process posts and their content in a single pass
-        const posts = document.querySelectorAll(this.selectors.posts);
-        posts.forEach(post => {
-            // Check post container first
-            if (this.checkAndHideElement(post)) return;
-
-            // Check media content
-            const media = post.querySelector(this.selectors.postContent);
-            if (media && this.checkAndHideElement(media, post)) return;
-
-            // Check comments efficiently
-            const comments = post.querySelectorAll(this.selectors.comments);
-            comments.forEach(comment => {
-                if (this.checkAndHideElement(comment)) return;
-
-                // Quick text content check
-                const text = comment.querySelector(this.selectors.commentText);
-                if (text) this.checkAndHideElement(text, comment);
-            });
-        });
+    async handlePreconfigured(roots = null) {
+        await this.processSelectors([this.selectors.posts], post =>
+            this.checkAndHideElement(post), 'Instagram post', roots);
     }
 }
 
 const handler = new InstagramHandler();
-export const handleInstagram = (nodesToHide) => handler.handle(nodesToHide);
+export const handleInstagram = (nodesToHide, roots = null) => handler.handle(nodesToHide, roots);

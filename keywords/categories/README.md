@@ -21,33 +21,32 @@ Each category file follows this structure:
 
 ## Weight System
 
-These keywords were weighted by Sonnet 3.5 using Cline in VS Code.
+Weights are the default filtering tier, not a measure of identity or lifecycle:
 
-### Category Weights
-- Weight 9-10: High-intensity topics (e.g., Race Relations, Reproductive Health)
-- Weight 8: Significant topics (e.g., Social Policy)
-- Weight 7: Important topics (e.g., US Government Institutions)
+- 3: highest-priority default
+- 2: strong default
+- 1: regular default
+- 0: metadata/Complete-only; excluded from the extension's default matcher
 
-### Keyword Weights
-Keywords within each category follow this distribution:
-- Weight 8-10: ~15% (most critical terms)
-  * 10: Reserved for presidents and highest impact terms
-  * Highly polarizing figures and critical policy terms
-  * Frequent, significant terms
-- Weight 7: ~25% (frequently discussed terms)
-- Weight 6: ~30% (common terms)
-- Weight 5 and below: ~30% (regular and basic terms)
+## Lifecycle System
+
+- evergreen: durable policy, institution, and process vocabulary
+- cyclical: recurring crises, elections, geography, and named policies whose priority changes
+- tenure: people and organizations reviewed at least every 90 days
+- event: short-lived incidents reviewed on an explicit `reviewAfter` date; review never silently deletes a term
+
+Category-level lifecycle is the default; missing lifecycle metadata is treated as evergreen, and individual keywords may override it. See ../../docs/keyword-lifecycle.md and ../catalog-migrations.json.
 
 ## Special Categories
 
 ### New Developments
-`new-developments.json` tracks emerging political figures and developing stories. Terms may graduate to permanent categories as their significance stabilizes.
+`new-developments.json` is a volatile remote-fed category and may be replaced wholesale. Events that must ship reliably to both clients live in their relevant durable category with `lifecycle: "event"` and an explicit `reviewAfter` date.
 
 ### World Leaders
-`world-leaders.json` maintains a list of international leaders with weight 0 to exclude them from muting while preserving their reference information for easy muting.
+`world-leaders.json` keeps current tenure-based leaders at weight 0. A former leader who is still driving a major event may temporarily override weight and lifecycle until an explicit `reviewAfter` decision.
 
 ### Political Figures
-Both full names (`us-political-figures-full-name.json`) and single names (`us-political-figures-single-name.json`) are tracked separately with consistent weights across both files.
+Canonical full names and safe aliases are tracked separately. Ambiguous aliases may have lower weights than the canonical name, but never a higher weight.
 
 ## Maintenance Guidelines
 
@@ -65,7 +64,7 @@ Both full names (`us-political-figures-full-name.json`) and single names (`us-po
 3. Adding New Terms
    - Place in most relevant category
    - Assign initial weight based on current impact and polarization
-   - Add to both name variants if a political figure
+   - Add a single-name alias only when it is safe and reasonably unambiguous
    - Include clear, consistent descriptions
 
 4. File Organization

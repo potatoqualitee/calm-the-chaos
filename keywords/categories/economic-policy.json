@@ -27,8 +27,9 @@
                 "description": "Technical tax term"
             },
             "CEO": {
-                "weight": 3,
-                "description": "Highly frequent corporate term"
+                "weight": 0,
+                "description": "Broad corporate role; Complete-only to reduce false positives",
+                "lifecycle": "evergreen"
             },
             "CEO pay": {
                 "weight": 2,
@@ -62,6 +63,11 @@
                 "weight": 1,
                 "description": "Regular financial term"
             },
+            "crude oil prices": {
+                "weight": 1,
+                "description": "Energy-market term in conflict and supply-shock coverage",
+                "lifecycle": "cyclical"
+            },
             "debt ceiling": {
                 "weight": 3,
                 "description": "Highly frequent policy crisis"
@@ -85,6 +91,11 @@
             "economic inequality": {
                 "weight": 2,
                 "description": "Frequent social issue term"
+            },
+            "energy price spike": {
+                "weight": 2,
+                "description": "Energy-cost disruption term tied to conflict and supply shocks",
+                "lifecycle": "cyclical"
             },
             "Fed rate": {
                 "weight": 1,
@@ -114,6 +125,15 @@
                 "weight": 1,
                 "description": "Common housing term"
             },
+            "Foreign Aid": {
+                "weight": 2,
+                "description": "Frequent financial term"
+            },
+            "global tariff": {
+                "weight": 2,
+                "description": "Recurring international trade policy term",
+                "lifecycle": "cyclical"
+            },
             "hedge fund": {
                 "weight": 1,
                 "description": "Regular financial term"
@@ -128,13 +148,10 @@
             },
             "inflation": {
                 "weight": 1,
-                "description": "Regular policy term"
+                "description": "Regular policy term",
+                "lifecycle": "cyclical"
             },
             "interest rates": {
-                "weight": 2,
-                "description": "Frequent financial term"
-            },
-            "Foreign Aid": {
                 "weight": 2,
                 "description": "Frequent financial term"
             },
@@ -154,6 +171,11 @@
                 "weight": 1,
                 "description": "Common workplace term"
             },
+            "Liberation Day tariffs": {
+                "weight": 1,
+                "description": "Named 2025 tariff policy",
+                "lifecycle": "cyclical"
+            },
             "market crash": {
                 "weight": 3,
                 "description": "Highly frequent crisis term"
@@ -170,6 +192,16 @@
                 "weight": 1,
                 "description": "Common labor term"
             },
+            "oil price shock": {
+                "weight": 2,
+                "description": "Energy-market disruption term tied to conflict and supply shocks",
+                "lifecycle": "cyclical"
+            },
+            "One Big Beautiful Bill": {
+                "weight": 2,
+                "description": "Named tax and spending law",
+                "lifecycle": "cyclical"
+            },
             "PAC": {
                 "weight": 2,
                 "description": "Common political funding term"
@@ -183,8 +215,9 @@
                 "description": "Frequent economic criticism"
             },
             "price of eggs": {
-                "weight": 2,
-                "description": "Frequent economic criticism"
+                "weight": 0,
+                "description": "Cyclical cost-of-living phrase",
+                "lifecycle": "cyclical"
             },
             "private equity": {
                 "weight": 1,
@@ -192,7 +225,13 @@
             },
             "recession": {
                 "weight": 3,
-                "description": "Highly frequent economic term"
+                "description": "Highly frequent economic term",
+                "lifecycle": "cyclical"
+            },
+            "reciprocal tariff": {
+                "weight": 3,
+                "description": "High-priority trade policy term",
+                "lifecycle": "cyclical"
             },
             "right to work": {
                 "weight": 1,
@@ -206,17 +245,21 @@
                 "weight": 1,
                 "description": "Regular labor conflict term"
             },
-            "strategic reserve": {
-                "weight": 0,
-                "description": "Technical resource term"
-            },
             "stock market crash": {
                 "weight": 3,
                 "description": "Highly frequent crisis term"
             },
+            "strategic reserve": {
+                "weight": 0,
+                "description": "Technical resource term"
+            },
             "strike breaking": {
                 "weight": 1,
                 "description": "Regular labor conflict term"
+            },
+            "tariff": {
+                "weight": 3,
+                "description": "Highly frequent trade policy term"
             },
             "tax cut": {
                 "weight": 1,
@@ -225,10 +268,6 @@
             "tax haven": {
                 "weight": 1,
                 "description": "Regular criticism term"
-            },
-            "tariff": {
-                "weight": 3,
-                "description": "Highly frequent trade policy term"
             },
             "tax loophole": {
                 "weight": 1,
@@ -246,9 +285,10 @@
                 "weight": 2,
                 "description": "Frequent international term"
             },
-            "Trumponomicsr": {
+            "Trumponomics": {
                 "weight": 2,
-                "description": "Frequent policy term"
+                "description": "Trump economic policy label",
+                "lifecycle": "cyclical"
             },
             "unemployment": {
                 "weight": 3,

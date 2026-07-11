@@ -15,6 +15,9 @@ export async function initializeSettings() {
       'ignoredDomains',
       'keywordGroups',
       'customKeywords',
+      'retiredDefaultKeywords',
+      'customKeywordMeta',
+      'pinnedKeywords',
       'customDomains',
       'disabledGroups',
       'disabledKeywords',
@@ -98,6 +101,9 @@ export async function initializeSettings() {
 
     // Initialize other settings
     let customKeywords = result.customKeywords || [];
+    let retiredDefaultKeywords = result.retiredDefaultKeywords || [];
+    let customKeywordMeta = result.customKeywordMeta || {};
+    let pinnedKeywords = result.pinnedKeywords || [];
     let customDomains = result.customDomains || [];
     let disabledGroups = result.disabledGroups || [];
     let disabledKeywords = result.disabledKeywords || [];
@@ -121,6 +127,9 @@ export async function initializeSettings() {
     console.log('Saving all settings...');
     await storage.setStorageData({
       customKeywords,
+      retiredDefaultKeywords,
+      customKeywordMeta,
+      pinnedKeywords,
       customDomains,
       disabledGroups,
       disabledKeywords,
@@ -149,7 +158,7 @@ export async function initializeSettings() {
 
     // Update UI elements
     ui.updateDomainGroups(ignoredDomains, disabledDomainGroups, disabledDomains, filteringEnabled, customDomains);
-    ui.updateKeywordGroups(keywordGroups, customKeywords, disabledGroups, disabledKeywords);
+    ui.updateKeywordGroups(keywordGroups, customKeywords, disabledGroups, disabledKeywords, retiredDefaultKeywords);
     ui.updateElementGroups(elementGroups, disabledElementGroups, disabledElements);
     ui.updateFilteringModeText(filteringEnabled);
     ui.updateConfigUrls(configUrls);

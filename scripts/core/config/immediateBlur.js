@@ -1,30 +1,4 @@
-// Configuration for sites that should be immediately blurred
-// This allows easy opt-in for other sites in the future
-export const IMMEDIATE_BLUR_SITES = {
-    'cnn.com': {
-        enabled: true
-    },
-    'bbc': {  // This will match bbc.com, bbc.co.uk, etc.
-        enabled: true
-    }
-};
-
-// Utility function to check if a hostname needs immediate blur
-export function needsImmediateBlur(hostname) {
-    // Remove 'www.' prefix for consistent matching
-    const normalizedHostname = hostname.replace(/^www\./, '');
-
-    // Check each domain pattern
-    for (const domain in IMMEDIATE_BLUR_SITES) {
-        if (normalizedHostname.includes(domain) && IMMEDIATE_BLUR_SITES[domain].enabled) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-import * as storage from '../../../options/optionsStorage.js';
+import { getStorageData } from '../../utils/chromeStorage.js';
 
 // Create and show blur overlay
 export async function showImmediateBlur() {
@@ -56,7 +30,7 @@ export async function showImmediateBlur() {
     }, 10000);
 
     // Check if message should be shown
-    const settings = await storage.getStorageData(['showBlurMessage']);
+    const settings = await getStorageData(['showBlurMessage']);
     const showMessage = settings.showBlurMessage !== false; // Default to true if not set
 
     if (showMessage) {

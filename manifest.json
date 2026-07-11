@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Calm the Chaos",
-  "version": "0.2",
+  "version": "0.3.0",
   "description": "Tired of distressing news and controversial topics? Block it all.",
   "permissions": [
     "storage",
@@ -15,6 +15,8 @@
     "https://*.apnews.com/*",
     "https://*.axios.com/*",
     "https://*.bbc.com/*",
+    "https://*.bbc.co.uk/*",
+    "https://*.bbc.in/*",
     "https://*.bloomberg.com/*",
     "https://*.breitbart.com/*",
     "https://*.businessinsider.com/*",
@@ -78,6 +80,8 @@
     "https://apnews.com/*",
     "https://axios.com/*",
     "https://bbc.com/*",
+    "https://bbc.co.uk/*",
+    "https://bbc.in/*",
     "https://bloomberg.com/*",
     "https://breitbart.com/*",
     "https://bsky.app/*",
@@ -170,6 +174,8 @@
   "content_scripts": [
     {
       "matches": [
+        "https://*.cnn.com/*",
+        "https://cnn.com/*",
         "https://*.bbc.com/*",
         "https://bbc.com/*",
         "https://*.bbc.co.uk/*",
@@ -182,6 +188,38 @@
       ],
       "js": [
         "early-blur.js"
+      ],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "https://*.bbc.com/*",
+        "https://bbc.com/*",
+        "https://*.bbc.co.uk/*",
+        "https://bbc.co.uk/*",
+        "https://*.bbc.in/*",
+        "https://bbc.in/*",
+        "https://bsky.app/*",
+        "https://*.cnn.com/*",
+        "https://cnn.com/*",
+        "https://news.google.com/*",
+        "https://*.instagram.com/*",
+        "https://instagram.com/*",
+        "https://*.linkedin.com/*",
+        "https://linkedin.com/*",
+        "https://*.people.com/*",
+        "https://people.com/*",
+        "https://*.reddit.com/*",
+        "https://reddit.com/*",
+        "https://*.stackoverflow.com/*",
+        "https://stackoverflow.com/*",
+        "https://*.yahoo.com/*",
+        "https://yahoo.com/*",
+        "https://*.youtube.com/*",
+        "https://youtube.com/*"
+      ],
+      "js": [
+        "content.js"
       ],
       "run_at": "document_start"
     }

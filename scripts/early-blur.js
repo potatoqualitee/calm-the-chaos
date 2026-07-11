@@ -1,5 +1,5 @@
 import { isSpeedReader } from './core/detection/speedReaderDetector.js';
-import { needsImmediateBlur } from './core/config/immediateBlur.js';
+import { needsImmediateBlur } from './core/config/blurSites.js';
 
 // Prevent blur if SpeedReader is detected immediately or content is already filtered
 if (isSpeedReader() || document.documentElement.getAttribute('data-calm-chaos-state') === 'filtered') {

@@ -2,13 +2,12 @@
 
 import { DEFAULT_ELEMENT_GROUPS } from './config/elements.js';
 import { chromeStorageGet } from '../utils/chromeApi.js';
-import { containsBlockedContent } from './contentDetectionModule.js';
-import { getBlockedRegex } from './managers/regexManager.js';
+import { containsBlockedContent, getImageFilteringSettings } from './contentDetectionModule.js';
 
 class ElementProcessor {
     constructor() {
         this.containerSelectors = null;
-        this.MAX_DEPTH = 100;
+        this.MAX_DEPTH = 30;
     }
 
     /**
@@ -16,73 +15,63 @@ class ElementProcessor {
      * @param {Node} node - Starting node to search from
      * @returns {Element|null} - The minimal container or null if none found
      */
-    findMinimalContentContainer(node) {
-        let element = node;
+    async findMinimalContentContainer(node) {
+        let element = node?.nodeType === Node.ELEMENT_NODE ? node : node?.parentElement;
         let depth = 0;
+        let configuredCandidate = null;
+        let semanticFallback = null;
+        const selectors = await this.getContainerSelectors();
 
         while (element && element !== document.body && depth < this.MAX_DEPTH) {
             depth++;
-            if (element.nodeType === Node.ELEMENT_NODE) {
-                try {
-                    // Check href attributes
-                    if (this.checkHrefContent(element)) {
-                        return element;
-                    }
-
-                    // Check shadow DOM
-                    if (this.checkShadowContent(element)) {
-                        return element;
-                    }
-
-                    // Check container content
-                    if (this.checkContainerContent(element)) {
-                        return element;
-                    }
-                } catch (e) {
-                    console.debug('Matching failed:', e);
-                }
+            if (element.closest('header, footer, nav, [role="navigation"]')) {
+                return null;
             }
+
+            if (this.isStrongContentContainer(element)) {
+                return element;
+            }
+
+            if (!configuredCandidate && this.matchesAnySelector(element, selectors)) {
+                configuredCandidate = element;
+            }
+
+            if (!semanticFallback && element.matches('h1, h2, h3, h4, p, a[href], [role="listitem"]')) {
+                semanticFallback = element;
+            }
+
             element = element.parentElement;
         }
-        return null;
+
+        return configuredCandidate || semanticFallback;
     }
 
-    /**
-     * Check href attribute for blocked content
-     * @param {Element} element - Element to check
-     * @returns {boolean} - Whether blocked content was found
-     */
-    checkHrefContent(element) {
-        return element.hasAttribute('href') &&
-               containsBlockedContent(element.getAttribute('href')).length > 0;
+    matchesAnySelector(element, selectors) {
+        return selectors.some(selector => {
+            try {
+                return element.matches(selector);
+            } catch (_error) {
+                return false;
+            }
+        });
     }
 
-    /**
-     * Check shadow DOM for blocked content
-     * @param {Element} element - Element to check
-     * @returns {boolean} - Whether blocked content was found
-     */
-    checkShadowContent(element) {
-        if (element.shadowRoot) {
-            const shadowContent = element.shadowRoot.textContent;
-            return containsBlockedContent(shadowContent).length > 0;
+    isStrongContentContainer(element) {
+        if (element.matches('article, [role="article"], shreddit-post, shreddit-comment')) {
+            return true;
         }
-        return false;
-    }
 
-    /**
-     * Check container content for blocked content
-     * @param {Element} element - Element to check
-     * @returns {boolean} - Whether blocked content was found
-     */
-    async checkContainerContent(element) {
-        const selectors = await this.getContainerSelectors();
-        if (selectors.some(selector => element.matches(selector))) {
-            const hasContent = element.textContent.trim().length > 0 ||
-                             element.querySelector('img, video, iframe');
-            return hasContent && containsBlockedContent(element.textContent).length > 0;
+        if (element.matches('[data-component-name="card"], [data-testid="post-container"], [data-testid$="-article"], [data-testid$="-live"]')) {
+            return true;
         }
-        return false;
+
+        const tagName = element.tagName.toLowerCase();
+        if (tagName.startsWith('ytd-') && (tagName.endsWith('-renderer') || tagName === 'ytd-rich-grid-media')) {
+            return true;
+        }
+
+        return ['card', 'post', 'story', 'news-item', 'feed-item', 'stream-item']
+            .some(className => element.classList.contains(className));
     }
 
     /**
@@ -149,96 +138,108 @@ class ElementProcessor {
         return enabledSelectors;
     }
 
+    collectMediaElements(roots = null) {
+        const mediaElements = new Set();
+        const selector = 'img, picture, source, video[poster], svg[aria-label]';
+        const scopes = roots
+            ? Array.from(roots)
+            : [document];
+
+        scopes.forEach(scope => {
+            const root = scope?.nodeType === Node.TEXT_NODE ? scope.parentElement : scope;
+            if (!root) return;
+
+            if (root.nodeType === Node.ELEMENT_NODE && root.matches(selector)) {
+                mediaElements.add(root);
+            }
+
+            if (root.querySelectorAll) {
+                root.querySelectorAll(selector).forEach(element => mediaElements.add(element));
+            }
+        });
+
+        return mediaElements;
+    }
+
+    getMediaContent(media, settings) {
+        const content = new Set();
+        const relatedElements = [media];
+
+        if (media.matches('picture, video')) {
+            media.querySelectorAll('img, source').forEach(element => relatedElements.push(element));
+        }
+
+        relatedElements.forEach(element => {
+            if (settings.context.altText) {
+                [element.alt, element.getAttribute('aria-label'), element.title]
+                    .filter(Boolean)
+                    .forEach(value => content.add(value));
+            }
+
+            if (settings.context.srcUrl) {
+                [element.currentSrc, element.src, element.srcset, element.getAttribute('data-src')]
+                    .filter(Boolean)
+                    .forEach(value => content.add(value));
+            }
+        });
+
+        if (settings.context.captions) {
+            const caption = media.closest('figure')?.querySelector('figcaption')?.textContent;
+            if (caption?.trim()) content.add(caption);
+        }
+
+        if (settings.context.nearbyText) {
+            const parent = media.parentElement;
+            if (parent) {
+                const nearbyText = Array.from(parent.childNodes)
+                    .filter(node => node.nodeType === Node.TEXT_NODE)
+                    .map(node => node.textContent)
+                    .join(' ')
+                    .trim();
+                if (nearbyText) content.add(nearbyText);
+            }
+        }
+
+        return content;
+    }
+
     /**
-     * Handle generic media elements
-     * @param {Set} nodesToHide - Set to collect nodes that should be hidden
+     * Handle media only inside the supplied mutation roots. A null scope is the
+     * one intentional full-page pass used during initial filtering.
      */
-    async handleGenericMedia(nodesToHide) {
-        try {
-            // Skip for Reddit since it has its own image handling
-            if (window.location.hostname.includes('reddit.com')) {
-                return;
-            }
+    async handleGenericMedia(nodesToHide, roots = null) {
+        if (window.location.hostname.includes('reddit.com')) return;
 
-            // Get all image elements
-            const images = [
-                ...document.getElementsByTagName('img'),
-                ...document.getElementsByTagName('picture'),
-                ...document.getElementsByTagName('source')
-            ];
+        const settings = await getImageFilteringSettings();
+        if (!settings.enabled) return;
 
-            // Process each image
-            for (const img of images) {
-                try {
-                    // Skip if image is already hidden
-                    if (img.style.display === 'none' ||
-                        img.style.visibility === 'hidden' ||
-                        img.closest('[style*="display: none"]') ||
-                        img.closest('[style*="visibility: hidden"]')) {
-                        continue;
-                    }
+        for (const media of this.collectMediaElements(roots)) {
+            try {
+                const target = media.tagName === 'SOURCE'
+                    ? media.closest('picture, video') || media
+                    : media;
 
-                    // Check alt text
-                    if (img.alt && containsBlockedContent(img.alt).length > 0) {
-                        nodesToHide.add(img);
-                        continue;
-                    }
-
-                    // Check src URL
-                    const src = img.src || img.srcset || img.getAttribute('data-src');
-                    if (src && containsBlockedContent(src).length > 0) {
-                        nodesToHide.add(img);
-                        continue;
-                    }
-
-                    // Check aria-label
-                    if (img.getAttribute('aria-label') &&
-                        containsBlockedContent(img.getAttribute('aria-label')).length > 0) {
-                        nodesToHide.add(img);
-                        continue;
-                    }
-
-                    // Check title
-                    if (img.title && containsBlockedContent(img.title).length > 0) {
-                        nodesToHide.add(img);
-                        continue;
-                    }
-
-                    // Check parent text content
-                    const parent = img.parentElement;
-                    if (parent) {
-                        // Check for figure caption
-                        if (parent.tagName === 'FIGURE') {
-                            const caption = parent.querySelector('figcaption');
-                            if (caption && containsBlockedContent(caption.textContent).length > 0) {
-                                nodesToHide.add(img);
-                                continue;
-                            }
-                        }
-
-                        // Check immediate text content
-                        const textNodes = Array.from(parent.childNodes)
-                            .filter(node => node.nodeType === Node.TEXT_NODE)
-                            .map(node => node.textContent.trim())
-                            .filter(text => text.length > 0);
-
-                        if (textNodes.some(text => containsBlockedContent(text).length > 0)) {
-                            nodesToHide.add(img);
-                            continue;
-                        }
-                    }
-                } catch (error) {
-                    console.debug('Error processing image:', error);
+                if (target.style.display === 'none' || target.style.visibility === 'hidden') {
+                    continue;
                 }
+
+                const hasBlockedContent = [...this.getMediaContent(media, settings)]
+                    .some(content => containsBlockedContent(content).length > 0);
+
+                if (hasBlockedContent) {
+                    nodesToHide.add(target);
+                }
+            } catch (error) {
+                console.debug('Error processing media:', error);
             }
-        } catch (error) {
-            console.debug('Error in handleGenericMedia:', error);
         }
     }
+
 }
 
 const processor = new ElementProcessor();
 
 export const findMinimalContentContainer = node => processor.findMinimalContentContainer(node);
 export const getContainerSelectors = () => processor.getContainerSelectors();
-export const handleGenericMedia = nodesToHide => processor.handleGenericMedia(nodesToHide);
+export const clearElementProcessingCache = () => { processor.containerSelectors = null; };
+export const handleGenericMedia = (nodesToHide, roots = null) => processor.handleGenericMedia(nodesToHide, roots);

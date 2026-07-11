@@ -94,6 +94,12 @@
                 "weight": 2,
                 "description": "Frequent attack term"
             },
+            "Charlie Kirk killing": {
+                "weight": 2,
+                "description": "Current assassination-case coverage involving Charlie Kirk",
+                "lifecycle": "event",
+                "reviewAfter": "2026-08-10"
+            },
             "civil unrest": {
                 "weight": 2,
                 "description": "Frequent disorder term"
@@ -249,10 +255,6 @@
             "riot control": {
                 "weight": 1,
                 "description": "Regular security term"
-            },
-            "rittenhouse": {
-                "weight": 1,
-                "description": "Regular incident term"
             },
             "security breach": {
                 "weight": 1,

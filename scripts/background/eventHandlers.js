@@ -32,11 +32,8 @@ export function setupStartupHandler() {
         !PRECONFIGURED_DOMAINS.some(preconfiguredDomain => domain.includes(preconfiguredDomain))
       );
 
-      // Set storage with updated ignored domains and ensure filtering is disabled by default
-      chrome.storage.local.set({
-        ignoredDomains,
-        filteringEnabled: false
-      }, () => {
+      // Preserve the user's filtering preference across browser restarts.
+      chrome.storage.local.set({ ignoredDomains }, () => {
         // After ensuring pre-configured domains are enabled, check for updates if configured
         chrome.storage.local.get(['checkForUpdates', 'configUrls', 'importUrl'], (result) => {
           if (result.checkForUpdates) {

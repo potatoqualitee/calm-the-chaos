@@ -1,5 +1,7 @@
 // storageManager.js
 
+import { normalizeKeyword } from '../../utils/keywordNormalization.js';
+
 class StorageManager {
     constructor() {
         this.updateQueue = [];
@@ -40,28 +42,7 @@ class StorageManager {
 
     // Enhanced keyword normalization
     normalizeKeyword(keyword) {
-        if (!keyword) return '';
-
-        // Convert to string in case of non-string input
-        keyword = String(keyword);
-
-        // Normalize unicode characters
-        keyword = keyword.normalize('NFKC');
-
-        // Remove leading/trailing punctuation and whitespace
-        keyword = keyword.replace(/^[\s.,:;!?'"[\]{}()\\/<>+=_-]+|[\s.,:;!?'"[\]{}()\\/<>+=_-]+$/g, '');
-
-        // Convert to lowercase
-        keyword = keyword.toLowerCase();
-
-        // Trim and limit length if needed
-        keyword = keyword.trim();
-        const MAX_KEYWORD_LENGTH = 100;
-        if (keyword.length > MAX_KEYWORD_LENGTH) {
-            keyword = keyword.substring(0, MAX_KEYWORD_LENGTH);
-        }
-
-        return keyword;
+        return normalizeKeyword(keyword);
     }
 
     // Update blocked keywords

@@ -15,8 +15,8 @@
                 "description": "Occasional media criticism term"
             },
             "america": {
-                "weight": 2,
-                "description": "Common nationalist slogan"
+                "weight": 0,
+                "description": "Broad national term; Complete-only to reduce false positives"
             },
             "america first": {
                 "weight": 2,
@@ -98,6 +98,11 @@
                 "weight": 0,
                 "description": "Basic policy term"
             },
+            "campaign finance": {
+                "weight": 1,
+                "description": "Recurring election funding term",
+                "lifecycle": "evergreen"
+            },
             "cancel culture": {
                 "weight": 2,
                 "description": "Frequent social media term"
@@ -109,6 +114,11 @@
             "censorship": {
                 "weight": 2,
                 "description": "Frequent free speech term"
+            },
+            "child grooming": {
+                "weight": 2,
+                "description": "Scoped abuse and political-accusation term",
+                "lifecycle": "evergreen"
             },
             "christian nation": {
                 "weight": 1,
@@ -138,7 +148,7 @@
                 "weight": 1,
                 "description": "Common partisan accusation"
             },
-            "conspiracy theory": {
+            "conspiracy": {
                 "weight": 2,
                 "description": "Frequent misinformation term"
             },
@@ -146,7 +156,7 @@
                 "weight": 1,
                 "description": "Common misinformation term"
             },
-            "conspiracy": {
+            "conspiracy theory": {
                 "weight": 2,
                 "description": "Frequent misinformation term"
             },
@@ -250,6 +260,11 @@
                 "weight": 3,
                 "description": "Frequent voting term"
             },
+            "election interference": {
+                "weight": 3,
+                "description": "High-priority election integrity term",
+                "lifecycle": "cyclical"
+            },
             "elitism": {
                 "weight": 1,
                 "description": "Regular class criticism"
@@ -257,6 +272,16 @@
             "end of democracy": {
                 "weight": 3,
                 "description": "Frequent political fear term"
+            },
+            "Epstein client list": {
+                "weight": 2,
+                "description": "Recurring political claim in Epstein-records coverage",
+                "lifecycle": "cyclical"
+            },
+            "Epstein files": {
+                "weight": 3,
+                "description": "Recurring controversy over release and redaction of Jeffrey Epstein records",
+                "lifecycle": "cyclical"
             },
             "esg mandate": {
                 "weight": 1,
@@ -278,10 +303,6 @@
                 "weight": 2,
                 "description": "Frequent political label"
             },
-            "fascism": {
-                "weight": 3,
-                "description": "Highly frequent ideology term"
-            },
             "fake news": {
                 "weight": 3,
                 "description": "Highly frequent media term"
@@ -289,6 +310,10 @@
             "false flag": {
                 "weight": 1,
                 "description": "Common conspiracy term"
+            },
+            "fascism": {
+                "weight": 3,
+                "description": "Highly frequent ideology term"
             },
             "fascist": {
                 "weight": 2,
@@ -310,6 +335,11 @@
                 "weight": 1,
                 "description": "Regular crime term"
             },
+            "gerrymandering": {
+                "weight": 2,
+                "description": "Recurring electoral district controversy",
+                "lifecycle": "evergreen"
+            },
             "globalist": {
                 "weight": 1,
                 "description": "Common conspiracy term"
@@ -318,13 +348,20 @@
                 "weight": 1,
                 "description": "Common political criticism"
             },
+            "groomer accusation": {
+                "weight": 2,
+                "description": "Scoped political accusation term",
+                "lifecycle": "evergreen"
+            },
             "grooming": {
-                "weight": 3,
-                "description": "Highly frequent accusation term"
+                "weight": 1,
+                "description": "Ambiguous accusation term also used in pet and personal-care contexts",
+                "lifecycle": "evergreen"
             },
             "Gulf of America": {
                 "weight": 3,
-                "description": "Highly frequent political term"
+                "description": "Highly frequent political term",
+                "lifecycle": "cyclical"
             },
             "hate speech": {
                 "weight": 2,
@@ -333,6 +370,26 @@
             "identity politics": {
                 "weight": 1,
                 "description": "Common political criticism"
+            },
+            "Jeffrey Epstein": {
+                "weight": 2,
+                "description": "Name central to recurring records and accountability coverage",
+                "lifecycle": "cyclical"
+            },
+            "mail-in ballot": {
+                "weight": 2,
+                "description": "Recurring election administration term",
+                "lifecycle": "cyclical"
+            },
+            "midterm election": {
+                "weight": 2,
+                "description": "Recurring federal election term",
+                "lifecycle": "cyclical"
+            },
+            "midterms": {
+                "weight": 2,
+                "description": "Common midterm election shorthand",
+                "lifecycle": "cyclical"
             },
             "misinformation": {
                 "weight": 3,
@@ -358,6 +415,11 @@
                 "weight": 3,
                 "description": "Frequent persecution claim"
             },
+            "primary election": {
+                "weight": 1,
+                "description": "Recurring candidate selection term",
+                "lifecycle": "cyclical"
+            },
             "radical left": {
                 "weight": 2,
                 "description": "Frequent partisan attack"
@@ -365,6 +427,11 @@
             "radical right": {
                 "weight": 2,
                 "description": "Frequent partisan attack"
+            },
+            "redistricting": {
+                "weight": 2,
+                "description": "Recurring electoral map controversy",
+                "lifecycle": "evergreen"
             },
             "saboteur": {
                 "weight": 0,
@@ -374,15 +441,11 @@
                 "weight": 3,
                 "description": "Highly frequent conspiracy claim"
             },
-            "tiktok": {
-                "weight": 3,
-                "description": "Highly frequent political phrase"
-            },
-            "Tech-bro": {
+            "Tech bro": {
                 "weight": 1,
                 "description": "Common political phrase"
             },
-            "Tech bro": {
+            "Tech-bro": {
                 "weight": 1,
                 "description": "Common political phrase"
             },
@@ -390,13 +453,23 @@
                 "weight": 1,
                 "description": "Common political phrase"
             },
+            "thoughts and prayers": {
+                "weight": 1,
+                "description": "Common political response phrase"
+            },
             "threat to democracy": {
                 "weight": 3,
                 "description": "Highly frequent political phrase"
             },
-            "thoughts and prayers": {
+            "TikTok ban": {
+                "weight": 2,
+                "description": "Scoped technology policy controversy",
+                "lifecycle": "cyclical"
+            },
+            "TikTok sale": {
                 "weight": 1,
-                "description": "Common political response phrase"
+                "description": "Scoped technology policy term",
+                "lifecycle": "cyclical"
             },
             "Tyranny": {
                 "weight": 1,
@@ -409,6 +482,11 @@
             "voter fraud": {
                 "weight": 3,
                 "description": "Frequent election term"
+            },
+            "voter ID": {
+                "weight": 3,
+                "description": "High-priority election policy term",
+                "lifecycle": "cyclical"
             },
             "voter suppression": {
                 "weight": 3,

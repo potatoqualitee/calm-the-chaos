@@ -1,13 +1,13 @@
 // contentDetectionModule.js
 
-import SpeedReaderDetector from './detection/speedReaderDetector.js';
+import speedReaderDetector from './detection/speedReaderDetector.js';
 import ContentMatcher from './detection/contentMatcher.js';
 import ImageDetector from './detection/imageDetector.js';
 
 class ContentDetector {
     constructor() {
         // Initialize components
-        this.speedReaderDetector = new SpeedReaderDetector();
+        this.speedReaderDetector = speedReaderDetector;
         this.contentMatcher = new ContentMatcher();
         this.imageDetector = new ImageDetector(this.contentMatcher);
     }
@@ -27,7 +27,14 @@ class ContentDetector {
      * @returns {Promise<boolean>} - Whether element contains blocked content
      */
     async elementContainsBlockedContent(element) {
+        if (typeof element === 'string') {
+            return this.containsBlockedContent(element).length > 0;
+        }
         return this.imageDetector.elementContainsBlockedContent(element, this.speedReaderDetector.getStatus());
+    }
+
+    getImageSettings() {
+        return this.imageDetector.getImageSettings();
     }
 
     /**
@@ -61,6 +68,7 @@ const detector = new ContentDetector();
 // Export functions that use the singleton
 export const containsBlockedContent = text => detector.containsBlockedContent(text);
 export const elementContainsBlockedContent = element => detector.elementContainsBlockedContent(element);
+export const getImageFilteringSettings = () => detector.getImageSettings();
 export const clearContentDetectionCache = () => detector.clearCache();
 export const startNewDetectionCycle = () => detector.startNewCycle();
 export const isSpeedReader = () => detector.isSpeedReader();

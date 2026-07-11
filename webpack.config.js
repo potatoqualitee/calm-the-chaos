@@ -1,7 +1,7 @@
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 
-module.exports = {
+module.exports = (_env, { mode = 'development' } = {}) => ({
   entry: {
     content: './scripts/content.js',
     background: './scripts/background/background.js',
@@ -25,7 +25,7 @@ module.exports = {
             presets: [
               ['@babel/preset-env', {
                 targets: {
-                  chrome: "58"
+                  chrome: '88'
                 },
                 modules: false
               }]
@@ -92,23 +92,9 @@ module.exports = {
       'node_modules'
     ]
   },
-  mode: 'development',
-  devtool: 'inline-source-map', // Changed to inline-source-map for better debugging
+  mode,
+  devtool: mode === 'production' ? false : 'cheap-module-source-map',
   optimization: {
-    minimize: false, // Disabled minification for better debugging
-    minimizer: [
-      new (require('terser-webpack-plugin'))({
-        terserOptions: {
-          compress: {
-            drop_console: false,
-            pure_funcs: []
-          },
-          mangle: false, // Disabled name mangling for better debugging
-          output: {
-            beautify: true // Pretty output for better debugging
-          }
-        }
-      })
-    ]
+    minimize: mode === 'production'
   }
-}
+});

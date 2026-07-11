@@ -140,7 +140,8 @@
             },
             "hurricane": {
                 "weight": 3,
-                "description": "Frequent natural disaster term"
+                "description": "Frequent natural disaster term",
+                "lifecycle": "cyclical"
             },
             "melting ice cap": {
                 "weight": 0,
@@ -208,7 +209,8 @@
             },
             "wildfire": {
                 "weight": 3,
-                "description": "Highly frequent disaster term"
+                "description": "Highly frequent disaster term",
+                "lifecycle": "cyclical"
             }
         }
     }

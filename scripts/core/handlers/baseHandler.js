@@ -1,7 +1,6 @@
 // baseHandler.js
 
 import { elementContainsBlockedContent } from '../contentDetectionModule.js';
-import { handleGenericMedia } from '../elementProcessingModule.js';
 
 class BaseHandler {
     constructor() {
@@ -14,14 +13,14 @@ class BaseHandler {
      * @param {Function} processElement - Function to process each element
      * @param {string} errorContext - Context for error logging
      */
-    processElements(elements, processElement, errorContext) {
-        elements.forEach(element => {
+    async processElements(elements, processElement, errorContext) {
+        for (const element of Array.from(elements)) {
             try {
-                processElement(element);
+                await processElement(element);
             } catch (error) {
                 console.debug(`Error processing ${errorContext}:`, error);
             }
-        });
+        }
     }
 
     /**
@@ -30,15 +29,29 @@ class BaseHandler {
      * @param {Function} processElement - Function to process each element
      * @param {string} errorContext - Context for error logging
      */
-    processSelectors(selectors, processElement, errorContext) {
-        selectors.forEach(selector => {
+    async processSelectors(selectors, processElement, errorContext, roots = null) {
+        const scopes = roots ? Array.from(roots) : [document];
+
+        for (const selector of selectors) {
             try {
-                const elements = document.querySelectorAll(selector);
-                this.processElements(elements, processElement, `${errorContext} selector: ${selector}`);
+                const elements = new Set();
+                scopes.forEach(scope => {
+                    const root = scope?.nodeType === Node.TEXT_NODE ? scope.parentElement : scope;
+                    if (!root) return;
+                    if (root.nodeType === Node.ELEMENT_NODE && root.matches(selector)) {
+                        elements.add(root);
+                    }
+                    root.querySelectorAll?.(selector).forEach(element => elements.add(element));
+                });
+                await this.processElements(elements, processElement, `${errorContext} selector: ${selector}`);
             } catch (error) {
                 console.debug(`Error processing ${errorContext} selector: ${selector}`, error);
             }
-        });
+        }
+    }
+
+    async elementContainsBlockedContent(element) {
+        return elementContainsBlockedContent(element);
     }
 
     /**
@@ -48,12 +61,15 @@ class BaseHandler {
      */
     async checkAndHideElement(element, container = null) {
         try {
-            const hasBlockedContent = await elementContainsBlockedContent(element);
+            const hasBlockedContent = await this.elementContainsBlockedContent(element);
             if (hasBlockedContent) {
                 this.nodesToHide.add(container || element);
+                return true;
             }
+            return false;
         } catch (error) {
             console.debug('Error in checkAndHideElement:', error);
+            return false;
         }
     }
 
@@ -61,13 +77,12 @@ class BaseHandler {
      * Main handler method to be implemented by platform-specific handlers
      * @param {Set} nodesToHide - Set to collect nodes that should be hidden
      */
-    async handle(nodesToHide) {
+    async handle(nodesToHide, roots = null) {
         this.nodesToHide = nodesToHide;
+        this.roots = roots;
 
         try {
-            await this.handlePreconfigured();
-            // Handle images after platform-specific content
-            await handleGenericMedia(nodesToHide);
+            await this.handlePreconfigured(roots);
         } catch (error) {
             console.debug(`Error in ${this.constructor.name}:`, error);
         }

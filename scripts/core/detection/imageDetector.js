@@ -59,7 +59,14 @@ class ImageDetector {
     async elementContainsBlockedContent(element, isSpeedReader) {
         try {
             if (isSpeedReader) {
-                console.log('Skipping element filtering: SpeedReader');
+                return false;
+            }
+
+            if (typeof element === 'string') {
+                return this.contentMatcher.containsBlockedContent(element, isSpeedReader).length > 0;
+            }
+
+            if (!element || typeof element !== 'object' || !element.tagName) {
                 return false;
             }
 
@@ -102,7 +109,7 @@ class ImageDetector {
             }
 
             // For non-image elements, check if it's an image container
-            const hasOnlyImages = Array.from(element.children).every(child =>
+            const hasOnlyImages = element.children.length > 0 && Array.from(element.children).every(child =>
                 child.tagName === 'IMG' ||
                 child.tagName === 'PICTURE' ||
                 child.tagName === 'SVG' ||

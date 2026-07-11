@@ -1,17 +1,24 @@
 // contentMatcher.js
 
 import { getBlockedRegex } from '../managers/regexManager.js';
-import { LINKEDIN_EXCEPTIONS } from '../config/keywords.js';
-import { storageManager } from '../managers/storageManager.js';
+import { LINKEDIN_EXCEPTIONS } from '../config/linkedinExceptions.js';
+import { normalizeForMatching } from '../../utils/regex.js';
+import { normalizeKeyword } from '../../utils/keywordNormalization.js';
+
+const MAX_CACHE_ENTRIES = 5000;
+const MAX_CACHE_TEXT_LENGTH = 4000;
+const STATS_FLUSH_DELAY = 500;
 
 class ContentMatcher {
     constructor() {
         this.regex = null;
         this.regexPattern = null;
         this.matchCache = new Map();
-        this.processedContent = new Set();
-        this.isLinkedIn = window.location.hostname.includes('linkedin.com');
-        this.isLinkedInProfile = this.isLinkedIn && window.location.pathname.startsWith('/in/');
+        this.isLinkedIn = typeof window !== 'undefined' && window.location.hostname.includes('linkedin.com');
+        this.linkedinExceptions = new Set(LINKEDIN_EXCEPTIONS.map(normalizeForMatching));
+        this.pendingStats = new Map();
+        this.statsFlushTimer = null;
+        this.statsWriteInProgress = false;
     }
 
     /**
@@ -21,48 +28,46 @@ class ContentMatcher {
     initializeRegex() {
         const pattern = getBlockedRegex();
         if (!pattern) {
+            if (this.regexPattern !== null) {
+                this.matchCache.clear();
+            }
             this.regex = null;
             this.regexPattern = null;
             return null;
         }
 
-        // Only create new regex if pattern has changed
-        if (pattern !== this.regexPattern) {
-            this.regex = new RegExp(pattern, 'gi');
-            this.regexPattern = pattern;
+        const isKeywordMatcher = typeof pattern.findMatches === 'function';
+        const source = pattern instanceof RegExp ? pattern.source : String(pattern);
+        const sourceFlags = pattern instanceof RegExp ? pattern.flags : 'iu';
+        const flags = [...new Set(`${sourceFlags.replace(/g/g, '')}g`.split(''))].join('');
+        const patternKey = isKeywordMatcher ? pattern.cacheKey : `${source}/${flags}`;
+
+        // Cache entries are valid only for the exact matcher configuration.
+        if (patternKey !== this.regexPattern) {
+            this.regex = isKeywordMatcher ? pattern : new RegExp(source, flags);
+            this.regexPattern = patternKey;
+            this.matchCache.clear();
         }
 
         return this.regex;
     }
 
-    /**
-     * Fast string hashing function
-     */
-    fastHash(str) {
-        let hash = 0;
-        for (let i = 0; i < str.length; i++) {
-            const char = str.charCodeAt(i);
-            hash = ((hash << 5) - hash) + char;
-            hash = hash & hash;
-        }
-        return hash;
+    getCachedResult(key) {
+        if (!this.matchCache.has(key)) return null;
+
+        const result = this.matchCache.get(key);
+        // Refresh insertion order to make the bounded Map an LRU cache.
+        this.matchCache.delete(key);
+        this.matchCache.set(key, result);
+        return result;
     }
 
-    /**
-     * Cache results with size management
-     */
-    cacheResult(hash, result) {
-        this.matchCache.set(hash, result);
-        this.processedContent.add(hash);
+    cacheResult(key, result) {
+        if (key.length > MAX_CACHE_TEXT_LENGTH) return;
 
-        // Use a more efficient cache size management
-        if (this.matchCache.size > 10000) {
-            const deleteCount = 1000;
-            const keys = Array.from(this.matchCache.keys()).slice(0, deleteCount);
-            for (const key of keys) {
-                this.matchCache.delete(key);
-                this.processedContent.delete(key);
-            }
+        this.matchCache.set(key, result);
+        while (this.matchCache.size > MAX_CACHE_ENTRIES) {
+            this.matchCache.delete(this.matchCache.keys().next().value);
         }
     }
 
@@ -70,8 +75,15 @@ class ContentMatcher {
      * Check if match is in exceptions list
      */
     isExceptionMatch(match) {
-        return LINKEDIN_EXCEPTIONS.some(exception =>
-            match.toLowerCase().includes(exception.toLowerCase())
+        const normalizedMatch = normalizeForMatching(match);
+        if (this.linkedinExceptions.has(normalizedMatch)) return true;
+
+        return [...this.linkedinExceptions].some(exception =>
+            normalizedMatch === `${exception}s` ||
+            normalizedMatch === `${exception}es` ||
+            normalizedMatch === `${exception}ed` ||
+            normalizedMatch === `${exception}ing` ||
+            normalizedMatch === `${exception}'s`
         );
     }
 
@@ -81,41 +93,78 @@ class ContentMatcher {
      * @private
      */
     updateStats(matches) {
-        if (matches.length > 0) {
+        if (matches.length === 0) return;
+
+        matches.forEach(match => {
+            const normalized = normalizeKeyword(match);
+            if (normalized) {
+                this.pendingStats.set(normalized, (this.pendingStats.get(normalized) || 0) + 1);
+            }
+        });
+
+        this.scheduleStatsFlush();
+    }
+
+    scheduleStatsFlush() {
+        if (this.statsFlushTimer || this.statsWriteInProgress || this.pendingStats.size === 0) {
+            return;
+        }
+
+        this.statsFlushTimer = setTimeout(() => {
+            this.statsFlushTimer = null;
+            this.flushStats();
+        }, STATS_FLUSH_DELAY);
+    }
+
+    flushStats() {
+        if (this.statsWriteInProgress || this.pendingStats.size === 0) return;
+        if (typeof chrome === 'undefined' || !chrome.storage?.local) {
+            this.pendingStats.clear();
+            return;
+        }
+
+        const batch = new Map(this.pendingStats);
+        this.pendingStats.clear();
+        this.statsWriteInProgress = true;
+
+        const finish = () => {
+            this.statsWriteInProgress = false;
+            this.scheduleStatsFlush();
+        };
+
+        try {
             chrome.storage.local.get('allTimeKeywordStats', (storage) => {
-                const stats = storage.allTimeKeywordStats || {};
                 const normalizedStats = {};
 
-                // First, normalize existing stats
-                Object.entries(stats).forEach(([key, count]) => {
-                    const normalized = storageManager.normalizeKeyword(key);
-                    if (normalized) { // Skip empty strings
-                        normalizedStats[normalized] = (normalizedStats[normalized] || 0) + count;
+                Object.entries(storage.allTimeKeywordStats || {}).forEach(([key, count]) => {
+                    const normalized = normalizeKeyword(key);
+                    if (normalized) {
+                        normalizedStats[normalized] = (normalizedStats[normalized] || 0) + Number(count || 0);
                     }
                 });
 
-                // Add new matches
-                matches.forEach(match => {
-                    const normalized = storageManager.normalizeKeyword(match);
-                    if (normalized) { // Skip empty strings
-                        normalizedStats[normalized] = (normalizedStats[normalized] || 0) + 1;
-                    }
+                batch.forEach((count, keyword) => {
+                    normalizedStats[keyword] = (normalizedStats[keyword] || 0) + count;
                 });
 
-                // Convert back to title case for display
                 const finalStats = {};
                 Object.entries(normalizedStats).forEach(([key, count]) => {
-                    // Convert to title case
-                    const displayKey = key.length <= 3 ?
-                        key.toUpperCase() : // Keep short words (like CIA) uppercase
-                        key.split(' ').map(word =>
+                    const displayKey = key.length <= 3
+                        ? key.toUpperCase()
+                        : key.split(' ').map(word =>
                             word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
                         ).join(' ');
                     finalStats[displayKey] = count;
                 });
 
-                chrome.storage.local.set({ allTimeKeywordStats: finalStats });
+                chrome.storage.local.set({ allTimeKeywordStats: finalStats }, finish);
             });
+        } catch (error) {
+            console.debug('Error updating keyword stats:', error);
+            batch.forEach((count, keyword) => {
+                this.pendingStats.set(keyword, (this.pendingStats.get(keyword) || 0) + count);
+            });
+            finish();
         }
     }
 
@@ -128,53 +177,50 @@ class ContentMatcher {
     containsBlockedContent(text, isSpeedReader) {
         try {
             // Skip filtering for LinkedIn profile pages and SpeedReader
-            if (this.isLinkedInProfile || isSpeedReader) {
-                console.log('Skipping content filtering: ' + (this.isLinkedInProfile ? 'LinkedIn Profile' : 'SpeedReader'));
+            const isLinkedInProfile = this.isLinkedIn && window.location.pathname.startsWith('/in/');
+            if (isLinkedInProfile || isSpeedReader) {
                 return [];
             }
 
             // Return empty array for empty text
             if (!text) return [];
 
-            // Normalize text for consistent matching
-            const normalizedText = text.trim().toLowerCase();
-            if (!normalizedText) return [];
-
-            // Check if we've already processed this exact content
-            if (this.processedContent.has(normalizedText)) {
-                return this.matchCache.get(normalizedText) || [];
-            }
-
+            // Initialize before cache lookup so settings changes invalidate old results.
             const regex = this.initializeRegex();
             if (!regex) return [];
 
+            const normalizedText = normalizeForMatching(text);
+            if (!normalizedText) return [];
+
+            const cachedResult = this.getCachedResult(normalizedText);
+            if (cachedResult !== null) return cachedResult;
+
+            const rawMatches = typeof regex.findMatchesNormalized === 'function'
+                ? regex.findMatchesNormalized(normalizedText)
+                : typeof regex.findMatches === 'function'
+                ? regex.findMatches(normalizedText)
+                : (() => {
+                    const fallbackMatches = [];
+                    let match;
+                    regex.lastIndex = 0;
+                    while ((match = regex.exec(normalizedText)) !== null) {
+                        fallbackMatches.push(match[0]);
+                    }
+                    return fallbackMatches;
+                })();
             const matches = [];
-            let match;
 
-            // Reset regex lastIndex to ensure consistent matching
-            regex.lastIndex = 0;
-
-            // Store all matches to maintain count
-            while ((match = regex.exec(text)) !== null) {
-                const matchedText = match[0];
+            rawMatches.forEach(matchedText => {
                 // If on LinkedIn (but not profile), check if the match is in the exceptions list
                 if (!this.isLinkedIn || !this.isExceptionMatch(matchedText)) {
-                    matches.push(match[0]); // Keep original case and count duplicates
+                    matches.push(matchedText);
                 }
-            }
+            });
 
             // Update stats asynchronously
             this.updateStats(matches);
 
-            // Cache the result and mark content as processed
-            this.matchCache.set(normalizedText, matches);
-            this.processedContent.add(normalizedText);
-
-            // Prevent cache from growing too large
-            if (this.matchCache.size > 10000) {
-                const oldestKey = this.matchCache.keys().next().value;
-                this.matchCache.delete(oldestKey);
-            }
+            this.cacheResult(normalizedText, matches);
 
             return matches;
 
@@ -189,7 +235,6 @@ class ContentMatcher {
      */
     clearCache() {
         this.matchCache.clear();
-        this.processedContent.clear();
     }
 }
 

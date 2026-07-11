@@ -1,6 +1,9 @@
 {
     "Media Personalities": {
         "description": "High-profile media figures and commentators who shape public discourse",
+        "lifecycle": "tenure",
+        "reviewCadenceDays": 90,
+        "reviewedAt": "2026-07-10",
         "keywords": {
             "Alex Jones": {
                 "weight": 1,
@@ -34,7 +37,7 @@
                 "weight": 1,
                 "description": "Common political commentator"
             },
-            "Bill O\u0027Reilly": {
+            "Bill O'Reilly": {
                 "weight": 0,
                 "description": "Occasional media figure"
             },
@@ -51,8 +54,10 @@
                 "description": "Frequent conservative commentator"
             },
             "Charlie Kirk": {
-                "weight": 1,
-                "description": "Frequent conservative activist"
+                "weight": 2,
+                "description": "Late Turning Point USA founder in current assassination-case coverage",
+                "lifecycle": "event",
+                "reviewAfter": "2026-08-10"
             },
             "Chris Cuomo": {
                 "weight": 0,
@@ -106,15 +111,11 @@
                 "weight": 0,
                 "description": "Regular progressive commentator"
             },
-            "Kyle Rittenhouse": {
-                "weight": 0,
-                "description": "Regular media figure"
-            },
             "Laura Ingraham": {
                 "weight": 1,
                 "description": "Frequent conservative host"
             },
-            "Lawrence O\u0027Donnell": {
+            "Lawrence O'Donnell": {
                 "weight": 0,
                 "description": "Regular progressive host"
             },
@@ -150,10 +151,6 @@
                 "weight": 1,
                 "description": "Common media personality"
             },
-            "Project Veritas": {
-                "weight": 1,
-                "description": "Common activist organization"
-            },
             "Rachel Maddow": {
                 "weight": 1,
                 "description": "Frequent progressive host"
@@ -170,13 +167,13 @@
                 "weight": 1,
                 "description": "Frequent conservative commentator"
             },
-            "Tim Cast": {
-                "weight": 1,
-                "description": "Common independent commentator"
-            },
             "Tim Pool": {
                 "weight": 1,
                 "description": "Common independent host"
+            },
+            "Timcast": {
+                "weight": 1,
+                "description": "Independent political media brand"
             },
             "Tomi Lahren": {
                 "weight": 1,
