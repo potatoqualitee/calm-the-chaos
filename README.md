@@ -4,7 +4,7 @@
 
 A [browser extension](https://chromewebstore.google.com/detail/calm-the-chaos/cholkigafekgccbkfgcmcigihipbnjoe) that filters unwanted content related to conflict, violence, and inflammatory rhetoric across every website. This extension, while only in the [Chrome Store](https://chromewebstore.google.com/detail/calm-the-chaos/cholkigafekgccbkfgcmcigihipbnjoe) also works on my favorite browser, [Brave](https://brave.com), Edge and others.
 
-> **Preview release (v0.3.0):** Features may still evolve as publisher layouts change.
+> **Preview release (v0.3.1):** Features may still evolve as publisher layouts change.
 >
 > By default, filtering is enabled for BBC, Bluesky, CNN, Google News, Instagram, LinkedIn, People, Reddit, Stack Overflow, Yahoo, and YouTube. You can enable additional domains through the extension settings.
 
