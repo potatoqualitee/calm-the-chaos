@@ -76,6 +76,10 @@
                 "weight": 2,
                 "description": "Frequent economic term"
             },
+            "downsizing": {
+                "weight": 2,
+                "description": "Common workforce-reduction term"
+            },
             "economic collapse": {
                 "weight": 3,
                 "description": "Highly frequent crisis term"
@@ -138,6 +142,10 @@
                 "weight": 1,
                 "description": "Regular financial term"
             },
+            "hiring freeze": {
+                "weight": 2,
+                "description": "Common employment-cutback announcement"
+            },
             "higher taxes": {
                 "weight": 1,
                 "description": "Common policy term"
@@ -155,6 +163,10 @@
                 "weight": 2,
                 "description": "Frequent financial term"
             },
+            "job cuts": {
+                "weight": 3,
+                "description": "Highly frequent layoff-announcement phrase"
+            },
             "labor dispute": {
                 "weight": 1,
                 "description": "Regular workplace term"
@@ -171,6 +183,14 @@
                 "weight": 1,
                 "description": "Common workplace term"
             },
+            "layoff": {
+                "weight": 3,
+                "description": "Highly frequent employment-loss term"
+            },
+            "layoffs": {
+                "weight": 3,
+                "description": "Highly frequent employment-loss announcement term"
+            },
             "Liberation Day tariffs": {
                 "weight": 1,
                 "description": "Named 2025 tariff policy",
@@ -179,6 +199,10 @@
             "market crash": {
                 "weight": 3,
                 "description": "Highly frequent crisis term"
+            },
+            "mass layoffs": {
+                "weight": 3,
+                "description": "High-volume workforce-reduction announcement"
             },
             "market manipulation": {
                 "weight": 2,
@@ -333,6 +357,10 @@
             "wealth tax": {
                 "weight": 2,
                 "description": "Frequent policy proposal"
+            },
+            "workforce reduction": {
+                "weight": 2,
+                "description": "Common corporate layoff-announcement phrase"
             },
             "worker exploitation": {
                 "weight": 1,

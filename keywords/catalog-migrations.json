@@ -1,7 +1,7 @@
 {
     "schemaVersion": 1,
-    "catalogVersion": "2026.07.2",
-    "reviewedAt": "2026-07-10",
+    "catalogVersion": "2026.07.3",
+    "reviewedAt": "2026-07-11",
     "categoryFiles": [
         "climate-and-environment.json",
         "economic-policy.json",
@@ -11,6 +11,7 @@
         "immigration.json",
         "international-coverage.json",
         "lgbtq.json",
+        "major-sports-events.json",
         "media-personalities.json",
         "military-and-defense.json",
         "new-developments.json",
@@ -22,6 +23,7 @@
         "religion.json",
         "reproductive-health.json",
         "social-policy.json",
+        "technology.json",
         "us-government-institutions.json",
         "us-political-figures-full-name.json",
         "us-political-figures-single-name.json",

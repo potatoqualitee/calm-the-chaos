@@ -1,0 +1,67 @@
+{
+    "Technology": {
+        "description": "Major technology companies, products, and AI services that frequently dominate technology coverage",
+        "keywords": {
+            "Alphabet Inc": {
+                "weight": 1,
+                "description": "Google parent company"
+            },
+            "Anthropic": {
+                "weight": 3,
+                "description": "Artificial intelligence company"
+            },
+            "Apple": {
+                "weight": 3,
+                "description": "Major consumer technology company"
+            },
+            "Apple Intelligence": {
+                "weight": 2,
+                "description": "Apple artificial intelligence product branding"
+            },
+            "ChatGPT": {
+                "weight": 3,
+                "description": "OpenAI conversational AI product"
+            },
+            "Claude": {
+                "weight": 2,
+                "description": "Anthropic conversational AI product"
+            },
+            "Copilot": {
+                "weight": 2,
+                "description": "Microsoft artificial intelligence product branding"
+            },
+            "Gemini AI": {
+                "weight": 3,
+                "description": "Google artificial intelligence product"
+            },
+            "Google": {
+                "weight": 3,
+                "description": "Major search, advertising, and technology company"
+            },
+            "Google I/O": {
+                "weight": 2,
+                "description": "Annual Google developer conference"
+            },
+            "iPhone": {
+                "weight": 2,
+                "description": "Apple smartphone product line"
+            },
+            "Microsoft": {
+                "weight": 3,
+                "description": "Major software and cloud technology company"
+            },
+            "OpenAI": {
+                "weight": 3,
+                "description": "Artificial intelligence company"
+            },
+            "Windows 11": {
+                "weight": 1,
+                "description": "Microsoft desktop operating system"
+            },
+            "WWDC": {
+                "weight": 2,
+                "description": "Annual Apple developer conference"
+            }
+        }
+    }
+}

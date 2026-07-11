@@ -1,0 +1,88 @@
+{
+    "Major Sports Events": {
+        "description": "Large recurring sports events and championships that can dominate social timelines",
+        "lifecycle": "cyclical",
+        "keywords": {
+            "Champions League": {
+                "weight": 2,
+                "description": "Major annual European club football competition"
+            },
+            "Cricket World Cup": {
+                "weight": 2,
+                "description": "Major international cricket tournament"
+            },
+            "F1": {
+                "weight": 3,
+                "description": "Common Formula One abbreviation"
+            },
+            "F1 Racing": {
+                "weight": 3,
+                "description": "Common Formula One racing phrase"
+            },
+            "FIFA World Cup": {
+                "weight": 3,
+                "description": "Major international football tournament"
+            },
+            "Formula 1": {
+                "weight": 3,
+                "description": "Global motor racing championship"
+            },
+            "Formula One": {
+                "weight": 2,
+                "description": "Spelled-out Formula One championship name"
+            },
+            "Grand Prix": {
+                "weight": 2,
+                "description": "Common Formula One race-event term"
+            },
+            "March Madness": {
+                "weight": 2,
+                "description": "Annual US college basketball tournament"
+            },
+            "NBA Finals": {
+                "weight": 2,
+                "description": "Annual NBA championship series"
+            },
+            "Olympic Games": {
+                "weight": 3,
+                "description": "Global multi-sport competition"
+            },
+            "Olympics": {
+                "weight": 3,
+                "description": "Common name for the Olympic Games"
+            },
+            "Rugby World Cup": {
+                "weight": 2,
+                "description": "Major international rugby tournament"
+            },
+            "Stanley Cup": {
+                "weight": 2,
+                "description": "Annual NHL championship series"
+            },
+            "Super Bowl": {
+                "weight": 3,
+                "description": "Annual NFL championship game"
+            },
+            "Tour de France": {
+                "weight": 2,
+                "description": "Major annual cycling race"
+            },
+            "UEFA Champions League": {
+                "weight": 2,
+                "description": "Full name of the European club football competition"
+            },
+            "Wimbledon": {
+                "weight": 2,
+                "description": "Major annual tennis championship"
+            },
+            "World Cup": {
+                "weight": 3,
+                "description": "Common name used across major international tournaments"
+            },
+            "World Series": {
+                "weight": 2,
+                "description": "Annual Major League Baseball championship series"
+            }
+        }
+    }
+}

@@ -71,6 +71,20 @@
             "Religion"
         ]
     },
+    "sports-events": {
+        "title": "Sports Events",
+        "description": "Large recurring sports events that can take over a timeline",
+        "categories": [
+            "Major Sports Events"
+        ]
+    },
+    "technology": {
+        "title": "Technology",
+        "description": "Major technology companies, products, and AI services",
+        "categories": [
+            "Technology"
+        ]
+    },
     "new-developments": {
         "title": "New Developments",
         "description": "Recent events and emerging stories",
