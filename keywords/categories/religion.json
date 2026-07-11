@@ -54,6 +54,10 @@
                 "weight": 1,
                 "description": "Common discrimination term"
             },
+            "church": {
+                "weight": 2,
+                "description": "Broad religious-conflict term; catches church attacks, shootings, and arson"
+            },
             "church attack": {
                 "weight": 2,
                 "description": "Frequent violence term"
@@ -89,6 +93,10 @@
             "islamophobia": {
                 "weight": 3,
                 "description": "Highly frequent discrimination term"
+            },
+            "mosque": {
+                "weight": 2,
+                "description": "Broad religious-conflict term; catches mosque attacks, bans, and arson"
             },
             "mosque attack": {
                 "weight": 3,
@@ -141,6 +149,10 @@
             "religious violence": {
                 "weight": 2,
                 "description": "Frequent conflict term"
+            },
+            "synagogue": {
+                "weight": 2,
+                "description": "Broad religious-conflict term; catches synagogue attacks, bans, and arson"
             },
             "synagogue attack": {
                 "weight": 3,
