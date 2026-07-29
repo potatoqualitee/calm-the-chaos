@@ -438,7 +438,7 @@ describe('buildTrendingCategory', () => {
         expect(data.keywords['Phrase 0'].weight).toBe(3);   // hottest
         expect(data.keywords['Phrase 4'].weight).toBe(2);   // middle
         expect(data.keywords['Phrase 9'].weight).toBe(1);   // coolest
-        expect(data.keywords['Phrase 0'].description).toContain('6 outlets');
+        expect(data.keywords['Phrase 0'].description).toContain('6-10 outlets');
     });
 
     function phrase(canon, display, heat) {
@@ -897,5 +897,62 @@ describe('updateTrendingState variant collapsing', () => {
         }];
         const next = updateTrendingState(prev, scored, '2026-07-29T06:00:00.000Z');
         expect(Object.keys(next.phrases)).toEqual(['secret service']);
+    });
+});
+
+import { outletBucket } from '../scripts/trending/lib.mjs';
+
+describe('outletBucket', () => {
+    it('buckets so ordinary jitter does not change the description', () => {
+        expect(outletBucket(12)).toBe(outletBucket(18));
+        expect(outletBucket(22)).toBe(outletBucket(24));
+    });
+
+    it('changes on a real shift in breadth', () => {
+        expect(outletBucket(4)).toBe('3-5');
+        expect(outletBucket(8)).toBe('6-10');
+        expect(outletBucket(15)).toBe('11-20');
+        expect(outletBucket(25)).toBe('20+');
+    });
+});
+
+describe('peakOutlets', () => {
+    it('never decreases, so a description can only ever move up a bucket', () => {
+        const prev = {
+            updatedAt: '2026-07-29T00:00:00.000Z',
+            phrases: {
+                fauci: {
+                    display: 'Fauci', firstSeen: '2026-07-27T00:00:00.000Z',
+                    lastSeen: '2026-07-29T00:00:00.000Z', heat: 40, peakHeat: 40,
+                    daysActive: 2, expiresAt: '2026-08-12T00:00:00.000Z',
+                    bipartisan: true, outlets: 24, peakOutlets: 24
+                }
+            }
+        };
+        const scored = [{
+            canon: 'fauci', display: 'Fauci', score: 20, outlets: 22,
+            leftOutlets: 8, rightOutlets: 8, mentions: 22, bipartisan: true, mainstream: true
+        }];
+        const next = updateTrendingState(prev, scored, '2026-07-29T06:00:00.000Z');
+        expect(next.phrases.fauci.outlets).toBe(22);
+        expect(next.phrases.fauci.peakOutlets).toBe(24);
+    });
+});
+
+describe('description stability', () => {
+    it('produces the same description for two runs whose outlet counts only jitter', () => {
+        const make = peakOutlets => buildTrendingCategory({
+            updatedAt: '2026-07-29T00:00:00.000Z',
+            phrases: {
+                fauci: {
+                    display: 'Fauci', firstSeen: '2026-07-27T00:00:00.000Z',
+                    lastSeen: '2026-07-29T00:00:00.000Z', heat: 40, peakHeat: 40,
+                    daysActive: 2, expiresAt: '2026-08-12T00:00:00.000Z',
+                    bipartisan: true, outlets: peakOutlets, peakOutlets
+                }
+            }
+        }, { excludeKeywords: [] })['New Developments'].keywords.Fauci.description;
+        expect(make(12)).toBe(make(18));
+        expect(make(12)).toBe('In 11-20 outlets across the spectrum (since 2026-07-27)');
     });
 });

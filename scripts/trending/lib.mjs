@@ -450,7 +450,8 @@ function mergePhrases(keep, absorbed) {
         daysActive: Math.max(keep.daysActive, absorbed.daysActive),
         expiresAt: later(keep.expiresAt, absorbed.expiresAt),
         bipartisan: Boolean(keep.bipartisan || absorbed.bipartisan),
-        outlets: Math.max(keep.outlets, absorbed.outlets)
+        outlets: Math.max(keep.outlets, absorbed.outlets),
+        peakOutlets: Math.max(keep.peakOutlets ?? keep.outlets ?? 0, absorbed.peakOutlets ?? absorbed.outlets ?? 0)
     };
 }
 
@@ -544,7 +545,8 @@ export function updateTrendingState(prevState, scored, nowIso, tuning = TUNING) 
             daysActive,
             expiresAt,
             bipartisan: hit ? hit.bipartisan : prev.bipartisan,
-            outlets: hit ? hit.outlets : prev.outlets
+            outlets: hit ? hit.outlets : prev.outlets,
+            peakOutlets: Math.max(prev.peakOutlets ?? prev.outlets ?? 0, hit ? hit.outlets : 0)
         };
     }
 
@@ -565,7 +567,8 @@ export function updateTrendingState(prevState, scored, nowIso, tuning = TUNING) 
             daysActive: 1,
             expiresAt: new Date(nowMs + ttlMs).toISOString(),
             bipartisan: hit.bipartisan,
-            outlets: hit.outlets
+            outlets: hit.outlets,
+            peakOutlets: hit.outlets
         };
     }
 
@@ -630,6 +633,16 @@ export function excludePermanent(prevState, scored, excludeKeywords) {
 // already muted there (or overlapping it, like "Kirk" vs "Charlie Kirk")
 // stays off the trending list, and overlapping trending phrases keep only
 // the hottest variant ("Maine" wins over "Maine Senate").
+// Bucketed so a description changes only on a real shift in breadth. Raw
+// counts jitter every run (24 -> 22 is the same story), and a description
+// that rewrites itself every run defeats the publish gate.
+export function outletBucket(peakOutlets) {
+    if (peakOutlets >= 21) return '20+';
+    if (peakOutlets >= 11) return '11-20';
+    if (peakOutlets >= 6) return '6-10';
+    return '3-5';
+}
+
 export function buildTrendingCategory(state, { categoryName = 'New Developments', excludeKeywords = [] } = {}) {
     const excluded = Array.from(excludeKeywords, keyword => keyword.toLowerCase());
     const entries = Object.entries(state.phrases || {}).sort(([, a], [, b]) => b.heat - a.heat);
@@ -650,7 +663,7 @@ export function buildTrendingCategory(state, { categoryName = 'New Developments'
         const weight = percentile < 0.2 ? 3 : percentile < 0.5 ? 2 : 1;
         keywords[entry.display] = {
             weight,
-            description: `In ${entry.outlets} outlets across the spectrum (since ${entry.firstSeen.slice(0, 10)})`
+            description: `In ${outletBucket(entry.peakOutlets ?? entry.outlets)} outlets across the spectrum (since ${entry.firstSeen.slice(0, 10)})`
         };
     });
 
@@ -680,13 +693,17 @@ const MAX_DAYS_ACTIVE = 3650;
 const CATEGORY_KEYS = ['description', 'keywords', 'updatedAt'];
 const STATE_KEYS = ['phrases', 'updatedAt'];
 const PHRASE_KEYS = ['bipartisan', 'daysActive', 'display', 'expiresAt',
-    'firstSeen', 'heat', 'lastSeen', 'outlets', 'peakHeat'];
+    'firstSeen', 'heat', 'lastSeen', 'outlets', 'peakHeat', 'peakOutlets'];
 
 export function validateTrending(
-    { category, state, headlines = null, baselinePhrases = null, baselineUpdatedAt = null, baselineCategory = null },
+    { category, state, headlines = null, baselinePhrases = null, baselineUpdatedAt = null, baselineCategory = null, curatedNames = [] },
     tuning = TUNING
 ) {
     const problems = [];
+    // Curated catalog entries are published from new-developments.json and
+    // have no tracked state; they are authoritative and exempt from the
+    // state-backing and derived-description checks.
+    const curated = new Set(curatedNames);
     const check = (condition, message) => { if (!condition) problems.push(message); };
     const isDate = value => typeof value === 'string' && !Number.isNaN(Date.parse(value));
     const isPlainObject = value => value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -723,13 +740,14 @@ export function validateTrending(
             `${phrase}: keyword has missing or unexpected fields`);
         check(Number.isInteger(meta?.weight) && meta.weight >= 1 && meta.weight <= 3,
             `${phrase}: weight must be an integer 1-3`);
+        if (curated.has(phrase)) continue;
         const stateEntry = (state?.phrases || {})[phrase.toLowerCase()];
         check(stateEntry?.display === phrase,
             `${phrase}: no matching state entry (published phrases must be tracked)`);
         // Derived exactly from validated state fields so the description
         // carries no free numbers or text of its own
         if (stateEntry) {
-            const derived = `In ${stateEntry.outlets} outlets across the spectrum (since ${String(stateEntry.firstSeen).slice(0, 10)})`;
+            const derived = `In ${outletBucket(stateEntry.peakOutlets ?? stateEntry.outlets)} outlets across the spectrum (since ${String(stateEntry.firstSeen).slice(0, 10)})`;
             check(meta?.description === derived,
                 `${phrase}: description must be derived from its state entry`);
         }

@@ -14,6 +14,7 @@ function makePhrase(overrides = {}) {
         expiresAt: '2026-07-14T12:00:00.000Z',
         bipartisan: true,
         outlets: 9,
+        peakOutlets: 9,
         ...overrides
     };
 }
@@ -304,4 +305,34 @@ describe('validateTrending', () => {
         });
         expect(problems).toEqual([]);
     });
+});
+
+it('accepts a published curated entry that has no state entry', () => {
+    const problems = validateTrending({
+        category: {
+            'New Developments': {
+                description: "Today's controversies from across the news spectrum, updated automatically",
+                updatedAt: '2026-07-29T00:00:00.000Z',
+                keywords: { 'Bryan Kohberger': { weight: 3, description: 'case' } }
+            }
+        },
+        state: { updatedAt: '2026-07-29T00:00:00.000Z', phrases: {} },
+        curatedNames: ['Bryan Kohberger']
+    });
+    expect(problems).toEqual([]);
+});
+
+it('still rejects a non-curated published phrase with no state entry', () => {
+    const problems = validateTrending({
+        category: {
+            'New Developments': {
+                description: "Today's controversies from across the news spectrum, updated automatically",
+                updatedAt: '2026-07-29T00:00:00.000Z',
+                keywords: { Smuggled: { weight: 3, description: 'x' } }
+            }
+        },
+        state: { updatedAt: '2026-07-29T00:00:00.000Z', phrases: {} },
+        curatedNames: []
+    });
+    expect(problems.some(p => p.includes('must be tracked'))).toBe(true);
 });
