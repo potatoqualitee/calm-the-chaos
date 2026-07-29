@@ -1,4 +1,4 @@
-// Pure logic for the trending-controversy engine. No I/O here -- update.js
+// Pure logic for the trending-controversy engine. No I/O here -- update.mjs
 // orchestrates fetching and file writes so everything in this module is
 // deterministic and unit-testable.
 
@@ -609,7 +609,7 @@ export function phraseOverlaps(a, b) {
 // Strip phrases overlapping the permanent keyword lists from both the carried
 // state and the fresh scores BEFORE updateTrendingState runs its maxPhrases
 // cap -- a permanently-muted "Trump" must not occupy a slot an eligible
-// phrase could use. Pure so update.js stays orchestration-only.
+// phrase could use. Pure so update.mjs stays orchestration-only.
 export function excludePermanent(prevState, scored, excludeKeywords) {
     const excludeList = Array.from(excludeKeywords, keyword => keyword.toLowerCase());
     if (excludeList.length === 0) return { prevState, scored };
@@ -676,14 +676,18 @@ export function buildTrendingCategory(state, { categoryName = 'New Developments'
     };
 }
 
-// Schema gate for the codex curation pass (scripts/trending/validate.js).
-// Curated files must keep the exact shape the functions above emit -- no
-// extra fields, descriptions derived exactly from state, bounded numbers,
-// ordered timestamps -- so the model can't smuggle freeform content into
-// the published list. When headlines + baselinePhrases are given, any
-// phrase codex added (a state key absent from the heuristic baseline) must
-// appear on a word boundary in headlines from minOutlets distinct sources.
-// Returns an array of problems; empty means valid.
+// Schema gate, called by update.mjs before either gist is written. The
+// payload must keep the exact shape the functions above emit -- no extra
+// fields, descriptions derived exactly from state, bounded numbers, ordered
+// timestamps -- because both consumers REPLACE their whole New Developments
+// group with it, so a malformed payload destroys the group rather than
+// degrading. Returns an array of problems; empty means valid.
+//
+// headlines + baselinePhrases are for an editorial curation pass that is not
+// currently wired up: given both, any phrase the pass added (a state key
+// absent from the heuristic baseline) must appear on a word boundary in
+// headlines from minOutlets distinct sources, so curation cannot smuggle
+// freeform content into the published list.
 const CATEGORY_NAME = 'New Developments';
 const CATEGORY_DESCRIPTION = "Today's controversies from across the news spectrum, updated automatically";
 const MAX_PHRASE_LENGTH = 60;

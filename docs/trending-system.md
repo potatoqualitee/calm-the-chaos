@@ -18,7 +18,6 @@ is hand-curated and the engine only ever reads it.
 | `update.mjs` | All I/O: fetch feeds, read the local catalog, read/write gists, decide whether to publish. |
 | `catalog.mjs` | Reads the permanent keyword catalog and the curated New Developments entries off disk. |
 | `publish.mjs` | Publication shaping: folds curated entries in, compares against what is already live. |
-| `validate.mjs` | CLI wrapper around `validateTrending`. **Currently stale** — it still reads the pre-consolidation file paths and needs rebuilding around gist I/O. |
 
 Tests live in `tests/trending.test.mjs` and `tests/trendingValidate.test.mjs`
 and run under vitest (`npm run test:trending`); the catalog tests in
@@ -183,9 +182,10 @@ curation pass.
 
 ### The publish gate
 
-`update.mjs` compares the payload it just built against what is already live
-and **skips the write entirely** when the keyword set, weights and
-descriptions all match. `updatedAt` is deliberately excluded from that
+Once the payload clears [validation](#validation), `update.mjs` compares it
+against what is already live and **skips the write entirely** when the keyword
+set, weights and descriptions all match. `updatedAt` is deliberately excluded
+from that
 comparison: it moves every run and no consumer reads it, so including it would
 make every run look like a change.
 
@@ -204,13 +204,28 @@ All knobs live in `TUNING` in `lib.mjs`; false positives go in
 
 `validateTrending` in `lib.mjs` enforces the exact schema the heuristics emit
 — category name, description format, weight range, no extra fields, ordered
-timestamps, published-phrase↔state correspondence. It accepts a
-`curatedNames` list whose entries are exempt from the state-backing and
-derived-description checks, because curated entries are published from the
-catalog rather than tracked in the ledger. It is covered by
-`tests/trendingValidate.test.mjs`.
+timestamps, published-phrase↔state correspondence.
 
-`validate.mjs`, the CLI wrapper, has not been rebuilt for gist I/O yet.
+`update.mjs` runs it as a **pre-publish gate**: the payload is validated after
+curated entries are folded in and before either gist is touched, and a
+non-empty problem list aborts the run with a nonzero exit. Both consumers
+*replace* their whole New Developments group with this file, so a malformed
+payload doesn't degrade — it destroys the group. Aborting before the write
+also leaves the ledger untouched, so a rejected run records no sightings and
+the next run recomputes from the same state.
+
+It accepts a `curatedNames` list whose entries are exempt from the
+state-backing and derived-description checks, because curated entries are
+published from the catalog rather than tracked in the ledger. They are *not*
+exempt from the field and weight-range checks — a curated entry with a weight
+outside 1–3 or a stray field will hard-stop publishing, which is the intended
+trade: a catalog typo should be loud.
+
+Covered by `tests/trendingValidate.test.mjs`, which validates fixtures built
+by the real builder rather than hand-written payloads — including the exact
+`mergeCuratedIntoCategory(buildTrendingCategory(...))` composition
+`update.mjs` gates on, so a change to the shaping code can't silently make the
+gate reject every run.
 
 ## Not yet ported: the codex curation pass
 
@@ -221,9 +236,13 @@ interest) before publishing. It is **not** in place.
 It cannot be lifted over as-is: it edited two files in a git working tree,
 checkpointed them with `cp`, gated on a validator run, and reverted with
 `git reset --hard`. None of that exists now that output goes to gists.
+
 Restoring it means splitting `update.mjs` into compute and publish halves with
-a curation window between them, and re-deriving the validator's evidence rules
-against runner-temp paths.
+a curation window between them. The evidence rules no longer need re-deriving:
+`validateTrending` still takes `headlines` and `baselinePhrases`, so a
+curation step only has to pass the headline dump (`HEADLINES_OUT`) and the
+pre-curation state to the gate that already runs, and every added phrase gets
+checked against a real headline for free.
 
 **The consequence is live.** The heuristic alone admits anything with enough
 cross-spectrum breadth, controversial or not — observed examples include

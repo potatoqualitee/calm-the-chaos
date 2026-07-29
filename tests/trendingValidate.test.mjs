@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { validateTrending, buildTrendingCategory } from '../scripts/trending/lib.mjs';
+import { mergeCuratedIntoCategory } from '../scripts/trending/publish.mjs';
 
 const NOW = '2026-07-10T12:00:00.000Z';
 
@@ -335,4 +336,40 @@ it('still rejects a non-curated published phrase with no state entry', () => {
         curatedNames: []
     });
     expect(problems.some(p => p.includes('must be tracked'))).toBe(true);
+});
+
+// update.mjs gates publication on this exact composition. If publish.mjs or
+// the builder ever emits a shape the validator rejects, the gate stops
+// publishing entirely -- so assert the real path, not a hand-built payload.
+describe('the payload update.mjs actually builds', () => {
+    const curated = {
+        'Bryan Kohberger': { weight: 3, description: 'ongoing case' },
+        'drone sightings': { weight: 1, description: 'developing story' }
+    };
+
+    it('passes the gate with curated entries folded in', () => {
+        const state = makeState();
+        const category = mergeCuratedIntoCategory(buildTrendingCategory(state), curated);
+        expect(validateTrending({
+            category, state, curatedNames: Object.keys(curated)
+        })).toEqual([]);
+    });
+
+    it('fails the gate when curatedNames is not passed alongside them', () => {
+        const state = makeState();
+        const category = mergeCuratedIntoCategory(buildTrendingCategory(state), curated);
+        const problems = validateTrending({ category, state, curatedNames: [] });
+        expect(problems.some(p => p.includes('must be tracked'))).toBe(true);
+    });
+
+    it('rejects a curated entry whose weight is out of range', () => {
+        const state = makeState();
+        const category = mergeCuratedIntoCategory(buildTrendingCategory(state), {
+            'Bad Weight': { weight: 7, description: 'out of range' }
+        });
+        const problems = validateTrending({
+            category, state, curatedNames: ['Bad Weight']
+        });
+        expect(problems.some(p => p.includes('weight must be an integer 1-3'))).toBe(true);
+    });
 });

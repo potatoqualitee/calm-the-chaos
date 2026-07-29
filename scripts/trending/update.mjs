@@ -16,7 +16,8 @@ import {
     scoreCandidates,
     updateTrendingState,
     buildTrendingCategory,
-    excludePermanent
+    excludePermanent,
+    validateTrending
 } from './lib.mjs';
 import { readCatalogKeywords, readCuratedNewDevelopments } from './catalog.mjs';
 import { mergeCuratedIntoCategory, publishedNamesEqual } from './publish.mjs';
@@ -133,7 +134,9 @@ async function main() {
         process.exit(1);
     }
 
-    // Raw headlines for the codex curation pass in trending.yml
+    // Raw headline dump, off by default. Debugging hook, and the input an
+    // editorial curation pass would need to feed validateTrending's evidence
+    // check -- see "Not yet ported" in docs/trending-system.md.
     if (process.env.HEADLINES_OUT) {
         await writeFile(process.env.HEADLINES_OUT, JSON.stringify(headlines, null, 2) + '\n');
     }
@@ -167,6 +170,19 @@ async function main() {
         buildTrendingCategory(state, { excludeKeywords }),
         curated
     );
+
+    // Schema-gate the payload before it can reach either gist. Both consumers
+    // REPLACE their whole New Developments group with this file, so a
+    // malformed payload doesn't degrade gracefully -- it destroys the group.
+    // Curated names are exempt from the state-backing and derived-description
+    // checks: they are published from the catalog, not tracked in the ledger.
+    const problems = validateTrending({
+        category, state, curatedNames: Object.keys(curated)
+    });
+    if (problems.length) {
+        console.error(`refusing to publish an invalid payload:\n  ${problems.join('\n  ')}`);
+        process.exit(1);
+    }
 
     const live = await readGistFile(PUBLISH_GIST_ID, PUBLISH_GIST_FILE);
     if (publishedNamesEqual(category, live)) {
