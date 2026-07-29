@@ -804,3 +804,98 @@ describe('entity handling', () => {
         expect(Object.keys(category['New Developments'].keywords)).toEqual([]);
     });
 });
+
+import { collapseVariants } from '../scripts/trending/lib.mjs';
+
+const phrase = (over = {}) => ({
+    display: 'X', firstSeen: '2026-07-28T00:00:00.000Z', lastSeen: '2026-07-29T00:00:00.000Z',
+    heat: 10, peakHeat: 10, daysActive: 1, expiresAt: '2026-08-05T00:00:00.000Z',
+    bipartisan: false, outlets: 4, ...over
+});
+
+describe('collapseVariants', () => {
+    it('keeps the specific phrase regardless of which variant is hotter', () => {
+        const hotShort = [
+            ['secret', phrase({ display: 'Secret', heat: 90 })],
+            ['secret service', phrase({ display: 'Secret Service', heat: 10 })]
+        ];
+        expect(collapseVariants(hotShort).map(([canon]) => canon)).toEqual(['secret service']);
+
+        const hotLong = [
+            ['secret', phrase({ display: 'Secret', heat: 10 })],
+            ['secret service', phrase({ display: 'Secret Service', heat: 90 })]
+        ];
+        expect(collapseVariants(hotLong).map(([canon]) => canon)).toEqual(['secret service']);
+    });
+
+    it('takes the max of heat and outlets rather than the sum, so a split story cannot inflate itself', () => {
+        const [[, merged]] = collapseVariants([
+            ['el-sayed', phrase({ display: 'El-Sayed', heat: 30, peakHeat: 40, outlets: 7 })],
+            ['abdul el-sayed', phrase({ display: 'Abdul El-Sayed', heat: 20, peakHeat: 25, outlets: 5 })]
+        ]);
+        expect(merged.heat).toBe(30);
+        expect(merged.peakHeat).toBe(40);
+        expect(merged.outlets).toBe(7);
+    });
+
+    it('keeps the earlier firstSeen, the later lastSeen and the later expiry', () => {
+        const [[, merged]] = collapseVariants([
+            ['dinner', phrase({
+                firstSeen: '2026-07-20T00:00:00.000Z', lastSeen: '2026-07-28T00:00:00.000Z',
+                expiresAt: '2026-08-01T00:00:00.000Z', daysActive: 2
+            })],
+            ['correspondents dinner', phrase({
+                display: 'Correspondents Dinner',
+                firstSeen: '2026-07-25T00:00:00.000Z', lastSeen: '2026-07-29T00:00:00.000Z',
+                expiresAt: '2026-08-09T00:00:00.000Z', daysActive: 5
+            })]
+        ]);
+        expect(merged.firstSeen).toBe('2026-07-20T00:00:00.000Z');
+        expect(merged.lastSeen).toBe('2026-07-29T00:00:00.000Z');
+        expect(merged.expiresAt).toBe('2026-08-09T00:00:00.000Z');
+        expect(merged.daysActive).toBe(5);
+    });
+
+    it('ORs bipartisan across merged variants', () => {
+        const [[, merged]] = collapseVariants([
+            ['kirk', phrase({ bipartisan: true })],
+            ['charlie kirk', phrase({ display: 'Charlie Kirk', bipartisan: false })]
+        ]);
+        expect(merged.bipartisan).toBe(true);
+    });
+
+    it('respects word boundaries and folds plurals', () => {
+        expect(collapseVariants([
+            ['art', phrase({ display: 'Art' })],
+            ['martial law', phrase({ display: 'Martial Law' })]
+        ]).map(([canon]) => canon).sort()).toEqual(['art', 'martial law']);
+
+        expect(collapseVariants([
+            ['data center', phrase({ display: 'Data Center' })],
+            ['data centers', phrase({ display: 'Data Centers' })]
+        ])).toHaveLength(1);
+    });
+
+    it('leaves unrelated phrases untouched', () => {
+        expect(collapseVariants([
+            ['fauci', phrase({ display: 'Fauci' })],
+            ['jay clayton', phrase({ display: 'Jay Clayton' })]
+        ])).toHaveLength(2);
+    });
+});
+
+describe('updateTrendingState variant collapsing', () => {
+    it('absorbs a carried state entry into a more specific fresh hit', () => {
+        const prev = {
+            updatedAt: '2026-07-29T00:00:00.000Z',
+            phrases: { secret: phrase({ display: 'Secret', heat: 40, outlets: 6 }) }
+        };
+        const scored = [{
+            canon: 'secret service', display: 'Secret Service', score: 30,
+            outlets: 9, leftOutlets: 3, rightOutlets: 3, mentions: 9,
+            bipartisan: true, mainstream: true
+        }];
+        const next = updateTrendingState(prev, scored, '2026-07-29T06:00:00.000Z');
+        expect(Object.keys(next.phrases)).toEqual(['secret service']);
+    });
+});

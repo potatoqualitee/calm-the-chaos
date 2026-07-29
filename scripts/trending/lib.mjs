@@ -411,18 +411,59 @@ export function scoreCandidates(candidates, tuning = TUNING) {
         });
     }
 
-    // Prefer the most specific phrasing: drop a shorter phrase when a longer
-    // phrase containing it scores at least as well (keep "hunter biden laptop"
-    // over "biden laptop" and "laptop"). Ties break toward the longer phrase.
-    scored.sort((a, b) => b.score - a.score || b.canon.length - a.canon.length);
+    // Prefer the most specific phrasing: "hunter biden laptop" beats "biden
+    // laptop" and "laptop". Ordering is by specificity, NOT by score --
+    // ordering by score meant that when the shorter phrase happened to be
+    // hotter it entered `kept` first and the longer phrase could never absorb
+    // it, so both published and which one won flapped with score jitter.
     const kept = [];
-    for (const candidate of scored) {
-        const absorbed = kept.some(better =>
-            better.canon !== candidate.canon &&
-            better.canon.includes(candidate.canon) &&
-            better.score >= candidate.score * 0.8
-        );
+    for (const candidate of [...scored].sort(bySpecificity)) {
+        const absorbed = kept.some(better => phraseContains(better.canon, candidate.canon));
         if (!absorbed) kept.push(candidate);
+    }
+    return kept;
+}
+
+// Most words first, then longest, then alphabetical: a total order, so the
+// absorber is never decided by a value that moves between runs.
+function bySpecificity(a, b) {
+    const canonA = a.canon ?? a[0];
+    const canonB = b.canon ?? b[0];
+    return canonB.split(' ').length - canonA.split(' ').length
+        || canonB.length - canonA.length
+        || canonA.localeCompare(canonB);
+}
+
+// Merge two state entries for what is one story under two phrasings. max, not
+// sum, on every coverage number: the variants are counted from overlapping
+// headlines, so summing would double-count one story and could push it into a
+// higher outlet bucket purely for having been split in two.
+function mergePhrases(keep, absorbed) {
+    const earlier = (a, b) => (Date.parse(a) <= Date.parse(b) ? a : b);
+    const later = (a, b) => (Date.parse(a) >= Date.parse(b) ? a : b);
+    return {
+        ...keep,
+        firstSeen: earlier(keep.firstSeen, absorbed.firstSeen),
+        lastSeen: later(keep.lastSeen, absorbed.lastSeen),
+        heat: Math.max(keep.heat, absorbed.heat),
+        peakHeat: Math.max(keep.peakHeat, absorbed.peakHeat),
+        daysActive: Math.max(keep.daysActive, absorbed.daysActive),
+        expiresAt: later(keep.expiresAt, absorbed.expiresAt),
+        bipartisan: Boolean(keep.bipartisan || absorbed.bipartisan),
+        outlets: Math.max(keep.outlets, absorbed.outlets)
+    };
+}
+
+// Collapse [canon, entry] pairs so one story cannot occupy two rows.
+export function collapseVariants(entries) {
+    const kept = [];
+    for (const [canon, entry] of [...entries].sort((a, b) => bySpecificity(a, b))) {
+        const index = kept.findIndex(([keptCanon]) => phraseContains(keptCanon, canon));
+        if (index === -1) {
+            kept.push([canon, entry]);
+        } else {
+            kept[index] = [kept[index][0], mergePhrases(kept[index][1], entry)];
+        }
     }
     return kept;
 }
@@ -529,7 +570,10 @@ export function updateTrendingState(prevState, scored, nowIso, tuning = TUNING) 
     }
 
     // Hard cap: keep the hottest phrases
-    const entries = Object.entries(phrases)
+    // Collapse before the cap, for the same reason excludePermanent runs
+    // before it: a duplicate must not occupy a slot an eligible phrase
+    // could use.
+    const entries = collapseVariants(Object.entries(phrases))
         .sort(([, a], [, b]) => b.heat - a.heat)
         .slice(0, tuning.maxPhrases);
 
@@ -545,7 +589,7 @@ function tokenMatches(a, b) {
     return a === b || a === `${b}s` || b === `${a}s`;
 }
 
-function phraseContains(bigger, smaller) {
+export function phraseContains(bigger, smaller) {
     const big = bigger.split(' ');
     const small = smaller.split(' ');
     if (small.length > big.length) return false;
