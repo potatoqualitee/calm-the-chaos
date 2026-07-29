@@ -105,13 +105,52 @@ therefore never fires, and the app restamps "Keywords updated" from
 The counts are noise, not signal: 24 → 22 outlets is sampling jitter on the same
 story.
 
-### 5. Phrase-boundary instability (deferred)
+### 5. Variant collapsing is order-dependent and never reaches state
 
 `Correspondents Dinner` → `Correspondents` → `Dinner` → `WHCA dinner` are
 distinct canonical phrases for one event, as are `Abdul El-Sayed`/`El-Sayed` and
-`Secret`/`Secret Service`. Unlike (2) these are genuinely different keys, so
-fixing it needs n-gram stability work rather than a pinning rule. Out of scope
-here; see Deferred.
+`Secret`/`Secret Service`.
+
+`scoreCandidates` already tries to collapse these (`lib.js:410-423`):
+
+```js
+scored.sort((a, b) => b.score - a.score || b.canon.length - a.canon.length);
+const kept = [];
+for (const candidate of scored) {
+    const absorbed = kept.some(better =>
+        better.canon !== candidate.canon &&
+        better.canon.includes(candidate.canon) &&
+        better.score >= candidate.score * 0.8
+    );
+    if (!absorbed) kept.push(candidate);
+}
+```
+
+Three defects make it leak:
+
+**Absorption is one-directional but iteration is by score.** Only a longer
+phrase can absorb a shorter one (`better.canon.includes(candidate.canon)`), yet
+candidates are visited hottest-first. When `dinner` outscores
+`correspondents dinner`, `dinner` enters `kept` first and the longer phrase is
+then tested against it — a short canon cannot contain a longer one, so nothing
+absorbs and **both publish**. Which variant wins is decided by score jitter,
+which is exactly the observed flapping.
+
+**The `0.8` score gate is a second jitter input.** Even in the right order,
+absorption requires the longer phrase to score within 20% of the shorter. Both
+scores move with outlet counts every run, so the same pair collapses on one run
+and splits on the next.
+
+**Absorption never touches carried state.** It runs only over one run's fresh
+`scored` array. `updateTrendingState` then refreshes existing phrases by exact
+canon lookup (`scoredByCanon.get(canon)`, `lib.js:471`), so a `secret` entry
+already in state and a new `secret service` hit are independent rows that never
+meet. With `retentionDays` granting 3 to 30 days (`lib.js:432-437`), a stale
+variant outlives the story by weeks.
+
+Also note the test is raw `String.includes`, not the word-boundary
+`phraseContains` used everywhere else (`lib.js:541`), so it neither folds
+plurals consistently nor respects word boundaries.
 
 ## Design
 
@@ -187,6 +226,48 @@ when the phrase leaves state and returns. This ends the casing churn while
 leaving the codex curation pass free to correct casing deliberately, which is
 where a casing change belongs.
 
+### Collapse phrase variants deterministically
+
+Rework absorption so a story cannot publish under two names, and so which name
+it publishes under does not depend on run-to-run score jitter.
+
+**Order by specificity, not heat.** Sort candidates by word count descending
+(ties by canon length, then canon) before the absorption pass, so the most
+specific phrase is always the absorber. Score no longer decides who absorbs
+whom.
+
+**Drop the `0.8` score gate.** Once ordering is specificity-based, the gate only
+adds jitter. Containment alone decides: if one phrase contains another, they are
+the same story.
+
+**Match on word boundaries.** Replace `better.canon.includes(candidate.canon)`
+with the existing `phraseContains` (`lib.js:541`), which already does word-level
+matching with plural folding — the same primitive `excludePermanent` uses. This
+also stops `art` being absorbed by `martial law`.
+
+**Apply absorption to state, not just fresh hits.** Move the pass into
+`updateTrendingState` so it runs over the union of carried phrases and new hits,
+before the `maxPhrases` cap — the same reasoning the `excludePermanent` comment
+gives at `lib.js:555-558`, that a duplicate must not occupy a slot an eligible
+phrase could use.
+
+**Merge rule.** When phrase A is absorbed into the more specific phrase B:
+
+| Field | Result | Reason |
+|---|---|---|
+| published key | B's `display` | Matches the editorial rule already in the codex prompt: keep the specific phrase, drop the over-broad one |
+| `firstSeen` | earlier of the two | The story began when its first variant appeared |
+| `lastSeen` | later of the two | Either variant appearing means the story is alive |
+| `heat`, `peakHeat` | **max**, not sum | Both variants are counted from overlapping headlines; summing double-counts one story's coverage |
+| `outlets` | **max**, not sum | Same overlap; an outlet running "Secret Service" is not a second outlet |
+| `daysActive` | max | Days the story was live, not days per variant |
+| `expiresAt` | later of the two | Retention follows the story, not the wording |
+| `bipartisan` | logical OR | Either variant proving cross-spectrum coverage proves it for the story |
+
+Max rather than sum throughout is the conservative choice: a merge can never
+promote a story to a higher heat bucket than its strongest single variant
+already earned, so collapsing variants cannot manufacture trending signal.
+
 ### Decode `&apos;`
 
 Add `&apos;` to `decodeEntities` alongside the existing `&#0?39;` rule. Add a
@@ -236,13 +317,21 @@ The extension is unaffected throughout.
   at publication.
 - Outlet counts of 12 and 18 produce the same description; a rise to 25 changes
   it.
+- `Secret` and `Secret Service` never publish together, regardless of which
+  scores higher — the specific phrase wins in both orderings.
+- `Abdul El-Sayed` already in carried state is absorbed by a fresh `El-Sayed`
+  hit (and the reverse), rather than surviving to its own expiry alongside it.
+- A merge takes the max of `outlets`, not the sum, so two variants of one story
+  cannot inflate its coverage count or its description bucket.
+- A merge keeps the earlier `firstSeen` and the later `expiresAt`.
+- `art` is not absorbed by `martial law` (word boundaries), while
+  `data center` and `data centers` do collapse (plural folding).
 - An unchanged keyword set produces no gist write and leaves `updatedAt` intact.
 - A changed keyword set produces exactly one write with a fresh `updatedAt`.
 - The existing `validateTrending` suite passes unmodified against moved code.
 
 ## Deferred
 
-- Phrase-boundary instability (root cause 5) — needs n-gram stability work.
 - Graded weights in the extension UI; `weight` remains a `> 0` gate
   (`scripts/core/config/keywordMetadata.js:12`).
 - Whether mutesky should eventually read the gist through the same catalog
