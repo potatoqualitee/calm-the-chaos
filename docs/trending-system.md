@@ -19,9 +19,10 @@ is hand-curated and the engine only ever reads it.
 | `catalog.mjs` | Reads the permanent keyword catalog and the curated New Developments entries off disk. |
 | `publish.mjs` | Publication shaping: folds curated entries in, compares against what is already live. |
 
-Tests live in `tests/trending.test.mjs` and `tests/trendingValidate.test.mjs`
-and run under vitest (`npm run test:trending`); the catalog tests in
-`tests/*.test.cjs` run under `node --test`. `npm test` runs both.
+Tests live in `tests/trending.test.mjs`, `tests/trendingValidate.test.mjs` and
+`tests/trendingPublishGate.test.mjs` and run under vitest
+(`npm run test:trending`); the catalog tests in `tests/*.test.cjs` run under
+`node --test`. `npm test` runs both.
 
 Engine files use `.mjs` because `package.json` is CommonJS and must stay that
 way — `webpack.config.js` would break otherwise.
@@ -226,6 +227,13 @@ by the real builder rather than hand-written payloads — including the exact
 `mergeCuratedIntoCategory(buildTrendingCategory(...))` composition
 `update.mjs` gates on, so a change to the shaping code can't silently make the
 gate reject every run.
+
+`tests/trendingPublishGate.test.mjs` covers the abort itself rather than the
+validator: it runs the real `update.mjs` with `fetch` stubbed
+(`tests/helpers/updateFetchStub.mjs` serves the feeds and both gists), then
+asserts that a ledger fixture the validator rejects exits nonzero having
+PATCHed *neither* gist. That is what pins the ordering — a gate that ran after
+the ledger write would still pass the validator's own tests.
 
 ## Not yet ported: the codex curation pass
 
