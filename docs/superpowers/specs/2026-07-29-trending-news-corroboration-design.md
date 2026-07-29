@@ -1,7 +1,15 @@
 # Trending news: corroboration-gated keyword promotion
 
+> **SUPERSEDED** by `2026-07-29-trending-engine-consolidation-design.md`.
+>
+> This document describes calm-the-chaos's own PowerShell trending workflow,
+> which has been `disabled_manually` since 2025-01-29. The live trending
+> problem was mutesky's engine, which already implements corroboration more
+> thoroughly than this design proposed. Retained for the analysis of the
+> gist consumer contract, which still holds. Do not implement.
+
 **Date:** 2026-07-29
-**Status:** Approved, pending implementation plan
+**Status:** Superseded — not for implementation
 
 ## Problem
 
