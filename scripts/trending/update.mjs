@@ -18,10 +18,16 @@ import {
     buildTrendingCategory,
     excludePermanent
 } from './lib.mjs';
+import { readCatalogKeywords, readCuratedNewDevelopments } from './catalog.mjs';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const STATE_PATH = path.join(repoRoot, 'keywords', 'trending-state.json');
 const OUTPUT_PATH = path.join(repoRoot, 'keywords', 'trending.json');
+const KEYWORDS_DIR = path.join(repoRoot, 'keywords');
+// The catalog holds thousands of keywords. This is a corruption tripwire,
+// not a tuning knob: anything near zero means we are about to publish
+// without exclusions, which is the failure this whole module prevents.
+const MIN_PERMANENT_KEYWORDS = 100;
 const FETCH_TIMEOUT_MS = 15000;
 // Prolific feeds (Daily Beast ships 100 items) must not out-shout everyone
 // else: mentions feed the score, so cap each outlet at its newest items
@@ -68,41 +74,6 @@ async function loadJson(filePath, fallback) {
     }
 }
 
-// The permanent calm-the-chaos lists already mute the big recurring names
-// (Trump, Iran, Charlie Kirk...); trending must not re-list them. Best-effort:
-// on failure we publish without exclusions and the app dedupes client-side.
-const CALM_THE_CHAOS = 'https://raw.githubusercontent.com/potatoqualitee/calm-the-chaos/main/keywords';
-
-async function fetchPermanentKeywords() {
-    const keywords = new Set();
-    try {
-        const listing = await fetch(
-            'https://api.github.com/repos/potatoqualitee/calm-the-chaos/contents/keywords/categories',
-            { signal: AbortSignal.timeout(FETCH_TIMEOUT_MS), headers: { 'User-Agent': 'MuteSky-Trending/1.0' } }
-        );
-        if (!listing.ok) throw new Error(`listing: HTTP ${listing.status}`);
-        const files = (await listing.json())
-            .map(file => file.name)
-            .filter(name => name.endsWith('.json'));
-
-        const results = await Promise.allSettled(files.map(async name => {
-            const response = await fetch(`${CALM_THE_CHAOS}/categories/${name}`, {
-                signal: AbortSignal.timeout(FETCH_TIMEOUT_MS)
-            });
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            const data = await response.json();
-            const category = data[Object.keys(data)[0]];
-            Object.keys(category?.keywords || {}).forEach(kw => keywords.add(kw.toLowerCase()));
-        }));
-        const failed = results.filter(r => r.status === 'rejected').length;
-        if (failed) console.warn(`permanent keyword lists: ${failed}/${files.length} files failed`);
-    } catch (error) {
-        console.warn(`permanent keyword fetch failed (publishing without exclusions): ${error.message}`);
-    }
-    console.log(`permanent keywords for exclusion: ${keywords.size}`);
-    return keywords;
-}
-
 async function main() {
     const results = await Promise.allSettled(FEEDS.map(fetchFeed));
     const headlines = [];
@@ -141,7 +112,14 @@ async function main() {
 
     const nowIso = new Date().toISOString();
     const loadedState = await loadJson(STATE_PATH, { phrases: {} });
-    const excludeKeywords = await fetchPermanentKeywords();
+    const excludeKeywords = await readCatalogKeywords(KEYWORDS_DIR);
+    if (excludeKeywords.size < MIN_PERMANENT_KEYWORDS) {
+        console.error(
+            `only ${excludeKeywords.size} permanent keywords loaded (expected >= ${MIN_PERMANENT_KEYWORDS}); refusing to publish without exclusions`
+        );
+        process.exit(1);
+    }
+    console.log(`permanent keywords for exclusion: ${excludeKeywords.size}`);
 
     const candidates = extractCandidates(headlines);
     // buildTrendingCategory filters excluded phrases again as the net for

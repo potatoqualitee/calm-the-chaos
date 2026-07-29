@@ -594,3 +594,76 @@ describe('possessive normalization', () => {
         expect(keys).not.toContain('Trumps');
     });
 });
+
+import { mkdtemp, mkdir, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
+import { readCatalogKeywords, readCuratedNewDevelopments } from '../scripts/trending/catalog.mjs';
+
+async function fixtureCatalog(categories) {
+    const dir = await mkdtemp(path.join(tmpdir(), 'ctc-catalog-'));
+    await mkdir(path.join(dir, 'categories'), { recursive: true });
+    await writeFile(
+        path.join(dir, 'catalog-migrations.json'),
+        JSON.stringify({ categoryFiles: Object.keys(categories) })
+    );
+    for (const [file, body] of Object.entries(categories)) {
+        await writeFile(path.join(dir, 'categories', file), JSON.stringify(body));
+    }
+    return dir;
+}
+
+describe('readCatalogKeywords', () => {
+    it('collects every keyword from every listed category, lowercased', async () => {
+        const dir = await fixtureCatalog({
+            'a.json': { 'Cat A': { description: 'x', keywords: { Trump: { weight: 3 }, Iran: { weight: 2 } } } },
+            'b.json': { 'Cat B': { description: 'y', keywords: { 'Charlie Kirk': { weight: 1 } } } }
+        });
+        const keywords = await readCatalogKeywords(dir);
+        expect(keywords).toEqual(new Set(['trump', 'iran', 'charlie kirk']));
+    });
+
+    it('includes weight-zero keywords, which must still be excluded from trending', async () => {
+        const dir = await fixtureCatalog({
+            'a.json': { 'Cat A': { description: 'x', keywords: { Senate: { weight: 0 } } } }
+        });
+        expect(await readCatalogKeywords(dir)).toEqual(new Set(['senate']));
+    });
+
+    it('throws when a listed category file is missing, rather than returning a partial set', async () => {
+        const dir = await fixtureCatalog({
+            'a.json': { 'Cat A': { description: 'x', keywords: { Trump: { weight: 3 } } } }
+        });
+        await writeFile(
+            path.join(dir, 'catalog-migrations.json'),
+            JSON.stringify({ categoryFiles: ['a.json', 'missing.json'] })
+        );
+        await expect(readCatalogKeywords(dir)).rejects.toThrow(/missing\.json/);
+    });
+});
+
+describe('readCuratedNewDevelopments', () => {
+    it('returns weight and description for entries above weight zero', async () => {
+        const dir = await fixtureCatalog({
+            'new-developments.json': {
+                'New Developments': {
+                    description: 'curated',
+                    keywords: {
+                        'Bryan Kohberger': { weight: 3, description: 'case', reviewAfter: '2026-08-29' },
+                        Quiet: { weight: 0, description: 'reference only' }
+                    }
+                }
+            }
+        });
+        expect(await readCuratedNewDevelopments(dir)).toEqual({
+            'Bryan Kohberger': { weight: 3, description: 'case' }
+        });
+    });
+
+    it('returns an empty object when the category file has no keywords', async () => {
+        const dir = await fixtureCatalog({
+            'new-developments.json': { 'New Developments': { description: 'curated', keywords: {} } }
+        });
+        expect(await readCuratedNewDevelopments(dir)).toEqual({});
+    });
+});
