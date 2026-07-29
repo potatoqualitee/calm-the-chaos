@@ -198,6 +198,44 @@ The two payload schemas already agree: mutesky's merge reads
 and the extension reads the same shape, ignoring `updatedAt`. One artifact
 serves both.
 
+### The engine publishes the union, not just trending
+
+`New Developments` has two writers and they disagree about ownership.
+
+The catalog ships a curated `keywords/categories/new-developments.json` holding
+`event`-lifecycle entries with `reviewAfter` dates. The gist publishes a
+category of the same name. The extension **replaces** the whole group with the
+gist's contents (`scripts/background/background.js:188`):
+
+```js
+keywordGroups['New Developments'] = remoteKeywords;
+```
+
+while mutesky **merges** into the existing category
+(`mutesky/js/api/trending.js:63-77`). So the same payload preserves curated
+entries in one product and destroys them in the other. Today the extension
+overwrites the curated file every six hours with a gist frozen at 2025-01-29 —
+48 keywords from January 2025 — which is why the curated event entries have no
+practical effect for extension users.
+
+**Decision: the published payload is the union of the curated category and the
+engine's trending output.**
+
+- The curated entries come from a local read of
+  `keywords/categories/new-developments.json`, which the engine already performs
+  as part of building the exclusion list.
+- Their `weight` and `description` pass through from the catalog unchanged, so
+  curation stays authoritative for the entries it owns.
+- No duplication is possible: every catalog keyword is already excluded from
+  trending discovery, so a curated entry can never also arrive as a trending
+  phrase.
+- The extension needs no code change — replacement becomes correct once the
+  payload is complete.
+- mutesky's merge sees the same union and is unaffected.
+
+This also gives the `reviewAfter` lifecycle real force for the first time: a
+curated event keyword now survives the poll instead of being clobbered by it.
+
 ### The ledger moves to a second gist
 
 Sighting state (`trending-state.json`, formerly committed) moves to a separate
@@ -317,6 +355,11 @@ The extension is unaffected throughout.
   at publication.
 - Outlet counts of 12 and 18 produce the same description; a rise to 25 changes
   it.
+- Every curated `new-developments.json` entry appears in the published payload,
+  with its catalog `weight` and `description` intact.
+- A curated entry is never duplicated by a trending phrase of the same name.
+- A published payload containing only curated entries (no trending phrases
+  qualified) is still valid and still publishes.
 - `Secret` and `Secret Service` never publish together, regardless of which
   scores higher — the specific phrase wins in both orderings.
 - `Abdul El-Sayed` already in carried state is absorbed by a fresh `El-Sayed`
