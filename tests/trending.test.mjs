@@ -776,3 +776,31 @@ describe('display pinning', () => {
         expect(next.phrases['jay clayton'].display).toBe('Jay Clayton');
     });
 });
+
+describe('entity handling', () => {
+    it('decodes the named apostrophe entity', () => {
+        const items = parseFeedXml(
+            `<rss><channel><item><title>Trump&amp;apos;s new plan</title></item></channel></rss>`
+        );
+        expect(items[0].title).toContain("Trump's");
+        expect(items[0].title).not.toContain('apos');
+    });
+
+    it('never publishes a phrase still carrying an ampersand', () => {
+        const state = {
+            updatedAt: '2026-07-29T00:00:00.000Z',
+            phrases: {
+                'trump&apos': {
+                    display: 'Trump&apos',
+                    firstSeen: '2026-07-29T00:00:00.000Z',
+                    lastSeen: '2026-07-29T00:00:00.000Z',
+                    heat: 30, peakHeat: 30, daysActive: 1,
+                    expiresAt: '2026-08-05T00:00:00.000Z',
+                    bipartisan: true, outlets: 5
+                }
+            }
+        };
+        const category = buildTrendingCategory(state, { excludeKeywords: [] });
+        expect(Object.keys(category['New Developments'].keywords)).toEqual([]);
+    });
+});

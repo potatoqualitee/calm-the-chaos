@@ -151,11 +151,15 @@ function decodeEntities(text) {
         .replace(/&lt;/g, '<')
         .replace(/&gt;/g, '>')
         .replace(/&quot;/g, '"')
-        .replace(/&#0?39;/g, "'")
+        .replace(/&#0?39;|&apos;/g, "'")
         .replace(/&#8216;|&#8217;|&rsquo;|&lsquo;/g, "'")
         .replace(/&#8220;|&#8221;|&rdquo;|&ldquo;/g, '"')
         .replace(/&#8211;|&#8212;|&ndash;|&mdash;/g, '-')
         .replace(/&amp;/g, '&')
+        // Feeds that double-encode ship "&amp;apos;", which the pass above
+        // leaves as a literal "&apos;". Decoding once more is what stops
+        // "Trump&apos" reaching the published mute list.
+        .replace(/&#0?39;|&apos;/g, "'")
         .replace(/<[^>]+>/g, ' ')
         .replace(/\s+/g, ' ')
         .trim();
@@ -588,6 +592,9 @@ export function buildTrendingCategory(state, { categoryName = 'New Developments'
     const kept = [];
     for (const [canon, entry] of entries) {
         if (GENERIC_PHRASES.has(canon)) continue;
+        // A surviving ampersand means an entity slipped decoding; publishing it
+        // would put a mangled token like "Trump&apos" in everyone's mute list.
+        if (canon.includes('&')) continue;
         if (excluded.some(keyword => phraseOverlaps(canon, keyword))) continue;
         if (kept.some(([keptCanon]) => phraseOverlaps(canon, keptCanon))) continue;
         kept.push([canon, entry]);
