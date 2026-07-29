@@ -488,7 +488,10 @@ export function updateTrendingState(prevState, scored, nowIso, tuning = TUNING) 
         if (new Date(expiresAt).getTime() <= nowMs) continue;
 
         phrases[canon] = {
-            display: hit ? hit.display : prev.display,
+            // Pinned: re-electing casing every run republishes the same story
+            // under a new key, which downstream reads as a delete plus an add.
+            // Deliberate casing corrections belong to the curation pass.
+            display: prev.display,
             firstSeen: prev.firstSeen,
             lastSeen: score >= tuning.refreshThreshold ? nowIso : prev.lastSeen,
             heat,

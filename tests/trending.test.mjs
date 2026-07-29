@@ -741,3 +741,38 @@ describe('publishedNamesEqual', () => {
         expect(publishedNamesEqual(categoryWith({}), null)).toBe(false);
     });
 });
+
+describe('display pinning', () => {
+    it('keeps the display a phrase was first admitted with, even when headline casing flips', () => {
+        const prev = {
+            updatedAt: '2026-07-29T00:00:00.000Z',
+            phrases: {
+                'border czar': {
+                    display: 'Border Czar',
+                    firstSeen: '2026-07-28T00:00:00.000Z',
+                    lastSeen: '2026-07-29T00:00:00.000Z',
+                    heat: 20, peakHeat: 20, daysActive: 2,
+                    expiresAt: '2026-08-10T00:00:00.000Z',
+                    bipartisan: true, outlets: 8
+                }
+            }
+        };
+        const scored = [{
+            canon: 'border czar', display: 'border czar', score: 20,
+            outlets: 8, leftOutlets: 3, rightOutlets: 3, mentions: 8,
+            bipartisan: true, mainstream: true
+        }];
+        const next = updateTrendingState(prev, scored, '2026-07-29T06:00:00.000Z');
+        expect(next.phrases['border czar'].display).toBe('Border Czar');
+    });
+
+    it('elects a display for a phrase entering state for the first time', () => {
+        const scored = [{
+            canon: 'jay clayton', display: 'Jay Clayton', score: 30,
+            outlets: 10, leftOutlets: 4, rightOutlets: 4, mentions: 10,
+            bipartisan: true, mainstream: true
+        }];
+        const next = updateTrendingState({ phrases: {} }, scored, '2026-07-29T06:00:00.000Z');
+        expect(next.phrases['jay clayton'].display).toBe('Jay Clayton');
+    });
+});
