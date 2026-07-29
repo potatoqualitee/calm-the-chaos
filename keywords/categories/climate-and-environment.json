@@ -82,6 +82,10 @@
                 "weight": 1,
                 "description": "Frequent weather crisis term"
             },
+            "earthquake": {
+                "weight": 3,
+                "description": "Frequent natural disaster term"
+            },
             "eco-anxiety": {
                 "weight": 0,
                 "description": "Moderate-use psychological term"
@@ -106,9 +110,17 @@
                 "weight": 1,
                 "description": "Common weather emergency term"
             },
+            "flood warning": {
+                "weight": 2,
+                "description": "Common weather emergency alert term"
+            },
             "flooding": {
                 "weight": 3,
                 "description": "Highly frequent recurring disaster term"
+            },
+            "floodwater": {
+                "weight": 2,
+                "description": "Frequent flood disaster term"
             },
             "fossil fuel": {
                 "weight": 1,
@@ -142,6 +154,14 @@
                 "weight": 3,
                 "description": "Frequent natural disaster term",
                 "lifecycle": "cyclical"
+            },
+            "mega fire": {
+                "weight": 1,
+                "description": "Emerging term for extreme-intensity wildfires"
+            },
+            "megafire": {
+                "weight": 1,
+                "description": "Emerging term for extreme-intensity wildfires"
             },
             "melting ice cap": {
                 "weight": 0,

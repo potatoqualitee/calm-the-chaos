@@ -94,6 +94,10 @@
                 "weight": 0,
                 "description": "Occasional electoral term"
             },
+            "boycott": {
+                "weight": 1,
+                "description": "Frequent political and consumer protest term"
+            },
             "business regulation": {
                 "weight": 0,
                 "description": "Basic policy term"
@@ -327,6 +331,10 @@
                 "weight": 0,
                 "description": "Occasional government term"
             },
+            "Fifth Amendment": {
+                "weight": 1,
+                "description": "Recurring term in testimony and investigation coverage"
+            },
             "freedom hating": {
                 "weight": 1,
                 "description": "Regular liberty attack"
@@ -422,6 +430,14 @@
             "pedophilia": {
                 "weight": 2,
                 "description": "Inflammatory accusation term"
+            },
+            "plead the Fifth": {
+                "weight": 2,
+                "description": "Charged phrase in testimony and investigation coverage"
+            },
+            "pleads the Fifth": {
+                "weight": 2,
+                "description": "Charged phrase in testimony and investigation coverage"
             },
             "polarization": {
                 "weight": 2,

@@ -33,6 +33,10 @@
                 "weight": 1,
                 "description": "Former secretary of state"
             },
+            "Anthony Fauci": {
+                "weight": 3,
+                "description": "Highly frequent public health figure in hearing coverage"
+            },
             "Asa Hutchinson": {
                 "weight": 1,
                 "description": "Moderate-use political figure"
@@ -196,6 +200,10 @@
             "Jamaal Bowman": {
                 "weight": 1,
                 "description": "Former House representative"
+            },
+            "James Comey": {
+                "weight": 2,
+                "description": "Former FBI director recurring in investigation coverage"
             },
             "James Talarico": {
                 "weight": 2,

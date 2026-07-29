@@ -53,6 +53,10 @@
                 "weight": 2,
                 "description": "Common political figure"
             },
+            "Comey": {
+                "weight": 2,
+                "description": "Former FBI director recurring in investigation coverage"
+            },
             "Coney Barrett": {
                 "weight": 2,
                 "description": "Common Supreme Court justice"
@@ -80,6 +84,10 @@
             "Elon": {
                 "weight": 3,
                 "description": "Highly frequent public figure"
+            },
+            "Fauci": {
+                "weight": 3,
+                "description": "Highly frequent public health figure in hearing coverage"
             },
             "Fetterman": {
                 "weight": 2,

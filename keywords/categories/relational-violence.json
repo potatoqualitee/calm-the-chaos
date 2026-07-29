@@ -166,6 +166,14 @@
                 "weight": 1,
                 "description": "Common harassment term"
             },
+            "strangled": {
+                "weight": 2,
+                "description": "Graphic killing term in crime coverage"
+            },
+            "strangulation": {
+                "weight": 2,
+                "description": "Graphic violence term in crime coverage"
+            },
             "suffocation": {
                 "weight": 1,
                 "description": "Regular violence term"

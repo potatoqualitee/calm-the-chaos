@@ -89,6 +89,10 @@
                 "weight": 1,
                 "description": "Frequent public health crisis"
             },
+            "Parkinson": {
+                "weight": 1,
+                "description": "Parkinson's disease diagnosis coverage"
+            },
             "patient rights": {
                 "weight": 0,
                 "description": "Regular medical term"
@@ -104,6 +108,10 @@
             "public health policy": {
                 "weight": 0,
                 "description": "Regular policy term"
+            },
+            "ultraprocessed": {
+                "weight": 1,
+                "description": "Recurring food and nutrition alarm term"
             },
             "universal healthcare": {
                 "weight": 3,

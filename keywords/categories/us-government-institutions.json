@@ -799,6 +799,10 @@
                 "weight": 0,
                 "description": "Common political conflict term"
             },
+            "Secret Service": {
+                "weight": 2,
+                "description": "Federal agency recurring in investigation and threat coverage"
+            },
             "Secretary of Agriculture": {
                 "weight": 0,
                 "description": "Basic position title"
