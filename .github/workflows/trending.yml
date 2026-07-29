@@ -1,0 +1,35 @@
+name: Update trending controversies
+
+on:
+  schedule:
+    # Four times a day, offset from the top of the hour to be polite to feeds
+    - cron: '23 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: trending
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Scour headlines and publish
+        env:
+          BRAVE_API_KEY: ${{ secrets.BRAVE_API_KEY }}
+          GIST_PAT: ${{ secrets.GIST_PAT }}
+          LEDGER_GIST_ID: ${{ secrets.LEDGER_GIST_ID }}
+        run: node scripts/trending/update.mjs
