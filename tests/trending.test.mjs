@@ -667,3 +667,77 @@ describe('readCuratedNewDevelopments', () => {
         expect(await readCuratedNewDevelopments(dir)).toEqual({});
     });
 });
+
+import { mergeCuratedIntoCategory, publishedNamesEqual } from '../scripts/trending/publish.mjs';
+
+const categoryWith = keywords => ({
+    'New Developments': {
+        description: "Today's controversies from across the news spectrum, updated automatically",
+        updatedAt: '2026-07-29T00:00:00.000Z',
+        keywords
+    }
+});
+
+describe('mergeCuratedIntoCategory', () => {
+    it('adds curated entries alongside trending ones', () => {
+        const merged = mergeCuratedIntoCategory(
+            categoryWith({ Fauci: { weight: 3, description: 'In 9 outlets across the spectrum (since 2026-07-27)' } }),
+            { 'Bryan Kohberger': { weight: 3, description: 'case' } }
+        );
+        expect(Object.keys(merged['New Developments'].keywords).sort())
+            .toEqual(['Bryan Kohberger', 'Fauci']);
+    });
+
+    it('lets the curated entry win when a name collides, since curation is authoritative', () => {
+        const merged = mergeCuratedIntoCategory(
+            categoryWith({ 'Bryan Kohberger': { weight: 1, description: 'In 3 outlets across the spectrum (since 2026-07-29)' } }),
+            { 'Bryan Kohberger': { weight: 3, description: 'case' } }
+        );
+        expect(merged['New Developments'].keywords['Bryan Kohberger'])
+            .toEqual({ weight: 3, description: 'case' });
+    });
+
+    it('publishes curated entries even when no trending phrase qualified', () => {
+        const merged = mergeCuratedIntoCategory(categoryWith({}), {
+            'Bryan Kohberger': { weight: 3, description: 'case' }
+        });
+        expect(Object.keys(merged['New Developments'].keywords)).toEqual(['Bryan Kohberger']);
+    });
+
+    it('does not mutate its input', () => {
+        const original = categoryWith({});
+        mergeCuratedIntoCategory(original, { X: { weight: 2, description: 'd' } });
+        expect(Object.keys(original['New Developments'].keywords)).toEqual([]);
+    });
+});
+
+describe('publishedNamesEqual', () => {
+    it('ignores updatedAt', () => {
+        const a = categoryWith({ Fauci: { weight: 3, description: 'd' } });
+        const b = categoryWith({ Fauci: { weight: 3, description: 'd' } });
+        b['New Developments'].updatedAt = '2999-01-01T00:00:00.000Z';
+        expect(publishedNamesEqual(a, b)).toBe(true);
+    });
+
+    it('is insensitive to key order', () => {
+        const a = categoryWith({ A: { weight: 1, description: 'd' }, B: { weight: 2, description: 'e' } });
+        const b = categoryWith({ B: { weight: 2, description: 'e' }, A: { weight: 1, description: 'd' } });
+        expect(publishedNamesEqual(a, b)).toBe(true);
+    });
+
+    it('detects a weight change', () => {
+        const a = categoryWith({ Fauci: { weight: 3, description: 'd' } });
+        const b = categoryWith({ Fauci: { weight: 2, description: 'd' } });
+        expect(publishedNamesEqual(a, b)).toBe(false);
+    });
+
+    it('detects a description change', () => {
+        const a = categoryWith({ Fauci: { weight: 3, description: 'd' } });
+        const b = categoryWith({ Fauci: { weight: 3, description: 'e' } });
+        expect(publishedNamesEqual(a, b)).toBe(false);
+    });
+
+    it('treats a missing or unparseable remote payload as different', () => {
+        expect(publishedNamesEqual(categoryWith({}), null)).toBe(false);
+    });
+});

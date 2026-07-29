@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 // Fetch political headlines across the spectrum, score the day's
-// controversies, and refresh keywords/trending.json + trending-state.json.
-// Run by .github/workflows/trending.yml every 6 hours. No dependencies --
-// plain Node 22 with built-in fetch.
+// controversies, and publish them to the New Developments gist. Run by
+// .github/workflows/trending.yml every 6 hours. No dependencies -- plain
+// Node 22 with built-in fetch.
 
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
@@ -19,11 +19,15 @@ import {
     excludePermanent
 } from './lib.mjs';
 import { readCatalogKeywords, readCuratedNewDevelopments } from './catalog.mjs';
+import { mergeCuratedIntoCategory, publishedNamesEqual } from './publish.mjs';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
-const STATE_PATH = path.join(repoRoot, 'keywords', 'trending-state.json');
-const OUTPUT_PATH = path.join(repoRoot, 'keywords', 'trending.json');
 const KEYWORDS_DIR = path.join(repoRoot, 'keywords');
+const PUBLISH_GIST_ID = '3488593dcc622acc736055fa00a9745e';
+const PUBLISH_GIST_FILE = 'new-development.json';
+const LEDGER_GIST_ID = process.env.LEDGER_GIST_ID;
+const LEDGER_GIST_FILE = 'trending-state.json';
+const GIST_API = 'https://api.github.com/gists';
 // The catalog holds thousands of keywords. This is a corruption tripwire,
 // not a tuning knob: anything near zero means we are about to publish
 // without exclusions, which is the failure this whole module prevents.
@@ -66,12 +70,36 @@ async function fetchBraveNews(apiKey) {
     })).filter(h => h.title);
 }
 
-async function loadJson(filePath, fallback) {
-    try {
-        return JSON.parse(await readFile(filePath, 'utf8'));
-    } catch {
-        return fallback;
-    }
+function gistHeaders() {
+    if (!process.env.GIST_PAT) throw new Error('GIST_PAT is not set');
+    return {
+        Accept: 'application/vnd.github+json',
+        Authorization: `Bearer ${process.env.GIST_PAT}`,
+        'X-GitHub-Api-Version': '2022-11-28',
+        'User-Agent': 'calm-the-chaos-trending/1.0'
+    };
+}
+
+async function readGistFile(gistId, fileName) {
+    const response = await fetch(`${GIST_API}/${gistId}`, {
+        headers: gistHeaders(),
+        signal: AbortSignal.timeout(FETCH_TIMEOUT_MS)
+    });
+    if (!response.ok) throw new Error(`gist ${gistId}: HTTP ${response.status}`);
+    const gist = await response.json();
+    const content = gist.files?.[fileName]?.content;
+    // A missing file is the first-run bootstrap case, not an error.
+    return content === undefined ? null : JSON.parse(content);
+}
+
+async function writeGistFile(gistId, fileName, value) {
+    const response = await fetch(`${GIST_API}/${gistId}`, {
+        method: 'PATCH',
+        headers: { ...gistHeaders(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ files: { [fileName]: { content: JSON.stringify(value, null, 2) + '\n' } } }),
+        signal: AbortSignal.timeout(FETCH_TIMEOUT_MS)
+    });
+    if (!response.ok) throw new Error(`gist ${gistId} PATCH: HTTP ${response.status}`);
 }
 
 async function main() {
@@ -111,7 +139,15 @@ async function main() {
     }
 
     const nowIso = new Date().toISOString();
-    const loadedState = await loadJson(STATE_PATH, { phrases: {} });
+
+    if (!LEDGER_GIST_ID) {
+        console.error('LEDGER_GIST_ID is not set; refusing to run without a ledger');
+        process.exit(1);
+    }
+    // Bootstrap on a missing file; abort on an unreadable one, because
+    // publishing against lost state would reset every heat score.
+    const loadedState = (await readGistFile(LEDGER_GIST_ID, LEDGER_GIST_FILE)) || { phrases: {} };
+
     const excludeKeywords = await readCatalogKeywords(KEYWORDS_DIR);
     if (excludeKeywords.size < MIN_PERMANENT_KEYWORDS) {
         console.error(
@@ -122,17 +158,28 @@ async function main() {
     console.log(`permanent keywords for exclusion: ${excludeKeywords.size}`);
 
     const candidates = extractCandidates(headlines);
-    // buildTrendingCategory filters excluded phrases again as the net for
-    // runs where the permanent fetch failed and something entered state
     const { prevState, scored } = excludePermanent(
         loadedState, scoreCandidates(candidates), excludeKeywords
     );
     const state = updateTrendingState(prevState, scored, nowIso);
-    const category = buildTrendingCategory(state, { excludeKeywords });
+    const curated = await readCuratedNewDevelopments(KEYWORDS_DIR);
+    const category = mergeCuratedIntoCategory(
+        buildTrendingCategory(state, { excludeKeywords }),
+        curated
+    );
 
-    await mkdir(path.dirname(OUTPUT_PATH), { recursive: true });
-    await writeFile(STATE_PATH, JSON.stringify(state, null, 2) + '\n');
-    await writeFile(OUTPUT_PATH, JSON.stringify(category, null, 2) + '\n');
+    const live = await readGistFile(PUBLISH_GIST_ID, PUBLISH_GIST_FILE);
+    if (publishedNamesEqual(category, live)) {
+        // Preserve the live updatedAt so the gist's history records only
+        // real changes to the mute list.
+        console.log('published set unchanged; skipping publish');
+    } else {
+        await writeGistFile(PUBLISH_GIST_ID, PUBLISH_GIST_FILE, category);
+        console.log(`published ${Object.keys(category['New Developments'].keywords).length} keywords`);
+    }
+
+    // Ledger last: sightings must not be recorded for a publish that failed.
+    await writeGistFile(LEDGER_GIST_ID, LEDGER_GIST_FILE, state);
 
     const phraseCount = Object.keys(state.phrases).length;
     const top = Object.values(state.phrases)
