@@ -1,37 +1,125 @@
 import { getStorageData } from '../../utils/chromeStorage.js';
 
+// Sites with a dedicated handler (e.g. CNN) finish initial filtering in a few
+// hundred milliseconds, which used to yank the mindful-pause message off
+// screen before it was readable. Non-forced removals wait until the message
+// has been visible at least this long.
+const MIN_MESSAGE_DISPLAY_MS = 2000;
+
+// Client-rendered sites (e.g. CNN) keep mounting content after the initial
+// scan finishes, and the mutation observer filters it as it appears. Lifting
+// the blur on the initial-scan checkpoint reveals unfiltered content that
+// then visibly disappears. Instead, the settled removal below holds the
+// overlay until the DOM has been quiet for a beat — capped so perpetual
+// churn (tickers, video players) cannot hold it forever.
+const SETTLE_QUIET_MS = 1000;
+const SETTLE_POLL_MS = 250;
+const SETTLE_MAX_WAIT_MS = 6000;
+
+// Absolute failsafe so a broken page can never stay blurred forever. Must
+// exceed the worst realistic initial-scan + settle time on slow connections.
+const MAX_OVERLAY_LIFETIME_MS = 20000;
+
+let lastPageActivityAt = 0;
+let settleLoopActive = false;
+
+// Called by the mutation observer on every DOM change batch.
+export function markPageActivity() {
+    lastPageActivityAt = Date.now();
+}
+
+// Remove the overlay once the page has stopped mutating (filtering caught
+// up), rather than the moment the initial scan finishes.
+export function removeImmediateBlurWhenSettled() {
+    const overlay = document.getElementById(OVERLAY_ID);
+    if (!overlay || settleLoopActive) {
+        if (!overlay) removeImmediateBlur();
+        return;
+    }
+
+    settleLoopActive = true;
+    const settleStartedAt = Date.now();
+    const check = () => {
+        const quietFor = Date.now() - lastPageActivityAt;
+        const waited = Date.now() - settleStartedAt;
+        if (quietFor >= SETTLE_QUIET_MS || waited >= SETTLE_MAX_WAIT_MS) {
+            settleLoopActive = false;
+            traceBlurEvent(`settled quiet=${quietFor}ms waited=${waited}ms`);
+            removeImmediateBlur();
+            return;
+        }
+        setTimeout(check, SETTLE_POLL_MS);
+    };
+    check();
+}
+
+// Diagnostic breadcrumb trail for the blur lifecycle, written to a DOM
+// attribute so it can be read from any world (page console, devtools,
+// automation) after the fact: data-calm-chaos-log on <html>.
+export function traceBlurEvent(event) {
+    try {
+        const root = document.documentElement;
+        if (!root) return;
+        const existing = root.getAttribute('data-calm-chaos-log') || '';
+        if (existing.length > 4000) return;
+        const now = Math.round(globalThis.performance?.now?.() ?? 0);
+        const entry = `${now}:${event}`;
+        root.setAttribute('data-calm-chaos-log', existing ? `${existing}|${entry}` : entry);
+    } catch (_error) {
+        // Diagnostics must never break the page.
+    }
+}
+
+// Cosmetic ad-block filters (e.g. Brave Shields annoyance lists) hide
+// full-screen elements whose names look like paywall or consent overlays —
+// the old #calm-chaos-blur-overlay id was display:none'd on cnn.com. Use a
+// neutral id and force the critical styles with !important so a stylesheet
+// rule cannot silently hide the pause.
+const OVERLAY_ID = 'calm-chaos-mindful-pause';
+
+function applyImportantStyles(element, styles) {
+    if (!element.style?.setProperty) return;
+    for (const [property, value] of Object.entries(styles)) {
+        element.style.setProperty(property, value, 'important');
+    }
+}
+
 // Create and show blur overlay
 export async function showImmediateBlur() {
     // Remove any existing overlay first (but don't remove initial blur yet)
-    const existingOverlay = document.getElementById('calm-chaos-blur-overlay');
+    const existingOverlay = document.getElementById(OVERLAY_ID);
     if (existingOverlay && existingOverlay.parentNode) {
         existingOverlay.parentNode.removeChild(existingOverlay);
     }
 
     const overlay = document.createElement('div');
-    overlay.id = 'calm-chaos-blur-overlay';
-    overlay.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        backdrop-filter: blur(10px);
-        background-color: rgba(255, 255, 255, 0.5);
-        z-index: 999999;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    `;
+    overlay.id = OVERLAY_ID;
+    applyImportantStyles(overlay, {
+        'position': 'fixed',
+        'top': '0',
+        'left': '0',
+        'width': '100%',
+        'height': '100%',
+        'backdrop-filter': 'blur(10px)',
+        'background-color': 'rgba(255, 255, 255, 0.5)',
+        'z-index': '2147483647',
+        'display': 'flex',
+        'justify-content': 'center',
+        'align-items': 'center',
+        'visibility': 'visible',
+        'opacity': '1'
+    });
 
-    // Set timeout to automatically remove blur after 10 seconds
+    // Absolute failsafe: force the blur down even if filtering never settles
     setTimeout(() => {
-        removeImmediateBlur();
-    }, 10000);
+        traceBlurEvent('failsafe-cap');
+        removeImmediateBlur(true);
+    }, MAX_OVERLAY_LIFETIME_MS);
 
     // Check if message should be shown
     const settings = await getStorageData(['showBlurMessage']);
     const showMessage = settings.showBlurMessage !== false; // Default to true if not set
+    traceBlurEvent(`show-blur msg=${showMessage} vis=${document.visibilityState}`);
 
     if (showMessage) {
         const messageContainer = document.createElement('div');
@@ -79,13 +167,15 @@ export async function showImmediateBlur() {
                 100% { transform: translateY(0px); }
             }
         `;
-        document.head.appendChild(style);
+        overlay.appendChild(style);
 
         messageContainer.appendChild(emojis);
         messageContainer.appendChild(message);
         overlay.appendChild(messageContainer);
+        overlay.__mindfulMessageShownAt = Date.now();
     }
     document.documentElement.appendChild(overlay);
+    traceBlurEvent('overlay-attached');
 
     // Only remove the initial blur after the new overlay is in place
     // This ensures continuous coverage without any gaps
@@ -96,7 +186,18 @@ export async function showImmediateBlur() {
 
 // Remove blur overlay
 export function removeImmediateBlur(force = false) {
-    const overlay = document.getElementById('calm-chaos-blur-overlay');
+    const overlay = document.getElementById(OVERLAY_ID);
+
+    if (overlay && !force && overlay.__mindfulMessageShownAt) {
+        const remaining = MIN_MESSAGE_DISPLAY_MS - (Date.now() - overlay.__mindfulMessageShownAt);
+        if (remaining > 0) {
+            traceBlurEvent(`remove-deferred ${remaining}ms`);
+            setTimeout(() => removeImmediateBlur(), remaining);
+            return;
+        }
+    }
+
+    traceBlurEvent(`remove force=${force} overlay=${Boolean(overlay)}`);
     if (overlay && overlay.parentNode) {
         overlay.parentNode.removeChild(overlay);
     }

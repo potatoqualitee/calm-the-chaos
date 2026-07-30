@@ -145,6 +145,20 @@ const nodeHider = new class NodeHider {
             container.title
         ].filter(Boolean).forEach(value => parts.add(value));
 
+        const storedContentElements = new Set([
+            container,
+            ...Array.from(container.querySelectorAll?.('[data-original-content]') || [])
+        ]);
+        storedContentElements.forEach(element => {
+            const originalContent = element.dataset?.originalContent;
+            if (!originalContent) return;
+
+            const template = document.createElement('template');
+            template.innerHTML = originalContent;
+            const originalText = template.content.textContent;
+            if (originalText?.trim()) parts.add(originalText);
+        });
+
         const mediaElements = [];
         if (container.matches('img, picture, source, video, svg')) {
             mediaElements.push(container);

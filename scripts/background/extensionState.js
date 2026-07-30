@@ -1,4 +1,5 @@
 import { loadDefaultKeywordCatalog } from './defaultKeywordLoader.js';
+import { seedDefaultDisabledGroups } from './defaultDisabledGroups.js';
 import { migrateManagedGroupExtras, reconcileKeywordCatalog } from './keywordCatalogMigration.js';
 import { DEFAULT_IGNORED_URLS } from '../core/config/ignoredUrls.js';
 import { DEFAULT_ELEMENT_GROUPS } from '../core/config/elements.js';
@@ -102,10 +103,19 @@ async function initializeKeywordGroups() {
     'retiredDefaultKeywords',
     'pinnedKeywords',
     'disabledGroups',
-    'disabledKeywords'
+    'disabledKeywords',
+    'appliedDefaultDisabledGroups'
   ]);
 
   const storedGroups = stored.keywordGroups || {};
+  const seeded = seedDefaultDisabledGroups({
+    catalogGroups,
+    enabledGroups,
+    disabledGroups: stored.disabledGroups,
+    disabledKeywords: stored.disabledKeywords,
+    appliedDefaultDisabledGroups: stored.appliedDefaultDisabledGroups
+  });
+
   if (!manifest) {
     if (Object.keys(storedGroups).length > 0) {
       console.error('Preserving stored keywords because catalog migration metadata failed:', manifestError);
@@ -114,7 +124,10 @@ async function initializeKeywordGroups() {
     await setStorage({
       keywordGroups: enabledGroups,
       keywordCatalogSnapshot: catalogGroups,
-      keywordCatalogEnabledSnapshot: enabledGroups
+      keywordCatalogEnabledSnapshot: enabledGroups,
+      disabledGroups: seeded.disabledGroups,
+      disabledKeywords: seeded.disabledKeywords,
+      appliedDefaultDisabledGroups: seeded.appliedDefaultDisabledGroups
     });
     return;
   }
@@ -132,8 +145,8 @@ async function initializeKeywordGroups() {
     nextCatalogGroups: catalogGroups,
     customKeywords: stored.customKeywords,
     customKeywordMeta: stored.customKeywordMeta,
-    disabledGroups: stored.disabledGroups,
-    disabledKeywords: stored.disabledKeywords,
+    disabledGroups: seeded.disabledGroups,
+    disabledKeywords: seeded.disabledKeywords,
     manifest,
     hadSnapshot,
     dynamicCategories: [...DYNAMIC_CATALOG_CATEGORIES]
@@ -147,7 +160,7 @@ async function initializeKeywordGroups() {
     customKeywordMeta: migratedExtras.customKeywordMeta,
     retiredDefaultKeywords: stored.retiredDefaultKeywords,
     pinnedKeywords: stored.pinnedKeywords,
-    disabledGroups: stored.disabledGroups,
+    disabledGroups: seeded.disabledGroups,
     disabledKeywords: migratedExtras.disabledKeywords,
     manifest
   });
@@ -171,7 +184,9 @@ async function initializeKeywordGroups() {
     customKeywordMeta: reconciled.customKeywordMeta,
     retiredDefaultKeywords: reconciled.retiredDefaultKeywords,
     pinnedKeywords: reconciled.pinnedKeywords,
-    disabledKeywords: reconciled.disabledKeywords
+    disabledGroups: seeded.disabledGroups,
+    disabledKeywords: reconciled.disabledKeywords,
+    appliedDefaultDisabledGroups: seeded.appliedDefaultDisabledGroups
   });
 }
 

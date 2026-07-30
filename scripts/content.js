@@ -7,7 +7,7 @@ import { nodeHider } from './core/nodeHidingModule.js';
 import { isExtensionEnabledOnUrl } from './core/urlModule.js';
 import { chromeStorageGet, isExtensionContextValid } from './utils/chromeApi.js';
 import { needsImmediateBlur } from './core/config/blurSites.js';
-import { removeImmediateBlur, showImmediateBlur } from './core/config/immediateBlur.js';
+import { removeImmediateBlur, showImmediateBlur, traceBlurEvent } from './core/config/immediateBlur.js';
 
 let lifecycleGeneration = 0;
 let initializationQueue = Promise.resolve();
@@ -26,10 +26,24 @@ function cleanup() {
 }
 
 function waitForDocumentBody() {
+    // Resolve as soon as <body> exists rather than waiting for
+    // DOMContentLoaded: on slow, heavy pages (CNN takes ~9s to reach DCL)
+    // that difference is the filtering starting seconds earlier, working
+    // through content while it streams in instead of all at once at the end.
     if (document.body) return Promise.resolve();
-    return new Promise(resolve =>
-        document.addEventListener('DOMContentLoaded', resolve, { once: true })
-    );
+    return new Promise(resolve => {
+        const observer = new MutationObserver(() => {
+            if (document.body) {
+                observer.disconnect();
+                resolve();
+            }
+        });
+        observer.observe(document.documentElement, { childList: true });
+        document.addEventListener('DOMContentLoaded', () => {
+            observer.disconnect();
+            resolve();
+        }, { once: true });
+    });
 }
 
 function initializeExtension() {
@@ -42,6 +56,7 @@ function initializeExtension() {
         if (generation !== lifecycleGeneration) return;
         await waitForDocumentBody();
         if (generation !== lifecycleGeneration) return;
+        traceBlurEvent('body-ready');
         await initializeRegex();
         if (generation !== lifecycleGeneration) return;
         clearContentDetectionCache();
@@ -82,6 +97,7 @@ async function checkAndInitialize() {
         // Check if extension is enabled for this URL
         if (!isExtensionEnabledOnUrl(currentUrl, ignoredDomains, disabledDomainGroups, filteringEnabled, enabledDomains, filterAllSites)) {
             console.log('Extension disabled for this URL, skipping initialization');
+            traceBlurEvent('disabled-url');
             // Force remove any blur since filtering is disabled
             removeImmediateBlur(true);
             cleanup(); // Ensure everything is cleaned up
@@ -91,6 +107,7 @@ async function checkAndInitialize() {
         // Skip all processing if SpeedReader is detected
         if (isSpeedReader()) {
             console.log('SpeedReader detected - skipping all processing');
+            traceBlurEvent('speedreader-skip');
             cleanup(); // Ensure everything is cleaned up
             return;
         }
@@ -99,6 +116,8 @@ async function checkAndInitialize() {
         if (needsImmediateBlur(hostname)) {
             console.debug('Applying immediate blur for:', hostname);
             await showImmediateBlur();
+        } else {
+            traceBlurEvent(`not-blur-site ${hostname}`);
         }
 
         // Initialize extension features
@@ -119,13 +138,30 @@ async function checkAndInitialize() {
     // Set initial state
     document.documentElement.setAttribute('data-calm-chaos-state', 'loading');
 
+    // Stamp the running build so a stale extension load is diagnosable from
+    // any tab: document.documentElement.dataset.calmChaosVersion
+    try {
+        document.documentElement.setAttribute(
+            'data-calm-chaos-version', chrome.runtime.getManifest().version
+        );
+    } catch (_error) {
+        // Never let diagnostics block initialization.
+    }
+
     // If SpeedReader is detected immediately, prevent blur
     if (isSpeedReader()) {
         document.documentElement.classList.add('blur-removed');
     }
 
+    traceBlurEvent(
+        `cs-start vis=${document.visibilityState} prerender=${document.prerendering === true} ready=${document.readyState}`
+    );
+
     // Handle visibility changes
     document.addEventListener('visibilitychange', () => {
+        traceBlurEvent(
+            `vis-change ${document.visibilityState} state=${document.documentElement.getAttribute('data-calm-chaos-state')}`
+        );
         if (document.visibilityState === 'visible') {
             // Only remove blur-removed class if SpeedReader is not active and content isn't filtered
             if (!isSpeedReader() && document.documentElement.getAttribute('data-calm-chaos-state') !== 'filtered') {

@@ -36,8 +36,11 @@ The immediate blur system provides instant content protection for sensitive site
    - The initial blur remains while checking site configuration
    - A friendly message with floating emojis appears to indicate content filtering is in progress
    - Content processing proceeds normally under the overlay
-   - The blur will automatically remove after 10 seconds as a failsafe
-   - Once filtering is successfully complete, all blurs are removed
+   - The message stays visible for at least 2 seconds so fast scans don't reduce it to a flash
+   - Once initial filtering completes, the overlay waits for the DOM to go quiet
+     (1s without mutations, at most 6s extra) so client-rendered content is
+     filtered before the reveal — never a flash of unfiltered content
+   - A 20-second failsafe force-removes the blur so it can never get stuck
 
 5. The blur persists through tab state changes:
    - Reapplied when tab becomes visible if SpeedReader is not active
@@ -162,9 +165,10 @@ The system consists of four main parts:
 
 The system uses a multi-phase approach:
 1. First, an immediate CSS-based blur is injected before any content loads (unless SpeedReader is detected)
-2. A friendly message with floating emojis appears to indicate filtering is in progress
-3. A 10-second timeout ensures the blur doesn't get stuck
-4. Finally, all blurs are removed once content is filtered
+2. A friendly message with floating emojis appears to indicate filtering is in progress (minimum 2 seconds on screen)
+3. Once the initial scan completes, the overlay holds until the DOM stops mutating (1s quiet, capped at +6s) so mutation-driven filtering finishes before the reveal
+4. A 20-second failsafe force-removes the blur so it can never get stuck
+5. The overlay element uses a neutral id (`calm-chaos-mindful-pause`) and inline `!important` styles because ad-block cosmetic filters hide elements that look like paywall/consent overlays
 
 This approach ensures:
 - No content is ever visible before being filtered (except in SpeedReader mode)

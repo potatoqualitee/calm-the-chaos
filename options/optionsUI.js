@@ -1,5 +1,6 @@
 // optionsUI.js
 import { PRECONFIGURED_DOMAINS } from '../scripts/core/config/preconfiguredDomains.js';
+import { keywordGroupId, keywordNavItems } from './keywordNav.js';
 import * as storage from './optionsStorage.js';
 
 // New function to update stats table
@@ -304,12 +305,32 @@ export function updateElementGroups(elementGroups, disabledElementGroups, disabl
   });
 }
 
+export function updateCategoryNav(groupNames) {
+  const nav = document.getElementById('categoryNav');
+  if (!nav) return;
+  nav.innerHTML = '';
+
+  keywordNavItems(groupNames).forEach(({ id, label }) => {
+    const item = document.createElement('li');
+    item.className = 'category-nav-item';
+
+    const link = document.createElement('a');
+    link.href = `#${id}`;
+    link.textContent = label;
+
+    item.appendChild(link);
+    nav.appendChild(item);
+  });
+}
+
 export function updateKeywordGroups(
   groups, customKeywords, disabledGroups, disabledKeywords, retiredDefaultKeywords = []
 ) {
   const container = document.getElementById('keywordGroups');
   if (!container) return;
   container.innerHTML = '';
+
+  updateCategoryNav(Object.keys(groups));
 
   const refresh = async () => {
     const result = await storage.getStorageData([
@@ -325,12 +346,7 @@ export function updateKeywordGroups(
 
   Object.keys(groups).sort().forEach(groupName => {
     const keywords = groups[groupName];
-    const groupId = groupName
-      .replace(/[^a-zA-Z0-9\s-()]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/\(|\)/g, '')
-      .replace(/-+/g, '-')
-      .trim();
+    const groupId = keywordGroupId(groupName);
     const group = document.createElement('div');
     group.className = 'keyword-group';
     group.id = groupId;

@@ -27,32 +27,8 @@
           Enable or disable entire groups or individual keywords. Changes are saved automatically.
         </div>
         <nav>
-          <ul class="category-nav-list">
-            <li class="category-nav-item"><a href="#Climate-and-Environment">Climate and Environment</a></li>
-            <li class="category-nav-item"><a href="#Economic-Policy">Economic Policy</a></li>
-            <li class="category-nav-item"><a href="#Education">Education</a></li>
-            <li class="category-nav-item"><a href="#Gun-Policy">Gun Policy</a></li>
-            <li class="category-nav-item"><a href="#Healthcare-and-Public-Health">Healthcare and Public Health</a></li>
-            <li class="category-nav-item"><a href="#Immigration">Immigration</a></li>
-            <li class="category-nav-item"><a href="#International-Coverage">International Coverage</a></li>
-            <li class="category-nav-item"><a href="#LGBTQ">LGBTQ</a></li>
-            <li class="category-nav-item"><a href="#Media-Personalities">Media Personalities</a></li>
-            <li class="category-nav-item"><a href="#Military-and-Defense">Military and Defense</a></li>
-            <li class="category-nav-item"><a href="#New-Developments">New Developments</a></li>
-            <li class="category-nav-item"><a href="#Political-Organizations">Political Organizations</a></li>
-            <li class="category-nav-item"><a href="#Political-Rhetoric">Political Rhetoric</a></li>
-            <li class="category-nav-item"><a href="#Political-Violence-and-Security-Threats">Political Violence and Security Threats</a></li>
-            <li class="category-nav-item"><a href="#Race-Relations">Race Relations</a></li>
-            <li class="category-nav-item"><a href="#Relational-Violence">Relational Violence</a></li>
-            <li class="category-nav-item"><a href="#Religion">Religion</a></li>
-            <li class="category-nav-item"><a href="#Reproductive-Health">Reproductive Health</a></li>
-            <li class="category-nav-item"><a href="#Social-Policy">Social Policy</a></li>
-            <li class="category-nav-item"><a href="#US-Government-Institutions">US Government Institutions</a></li>
-            <li class="category-nav-item"><a href="#US-Political-Figures-Full-Name">US Political Figures (Full Name)</a></li>
-            <li class="category-nav-item"><a href="#US-Political-Figures-Single-Name">US Political Figures (Single Name)</a></li>
-            <li class="category-nav-item"><a href="#Vaccine-Policy">Vaccine Policy</a></li>
-            <li class="category-nav-item"><a href="#World-Leaders">World Leaders</a></li>
-          </ul>
+          <!-- Built from the live keyword groups by updateCategoryNav(). -->
+          <ul class="category-nav-list" id="categoryNav"></ul>
         </nav>
         <div class="search-container">
           <input type="text" id="filterInput" placeholder="Search ignored keywords..." class="search-input">
@@ -168,7 +144,7 @@
             <input type="checkbox" id="showBlurMessage" checked>
             <span class="slider"></span>
           </label>
-          <span class="mode-text">Show "Taking a mindful pause" Message</span>
+          <label class="mode-text" for="showBlurMessage">Show "Taking a mindful pause" Message</label>
         </div>
       </div>
       <div class="content-section">

@@ -5,7 +5,7 @@ import { findMinimalContentContainer, handleGenericMedia } from '../../elementPr
 import { hideNodes } from '../../nodeHidingModule.js';
 import { containsBlockedContent, startNewDetectionCycle } from '../../contentDetectionModule.js';
 import { handlerRegistry } from '../../handlers/handlerRegistry.js';
-import { removeImmediateBlur } from '../../config/immediateBlur.js';
+import { removeImmediateBlurWhenSettled, traceBlurEvent } from '../../config/immediateBlur.js';
 
 const SETTINGS_KEYS = [
     'ignoredDomains',
@@ -174,8 +174,12 @@ export class FilterProcessor {
     }
 
     finalizeInitialFiltering() {
+        traceBlurEvent('initial-filtering-done');
         document.documentElement.setAttribute('data-calm-chaos-state', 'filtered');
-        removeImmediateBlur();
+        // Client-rendered sites keep mounting content after the initial scan;
+        // hold the blur until the DOM goes quiet so users never see content
+        // that is about to be filtered away.
+        removeImmediateBlurWhenSettled();
     }
 
     async processContent(nodes = null) {

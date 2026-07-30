@@ -114,83 +114,6 @@ class RedditHandler extends BaseHandler {
         this.nodesToHide.add(comment);
     }
 
-    hideCommentContent(comment) {
-        // Find the comment content div and replace its text
-        const contentDiv = comment.querySelector('div[slot="comment"]');
-        if (contentDiv) {
-            // Skip if content was manually revealed
-            if (comment.dataset.contentRevealed === 'true') {
-                return;
-            }
-
-            // Store original content elements
-            const originalContent = Array.from(contentDiv.children);
-
-            // Store non-action content for restoration
-            const contentToRestore = originalContent.filter(child =>
-                !child.classList.contains('comment-actions-bar') &&
-                !child.classList.contains('comment-metadata')
-            );
-
-            // Store original content in dataset
-            contentDiv.dataset.originalContent = contentToRestore.map(el => el.outerHTML).join('');
-
-            // Clear the content div and add the hidden comment message with styling
-            const hiddenMessage = document.createElement('p');
-            hiddenMessage.className = 'text-neutral-content-weak';
-            hiddenMessage.textContent = '--comment hidden--';
-            hiddenMessage.style.cursor = 'pointer';
-
-            // Add click handler to restore content
-            hiddenMessage.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (contentDiv.dataset.originalContent) {
-                    // Create a temporary container
-                    const temp = document.createElement('div');
-                    temp.innerHTML = contentDiv.dataset.originalContent;
-
-                    // Clear existing content except action buttons/metadata
-                    const actionsAndMetadata = originalContent.filter(child =>
-                        child.classList.contains('comment-actions-bar') ||
-                        child.classList.contains('comment-metadata')
-                    );
-                    contentDiv.textContent = '';
-
-                    // Add restored content
-                    Array.from(temp.children).forEach(child => {
-                        contentDiv.appendChild(child);
-                    });
-
-                    // Re-add action buttons and metadata
-                    actionsAndMetadata.forEach(child => {
-                        contentDiv.appendChild(child);
-                    });
-
-                    // Mark as revealed to prevent re-processing
-                    comment.dataset.contentRevealed = 'true';
-
-                    // Clean up
-                    delete contentDiv.dataset.originalContent;
-                }
-            });
-
-            contentDiv.textContent = ''; // Clear existing content
-            contentDiv.appendChild(hiddenMessage);
-
-            // Re-add any action buttons or metadata that was at the bottom of the comment
-            originalContent.forEach(child => {
-                if (child.classList.contains('comment-actions-bar') ||
-                    child.classList.contains('comment-metadata')) {
-                    contentDiv.appendChild(child);
-                }
-            });
-
-            // Mark this comment as filtered for counting
-            comment.dataset.filtered = 'true';
-            this.nodesToHide.add(comment);
-        }
-    }
-
     getCommentContent(comment) {
         const contentDiv = comment.querySelector('div[slot="comment"]');
         if (!contentDiv) return '';
@@ -256,7 +179,9 @@ class RedditHandler extends BaseHandler {
 
                         const content = this.getCommentContent(comment);
                         if (containsBlockedContent(content).length > 0) {
-                            this.hideCommentContent(comment);
+                            // Preserve the original text so the shared hider can
+                            // track the match and create exactly one reveal layer.
+                            this.nodesToHide.add(comment);
                         }
                     }
                 }, 'Reddit reply comment');

@@ -1,4 +1,5 @@
 import { FilterProcessor } from './FilterProcessor.js';
+import { markPageActivity } from '../../config/immediateBlur.js';
 
 class ResettableWeakSet {
     constructor() {
@@ -41,6 +42,9 @@ export class FilteringMutationObserver {
     }
 
     queueMutations(mutations) {
+        // Every mutation batch counts as page activity: the blur overlay's
+        // settled removal holds until this goes quiet.
+        markPageActivity();
         mutations.forEach(mutation => {
             if (mutation.type === 'characterData') {
                 if (mutation.target.textContent?.trim()) this.addPendingNode(mutation.target);

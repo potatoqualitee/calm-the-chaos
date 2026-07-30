@@ -27,6 +27,7 @@ The following categories are defined in the [keywords/categories/](keywords/cate
 | Immigration | Terms used in border conflict and immigration controversy |
 | International Coverage | Language of international conflicts and diplomatic crises |
 | LGBTQ+ | Terms frequently used in contentious legislation and inflammatory coverage |
+| Major Sports Events | Recurring championships and tournaments that take over a timeline |
 | Media Personalities | Political commentators and media figures frequently involved in political coverage |
 | Military and Defense | Terms related to conflict, weapons, and military threats |
 | New Developments | Terms tracking emerging stories and breaking developments |
@@ -37,6 +38,7 @@ The following categories are defined in the [keywords/categories/](keywords/cate
 | Religion | Terms associated with religious conflict and discrimination |
 | Reproductive Health | Language around healthcare restrictions and rights conflicts |
 | Social Policy | Terms common in coverage of social crises and system failures |
+| Technology | Big tech companies, products, and AI services (off by default) |
 | US Government Institutions | Federal agencies, positions, and institutional terminology |
 | US Political Figures - Full Name | Notable figures in contentious political coverage |
 | US Political Figures - Single Name | Common references in controversial coverage |
