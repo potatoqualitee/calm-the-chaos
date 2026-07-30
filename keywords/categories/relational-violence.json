@@ -162,6 +162,14 @@
                 "weight": 2,
                 "description": "Frequent harm term"
             },
+            "stabbed": {
+                "weight": 3,
+                "description": "Graphic knife-attack term in crime coverage"
+            },
+            "stabbing": {
+                "weight": 3,
+                "description": "Graphic knife-attack term covering stabbing and stabbings"
+            },
             "stalking": {
                 "weight": 1,
                 "description": "Common harassment term"

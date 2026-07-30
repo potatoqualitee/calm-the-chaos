@@ -8,6 +8,11 @@
                 "description": "Convicted killer seeking to withdraw plea deal in heavily covered case",
                 "reviewAfter": "2026-08-29"
             },
+            "Hadi Matar": {
+                "weight": 2,
+                "description": "Man convicted in the terrorism trial over the Salman Rushdie stabbing",
+                "reviewAfter": "2026-08-30"
+            },
             "Nolan Wells": {
                 "weight": 3,
                 "description": "Teen football player whose death is a developing investigation drawing heavy coverage and speculation",
@@ -22,6 +27,11 @@
                 "weight": 3,
                 "description": "ICE-shooting victim in developing Houston story",
                 "reviewAfter": "2026-08-10"
+            },
+            "Salman Rushdie": {
+                "weight": 2,
+                "description": "Author at the center of developing terrorism-trial coverage of his stabbing",
+                "reviewAfter": "2026-08-30"
             }
         }
     }

@@ -134,6 +134,10 @@
                 "weight": 1,
                 "description": "Frequent conflict term"
             },
+            "missile": {
+                "weight": 2,
+                "description": "Root weapons term the strike/launch/test compounds miss on their own"
+            },
             "missile defense": {
                 "weight": 0,
                 "description": "Common defense system term"
@@ -234,6 +238,10 @@
             "troop surge": {
                 "weight": 0,
                 "description": "Common military strategy term"
+            },
+            "US strikes": {
+                "weight": 2,
+                "description": "Standard phrasing for American military action; can also read as \"US strikes a deal\""
             },
             "war games": {
                 "weight": 0,

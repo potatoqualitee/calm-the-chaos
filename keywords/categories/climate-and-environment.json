@@ -106,9 +106,17 @@
                 "weight": 3,
                 "description": "Frequent weather crisis term"
             },
+            "firenado": {
+                "weight": 2,
+                "description": "Fire whirl term in viral extreme-weather coverage"
+            },
             "flash flood": {
                 "weight": 1,
                 "description": "Common weather emergency term"
+            },
+            "flood": {
+                "weight": 3,
+                "description": "Root disaster term covering flood, floods and flooded coverage"
             },
             "flood warning": {
                 "weight": 2,
@@ -145,6 +153,10 @@
             "heat wave": {
                 "weight": 3,
                 "description": "Frequent weather crisis term"
+            },
+            "heavy rain": {
+                "weight": 2,
+                "description": "Frequent storm and flooding emergency term"
             },
             "hottest year": {
                 "weight": 1,
@@ -187,6 +199,10 @@
                 "weight": 0,
                 "description": "Regular weather phenomenon term"
             },
+            "quake": {
+                "weight": 2,
+                "description": "Shorthand disaster term; word-boundary matching keeps it clear of earthquake and Quaker"
+            },
             "renewable energy": {
                 "weight": 1,
                 "description": "Frequent energy policy term"
@@ -222,6 +238,10 @@
             "water crisis": {
                 "weight": 1,
                 "description": "Common resource scarcity term"
+            },
+            "water rescue": {
+                "weight": 2,
+                "description": "Frequent flood emergency response term"
             },
             "water scarcity": {
                 "weight": 1,

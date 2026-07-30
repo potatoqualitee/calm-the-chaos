@@ -26,6 +26,10 @@
                 "weight": 1,
                 "description": "Regular security concern term"
             },
+            "arrest": {
+                "weight": 1,
+                "description": "Broad enforcement root covering arrest, arrests and arrested across crime and ICE coverage"
+            },
             "assassination attempt": {
                 "weight": 3,
                 "description": "Highly frequent violence term"
@@ -41,6 +45,10 @@
             "blm protest shooting": {
                 "weight": 2,
                 "description": "Frequent protest violence term"
+            },
+            "bodycam": {
+                "weight": 1,
+                "description": "Police-footage release term in charged enforcement coverage"
             },
             "bomb threat": {
                 "weight": 3,
@@ -295,6 +303,14 @@
             "systemic violence": {
                 "weight": 2,
                 "description": "Frequent structural term"
+            },
+            "terrorism": {
+                "weight": 3,
+                "description": "Root term the domestic/political/religious compounds miss on their own"
+            },
+            "terrorist": {
+                "weight": 3,
+                "description": "Root term covering terrorist and terrorists outside the existing compounds"
             },
             "terrorist attack": {
                 "weight": 3,

@@ -22,6 +22,10 @@
                 "weight": 2,
                 "description": "Frequent financial term"
             },
+            "bond market": {
+                "weight": 1,
+                "description": "Common market-anxiety term in rate and deficit coverage"
+            },
             "capital gains": {
                 "weight": 0,
                 "description": "Technical tax term"
@@ -100,6 +104,10 @@
                 "weight": 2,
                 "description": "Energy-cost disruption term tied to conflict and supply shocks",
                 "lifecycle": "cyclical"
+            },
+            "Fed chair": {
+                "weight": 2,
+                "description": "Frequent central-bank conflict term"
             },
             "Fed rate": {
                 "weight": 1,

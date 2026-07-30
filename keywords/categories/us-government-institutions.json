@@ -1029,6 +1029,10 @@
                 "weight": 0,
                 "description": "Basic agency acronym"
             },
+            "VA secretary": {
+                "weight": 1,
+                "description": "Short title CNN and others use where \"Secretary of Veterans Affairs\" never appears"
+            },
             "Veterans Affairs Committee": {
                 "weight": 0,
                 "description": "Regular committee name"

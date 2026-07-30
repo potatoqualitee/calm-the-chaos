@@ -34,6 +34,10 @@
                 "weight": 1,
                 "description": "Moderate-use protective equipment term"
             },
+            "bullet": {
+                "weight": 2,
+                "description": "Root shooting-coverage term covering bullet and bullets"
+            },
             "bullet proof vest": {
                 "weight": 1,
                 "description": "Common protective equipment term"
@@ -169,6 +173,10 @@
             "self defense shooting": {
                 "weight": 1,
                 "description": "Common incident term"
+            },
+            "shooter": {
+                "weight": 3,
+                "description": "Root perpetrator term the active/school/armed compounds miss on their own"
             },
             "shooting": {
                 "weight": 3,

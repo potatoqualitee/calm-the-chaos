@@ -232,6 +232,11 @@
                 "weight": 1,
                 "description": "Frequent military term"
             },
+            "Moscow": {
+                "weight": 2,
+                "description": "Russian government metonym in war coverage; also matches Moscow, Idaho crime stories",
+                "lifecycle": "cyclical"
+            },
             "NATO": {
                 "weight": 2,
                 "description": "Alliance name in current Ukraine and transatlantic security coverage",

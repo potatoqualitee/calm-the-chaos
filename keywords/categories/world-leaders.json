@@ -89,6 +89,10 @@
                 "weight": 0,
                 "description": "Prime minister of the United Kingdom"
             },
+            "Kim Jong Un": {
+                "weight": 0,
+                "description": "North Korean head of state; unhyphenated spelling used by CNN and AP"
+            },
             "Kim Jong-un": {
                 "weight": 0,
                 "description": "North Korean head of state"
