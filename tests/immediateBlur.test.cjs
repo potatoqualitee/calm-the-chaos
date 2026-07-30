@@ -45,6 +45,13 @@ function findById(element, id) {
   return null;
 }
 
+// The settle loop is the only thing that schedules sub-second callbacks: the
+// overlay lifetime failsafe and the deferred message removal are seconds out.
+function takeSettlePoll(scheduled) {
+  const index = scheduled.findIndex(entry => entry.delay <= 1000);
+  return index === -1 ? null : scheduled.splice(index, 1)[0];
+}
+
 let importCounter = 0;
 
 async function importImmediateBlur() {
@@ -161,7 +168,8 @@ test('settled removal waits for the page to stop mutating', async () => {
     createElement: tagName => new FakeElement(tagName),
     getElementById: id => findById(documentElement, id)
   };
-  globalThis.__getStorageData = async () => ({ showBlurMessage: true });
+  // No message, so nothing but the quiet window can hold the overlay.
+  globalThis.__getStorageData = async () => ({ showBlurMessage: false });
   globalThis.setTimeout = (fn, delay) => { scheduled.push({ fn, delay }); return scheduled.length; };
   Date.now = () => fakeNow;
 
@@ -183,19 +191,21 @@ test('settled removal waits for the page to stop mutating', async () => {
     // Fresh mutations keep arriving: each poll must keep holding.
     fakeNow += 500;
     markPageActivity();
-    scheduled.pop().fn();
+    takeSettlePoll(scheduled).fn();
     assert.ok(
       findById(documentElement, 'calm-chaos-mindful-pause'),
       'ongoing mutations must keep the overlay up'
     );
 
-    // The page goes quiet (and the minimum display time has long passed).
-    fakeNow += 3000;
-    scheduled.pop().fn();
+    // The page goes quiet. This must release the overlay on the quiet window,
+    // well inside the maximum settle wait: a settle that only ever exits on
+    // its cap is a fixed sleep wearing a quiet check as a disguise.
+    fakeNow += 500;
+    takeSettlePoll(scheduled).fn();
     assert.equal(
       findById(documentElement, 'calm-chaos-mindful-pause'),
       null,
-      'a quiet page should finally release the overlay'
+      'a quiet page should be released by the quiet window, not the cap'
     );
   } finally {
     globalThis.document = originalDocument;
@@ -205,7 +215,7 @@ test('settled removal waits for the page to stop mutating', async () => {
   }
 });
 
-test('settled removal gives up holding after its maximum wait', async () => {
+test('settled removal gives up on a perpetually-mutating page within two seconds', async () => {
   const documentElement = new FakeElement('html');
   const originalDocument = globalThis.document;
   const originalGetStorageData = globalThis.__getStorageData;
@@ -220,7 +230,8 @@ test('settled removal gives up holding after its maximum wait', async () => {
     createElement: tagName => new FakeElement(tagName),
     getElementById: id => findById(documentElement, id)
   };
-  globalThis.__getStorageData = async () => ({ showBlurMessage: true });
+  // No message, so the settle wait alone decides when the overlay comes down.
+  globalThis.__getStorageData = async () => ({ showBlurMessage: false });
   globalThis.setTimeout = (fn, delay) => { scheduled.push({ fn, delay }); return scheduled.length; };
   Date.now = () => fakeNow;
 
@@ -233,19 +244,145 @@ test('settled removal gives up holding after its maximum wait', async () => {
     markPageActivity();
     removeImmediateBlurWhenSettled();
 
-    // A perpetually-mutating page (ticker, video player) must not hold the
-    // overlay forever: after the max settle wait it comes down anyway.
-    for (let elapsed = 0; elapsed <= 7000; elapsed += 500) {
-      fakeNow += 500;
+    // cnn.com never goes quiet: its video player and ad rotation mutate the DOM
+    // continuously, so only the cap can end this wait. Every millisecond of it
+    // is an opaque screen the user stares at after filtering already finished,
+    // so the cap has to be short.
+    let waited = 0;
+    while (findById(documentElement, 'calm-chaos-mindful-pause') && waited < 4000) {
+      const poll = takeSettlePoll(scheduled);
+      if (!poll) break;
+      fakeNow += poll.delay;
+      waited += poll.delay;
       markPageActivity();
-      const next = scheduled.pop();
-      if (!next) break;
-      next.fn();
+      poll.fn();
     }
+
     assert.equal(
       findById(documentElement, 'calm-chaos-mindful-pause'),
       null,
-      'the overlay must come down after the maximum settle wait'
+      `the overlay must come down after the maximum settle wait (waited ${waited}ms)`
+    );
+    assert.ok(
+      waited <= 2000,
+      `a churning page must not hold the overlay for seconds; waited ${waited}ms`
+    );
+  } finally {
+    globalThis.document = originalDocument;
+    globalThis.__getStorageData = originalGetStorageData;
+    globalThis.setTimeout = originalSetTimeout;
+    Date.now = originalDateNow;
+  }
+});
+
+test('the lifetime failsafe forces the overlay down within ten seconds', async () => {
+  const documentElement = new FakeElement('html');
+  const originalDocument = globalThis.document;
+  const originalGetStorageData = globalThis.__getStorageData;
+  const originalSetTimeout = globalThis.setTimeout;
+  const scheduled = [];
+
+  globalThis.document = {
+    head: null,
+    documentElement,
+    createElement: tagName => new FakeElement(tagName),
+    getElementById: id => findById(documentElement, id)
+  };
+  globalThis.__getStorageData = async () => ({ showBlurMessage: true });
+  globalThis.setTimeout = (fn, delay) => { scheduled.push({ fn, delay }); return scheduled.length; };
+
+  try {
+    const { showImmediateBlur } = await importImmediateBlur();
+
+    await showImmediateBlur();
+
+    // Filtering never finishes here, so no settle wait ever runs and only the
+    // lifetime failsafe can end this. A full-screen opaque overlay is the worst
+    // thing the extension can do to a page: the ceiling has to stay tight.
+    const failsafe = scheduled.find(entry => entry.delay <= 10000);
+    assert.ok(
+      failsafe,
+      `nothing brings the overlay down inside 10s (scheduled: ${scheduled.map(entry => entry.delay).join(', ')})`
+    );
+
+    failsafe.fn();
+    assert.equal(
+      findById(documentElement, 'calm-chaos-mindful-pause'),
+      null,
+      'the failsafe must force the overlay down even with the message still up'
+    );
+  } finally {
+    globalThis.document = originalDocument;
+    globalThis.__getStorageData = originalGetStorageData;
+    globalThis.setTimeout = originalSetTimeout;
+  }
+});
+
+test('a replacement overlay gets its own settle wait, not the previous one\'s remainder', async () => {
+  const documentElement = new FakeElement('html');
+  const originalDocument = globalThis.document;
+  const originalGetStorageData = globalThis.__getStorageData;
+  const originalSetTimeout = globalThis.setTimeout;
+  const originalDateNow = Date.now;
+  const scheduled = [];
+  let fakeNow = 100000;
+
+  globalThis.document = {
+    head: null,
+    documentElement,
+    createElement: tagName => new FakeElement(tagName),
+    getElementById: id => findById(documentElement, id)
+  };
+  globalThis.__getStorageData = async () => ({ showBlurMessage: false });
+  globalThis.setTimeout = (fn, delay) => { scheduled.push({ fn, delay }); return scheduled.length; };
+  Date.now = () => fakeNow;
+
+  try {
+    const {
+      showImmediateBlur, removeImmediateBlurWhenSettled, markPageActivity
+    } = await importImmediateBlur();
+
+    await showImmediateBlur();
+    markPageActivity();
+    removeImmediateBlurWhenSettled();
+
+    // Spend most of the first overlay's settle budget while the page churns.
+    let burned = 0;
+    while (burned < 1250) {
+      const poll = takeSettlePoll(scheduled);
+      assert.ok(poll, 'the first overlay should still be settling');
+      fakeNow += poll.delay;
+      burned += poll.delay;
+      markPageActivity();
+      poll.fn();
+    }
+    assert.ok(
+      findById(documentElement, 'calm-chaos-mindful-pause'),
+      'setup: the first overlay must still be up when the re-init happens'
+    );
+
+    // A re-init (extension reload, keyword update, tab wake-up) replaces the
+    // overlay: content.js calls cleanup() then showImmediateBlur().
+    await showImmediateBlur();
+    markPageActivity();
+    removeImmediateBlurWhenSettled();
+
+    // The page is still mutating, so the replacement overlay should be held for
+    // its own settle wait. A settle loop left over from the previous overlay
+    // would release it almost immediately, on a budget already spent.
+    let survived = 0;
+    while (findById(documentElement, 'calm-chaos-mindful-pause') && survived < 4000) {
+      const poll = takeSettlePoll(scheduled);
+      if (!poll) break;
+      fakeNow += poll.delay;
+      survived += poll.delay;
+      markPageActivity();
+      poll.fn();
+    }
+
+    assert.ok(
+      survived >= 1000,
+      `the replacement overlay must be held for its own settle wait; it lasted ${survived}ms`
     );
   } finally {
     globalThis.document = originalDocument;

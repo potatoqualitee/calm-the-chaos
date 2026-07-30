@@ -8,24 +8,48 @@ const MIN_MESSAGE_DISPLAY_MS = 2000;
 
 // Client-rendered sites (e.g. CNN) keep mounting content after the initial
 // scan finishes, and the mutation observer filters it as it appears. Lifting
-// the blur on the initial-scan checkpoint reveals unfiltered content that
-// then visibly disappears. Instead, the settled removal below holds the
-// overlay until the DOM has been quiet for a beat — capped so perpetual
-// churn (tickers, video players) cannot hold it forever.
-const SETTLE_QUIET_MS = 1000;
+// the blur on the initial-scan checkpoint reveals unfiltered content that then
+// visibly disappears. Instead, the settled removal below holds the overlay
+// until the DOM has been quiet for a beat.
+//
+// Keep the quiet window short and the cap tight. A page with an autoplaying
+// video player and rotating ads (cnn.com) mutates near-continuously: measured
+// on a live load, it took 4.4s to produce a single quiet second, so a 1000ms
+// window turned into 4.4s of opaque screen after filtering had already
+// finished. A few hundred milliseconds of quiet is enough to mean "the
+// observer has caught up" and is reached almost immediately.
+//
+// The cap is the ceiling on that wait, not a rare safety valve — on a page that
+// never settles it is the only exit. The two failure modes are wildly
+// asymmetric: holding too long shows an opaque screen and reads as a broken
+// page, while releasing too early shows a headline that vanishes a moment
+// later.
+const SETTLE_QUIET_MS = 400;
 const SETTLE_POLL_MS = 250;
-const SETTLE_MAX_WAIT_MS = 6000;
+const SETTLE_MAX_WAIT_MS = 1500;
 
 // Absolute failsafe so a broken page can never stay blurred forever. Must
-// exceed the worst realistic initial-scan + settle time on slow connections.
-const MAX_OVERLAY_LIFETIME_MS = 20000;
+// exceed the worst realistic initial-scan + settle time on slow connections,
+// and no more: every second past that is a page the user cannot see at all.
+const MAX_OVERLAY_LIFETIME_MS = 10000;
 
 let lastPageActivityAt = 0;
 let settleLoopActive = false;
+let settleGeneration = 0;
 
 // Called by the mutation observer on every DOM change batch.
 export function markPageActivity() {
     lastPageActivityAt = Date.now();
+}
+
+// A re-init (extension reload, keyword update, tab wake-up) replaces the
+// overlay while a settle loop may still be polling for the old one. That loop
+// measures its wait from the overlay it was started for, so letting it survive
+// hands the new overlay a budget that is already spent — it gets released one
+// poll later, on a page that never settled. Retire the loop with the overlay.
+function cancelSettleWait() {
+    settleGeneration++;
+    settleLoopActive = false;
 }
 
 // Remove the overlay once the page has stopped mutating (filtering caught
@@ -38,8 +62,11 @@ export function removeImmediateBlurWhenSettled() {
     }
 
     settleLoopActive = true;
+    const generation = settleGeneration;
     const settleStartedAt = Date.now();
     const check = () => {
+        if (generation !== settleGeneration) return;
+
         const quietFor = Date.now() - lastPageActivityAt;
         const waited = Date.now() - settleStartedAt;
         if (quietFor >= SETTLE_QUIET_MS || waited >= SETTLE_MAX_WAIT_MS) {
@@ -86,6 +113,8 @@ function applyImportantStyles(element, styles) {
 
 // Create and show blur overlay
 export async function showImmediateBlur() {
+    cancelSettleWait();
+
     // Remove any existing overlay first (but don't remove initial blur yet)
     const existingOverlay = document.getElementById(OVERLAY_ID);
     if (existingOverlay && existingOverlay.parentNode) {
